@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/03/11 10:26:33 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/03/16 10:22:19 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = cub3d
 
 SRCS =		cub3d.c parsing.c parsing_utils.c map_check.c map_size.c
 
-GCCF = gcc -Wall -Werror -Wextra -g
+GCCF = gcc -g3 -fsanitize=address -Wall -Werror -Wextra -g
 
 OBJS = ${SRCS:.c=.o}
 

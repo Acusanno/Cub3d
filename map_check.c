@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 09:11:08 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/15 13:54:57 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/18 10:39:16 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	check_space(t_settings *ts, int i, int j)
 	}
 }
 
-int		is_spawn(char c)
+int	is_spawn(char c)
 {
 	if (c == 'N' || c == 'S' || c == 'O' || c == 'E')
 		return (1);
@@ -36,8 +36,8 @@ void	error_map(void)
 
 void	check_resolution(t_vars *vars)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	x = 0;
 	y = 0;

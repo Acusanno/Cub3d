@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/15 14:19:54 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/18 16:07:12 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,15 @@
 # define LEFT 123
 # define RIGHT 124
 # define ESC 53
+# define TAB 48
+# define SHIFT 257
 # define RED "ff0000"
 # define GREEN "00ff00"
 # define BLUE "0000ff"
 # define CYAN "00ffff"
 # define WHITE "ffffff"
 
-typedef struct		s_settings
+typedef struct s_settings
 {
 	int				fd;
 	char			*filename;
@@ -47,7 +49,7 @@ typedef struct		s_settings
 	int				map_height;
 }					t_settings;
 
-typedef struct		s_data {
+typedef struct s_data {
 	void			*img;
 	char			*addr;
 	int				bits_per_pixel;
@@ -55,24 +57,49 @@ typedef struct		s_data {
 	int				endian;
 }					t_data;
 
-typedef struct		s_pixel {
-	int				x;
-	int				y;
-	int				pdx;
-	int				pdy;
-	float			pa;
-	int				color;
-	int				camx;
-	int				camy;
+typedef struct s_pixel {
+	float	x;
+	float	y;
+	float	pdx;
+	float	pdy;
+	float	pa;
+	int		color;
 }					t_pixel;
 
-typedef struct		s_vars {
+typedef struct s_rays {
+	int				r;
+	int				mx;
+	int				my;
+	int				mp;
+	int				dof;
+	float			rx;
+	float			ry;
+	float			ra;
+	float			xo;
+	float			yo;
+}					t_rays;
+
+typedef struct s_point {
+	float			x;
+	float			y;
+}					t_point;
+
+typedef struct s_lines {
+	t_point				*h[2];
+	t_point				*v[2];
+}					t_lines;
+
+typedef struct s_vars {
 	void			*mlx;
 	void			*win;
 	int				minimap_size;
+	int				minimap_display;
+	int				run;
 	t_data			img;
 	t_pixel			tp;
 	t_settings		ts;
+	t_rays			tv;
+	t_lines			tl;
 }					t_vars;
 
 void				struct_init(t_settings *ts);
@@ -94,5 +121,12 @@ void				map_draw(t_vars *vars);
 void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int					is_spawn(char c);
 void				spawn_player(t_vars *vars);
+void				raycast(t_vars *vars);
+void				lines_init(t_vars *vars);
+t_point				inter_line_v(t_vars *vars, t_point player,
+						t_point cam, int line);
+t_point				inter_line_h(t_vars *vars, t_point player,
+						t_point cam, int line);
+void				find_inter(t_vars *vars);
 
 #endif
