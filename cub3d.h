@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/18 16:07:12 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/19 10:13:19 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ typedef struct s_settings
 	int				map_height;
 }					t_settings;
 
+typedef struct s_point {
+	float			x;
+	float			y;
+	float			z;
+}					t_point;
+
 typedef struct s_data {
 	void			*img;
 	char			*addr;
@@ -64,6 +70,8 @@ typedef struct s_pixel {
 	float	pdy;
 	float	pa;
 	int		color;
+	t_point	inter_h;
+	t_point	inter_v;
 }					t_pixel;
 
 typedef struct s_rays {
@@ -79,15 +87,15 @@ typedef struct s_rays {
 	float			yo;
 }					t_rays;
 
-typedef struct s_point {
-	float			x;
-	float			y;
-}					t_point;
-
 typedef struct s_lines {
-	t_point				*h[2];
-	t_point				*v[2];
+	t_point				a;
+	t_point				b;
 }					t_lines;
+
+typedef struct s_grid {
+	t_lines			*h;
+	t_lines			*v;
+}					t_grid;
 
 typedef struct s_vars {
 	void			*mlx;
@@ -99,7 +107,7 @@ typedef struct s_vars {
 	t_pixel			tp;
 	t_settings		ts;
 	t_rays			tv;
-	t_lines			tl;
+	t_grid			tg;
 }					t_vars;
 
 void				struct_init(t_settings *ts);
@@ -128,5 +136,6 @@ t_point				inter_line_v(t_vars *vars, t_point player,
 t_point				inter_line_h(t_vars *vars, t_point player,
 						t_point cam, int line);
 void				find_inter(t_vars *vars);
+int					intersection(t_vars *vars, t_lines line, t_point *res);
 
 #endif

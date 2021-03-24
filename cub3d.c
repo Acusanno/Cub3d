@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/18 16:09:17 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/24 16:52:05 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int	key_hook(int keycode, t_vars *vars)
 		}
 	}
 	if (keycode == LEFT)
-		vars->tp.pa += M_PI / 12;
+		vars->tp.pa += M_PI / 20;
 	if (keycode == RIGHT)
-		vars->tp.pa -= M_PI / 12;
+		vars->tp.pa -= M_PI / 20;
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(vars->mlx, vars->win);
@@ -67,15 +67,17 @@ int	key_hook(int keycode, t_vars *vars)
 	else if (keycode == SHIFT && vars->run == 1)
 		vars->run = 0;
 	if (vars->tp.pa < 0)
-		vars->tp.pa = 2 * M_PI;
+		vars->tp.pa += 2 * M_PI;
 	else if (vars->tp.pa > (2 * M_PI))
-		vars->tp.pa = 0;
+		vars->tp.pa -= 2 * M_PI;
 	vars->tp.pdx = cos(vars->tp.pa) * 5;
 	vars->tp.pdy = -sin(vars->tp.pa) * 5;
 	find_inter(vars);
-	//raycast(vars);
 	printf("Keycode = %d\n", keycode);
-	(void)vars;
+	printf("Inter_h.x = %f\n", vars->tp.inter_h.x);
+	printf("Inter_h.y = %f\n", vars->tp.inter_h.y);
+	printf("Inter_v.x = %f\n", vars->tp.inter_v.x);
+	printf("Inter_v.y = %f\n", vars->tp.inter_v.y);
 	return (0);
 }
 
@@ -89,104 +91,241 @@ int	shutdown(int keycode, t_vars *vars)
 
 int	render_next_frame(t_vars *vars)
 {
-	//mlx_clear_window(vars->mlx, vars->win);
 	if (vars->minimap_display == 1)
 	{
 		map_draw(vars);
-		my_mlx_pixel_put(&vars->img, vars->tp.x * vars->minimap_size, vars->tp.y * vars->minimap_size, 0x00FF0000);
-		my_mlx_pixel_put(&vars->img, vars->tp.x * vars->minimap_size + vars->tp.pdx,
+		my_mlx_pixel_put(&vars->img, vars->tp.x * vars->minimap_size,
+			vars->tp.y * vars->minimap_size, 0x00FF0000);
+		my_mlx_pixel_put(&vars->img,
+			vars->tp.x * vars->minimap_size + vars->tp.pdx,
 			vars->tp.y * vars->minimap_size + vars->tp.pdy, 0x00FF00FF);
-		my_mlx_pixel_put(&vars->img, vars->tv.rx, vars->tv.ry, 0x00FF00FF);
+		if (vars->tp.inter_h.z != -1 && vars->tp.inter_h.x < vars->ts.map_width
+			&& vars->tp.inter_h.x > 0)
+			my_mlx_pixel_put(&vars->img, vars->tp.inter_h.x * vars->minimap_size,
+				vars->tp.inter_h.y * vars->minimap_size, 0x00FF00FF);
+		if (vars->tp.inter_v.z != -1 && vars->tp.inter_v.x < vars->ts.map_width
+			&& vars->tp.inter_v.x > 0 && vars->tp.inter_v.y >= 0)
+			my_mlx_pixel_put(&vars->img, vars->tp.inter_v.x * vars->minimap_size,
+				vars->tp.inter_v.y * vars->minimap_size, 0x00FF00FF);
 	}
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 	return (0);
 }
 
-t_point	inter_line_v(t_vars *vars, t_point player, t_point cam, int line)
+double	line_slope(float a1, float a2, float b1, float b2)
 {
-	t_point	inter;
-	t_point	un;
-	t_point	deux;
-
-	un.x = vars->tl.v[line][0].x;
-	un.y = vars->tl.v[line][0].y;
-	deux.x = vars->tl.v[line][1].x;
-	deux.y = vars->tl.v[line][1].y;
-	inter.x = (deux.x * un.y - un.x * deux.y) * (cam.y - player.x);
-	inter.x -= (cam.x * player.y - player.x * cam.y) * (deux.x - un.x);
-	inter.x /= (deux.x - un.x) * (cam.y - player.y)
-		- (cam.x - player.x) * (deux.y - un.y);
-	inter.y = (deux.x * un.y - un.x * deux.y) * (cam.y - player.y);
-	inter.y -= (cam.x * player.y - player.x * cam.y) * (deux.x - un.x);
-	inter.y /= (deux.x - un.x) * (cam.y - player.y)
-		- (cam.x - player.x) * (deux.y - un.y);
-	return (inter);
+	if (a1 - b1 == 0.0)
+		return (NAN);
+	else
+		return ((a2 - b2) / (a1 - b1));
 }
 
-t_point	inter_line_h(t_vars *vars, t_point player, t_point cam, int line)
+void	set_x_y(t_point *res, double first, double second)
 {
-	t_point	inter;
-	t_point	un;
-	t_point	deux;
+	res->x = first;
+	res->y = second;
+}
 
-	un.x = vars->tl.h[line][0].x;
-	un.y = vars->tl.h[line][0].y;
-	deux.x = vars->tl.h[line][1].x;
-	deux.y = vars->tl.h[line][1].y;
-	inter.x = (deux.x * un.y - un.x * deux.y) * (cam.y - player.x);
-	inter.x -= (cam.x * player.y - player.x * cam.y) * (deux.x - un.x);
-	inter.x /= (deux.x - un.x) * (cam.y - player.y)
-		- (cam.x - player.x) * (deux.y - un.y);
-	inter.y = (deux.x * un.y - un.x * deux.y) * (cam.y - player.y);
-	inter.y -= (cam.x * player.y - player.x * cam.y) * (deux.x - un.x);
-	inter.y /= (deux.x - un.x) * (cam.y - player.y)
-		- (cam.x - player.x) * (deux.y - un.y);
-	return (inter);
+int		intersection(t_vars *vars, t_lines line, t_point *res)
+{
+	double	slope_a;
+	double	slope_b;
+	t_pixel	a1;
+
+	res->z = 0;
+	a1 = vars->tp;
+	slope_a = line_slope(a1.x, a1.y, a1.pdx + a1.x, a1.pdy + a1.y);
+	slope_b = line_slope(line.a.x, line.a.y, line.b.x, line.b.y);
+	if (slope_a == slope_b || (isnan(slope_a) && isnan(slope_b)))
+	{
+		res->z = -1;
+		return (-1);
+	}
+	else if (isnan(slope_a) && !isnan(slope_b))
+		set_x_y(res, a1.x, (a1.x - line.a.x) * slope_b + line.a.y);
+	else if (isnan(slope_b) && !isnan(slope_a))
+		set_x_y(res, line.a.x, (line.a.x - a1.x) * slope_a + a1.y);
+	else
+		set_x_y(res, (slope_a * a1.x - slope_b * line.a.x + line.a.y - a1.y) \
+	    / (slope_a - slope_b), slope_b * (res->x - line.a.x) + line.a.y);
+	return (1);
+}
+
+void	map_transform(t_vars *vars)
+{
+	int		i;
+	int		j;
+	char	**newmap;
+
+	i = 0;
+	newmap = malloc(sizeof(char *) * vars->ts.map_height + 1);
+	while (vars->ts.map[i])
+	{
+		newmap[i] = malloc(sizeof(char) * vars->ts.map_width + 1);
+		j = 0;
+		while (j < vars->ts.map_width)
+		{
+			if (j < (int)ft_strlen(vars->ts.map[i]))
+				newmap[i][j] = vars->ts.map[i][j];
+			else
+				newmap[i][j] = ' ';
+			j++;
+		}
+		newmap[i][j] = '\0';
+		i++;
+	}
+	free(vars->ts.map);
+	vars->ts.map = newmap;
+}
+
+int	check_wall(t_vars *vars, float x, float y, char tal)
+{
+	int	i;
+
+	i = 0;
+	if (tal == 'h' && vars->tp.pa < M_PI)
+		i = 1;
+	else if (tal == 'v' && vars->tp.pa > M_PI / 2
+		&& vars->tp.pa < 3 * M_PI / 2)
+		i = 1;
+	if (x < 0 || y < 0 || x > vars->ts.map_width
+		|| y > vars->ts.map_height)
+	{
+		if (tal == 'h')
+			vars->tp.inter_h.z = -1;
+		else
+			vars->tp.inter_v.z = -1;
+		return (-1);
+	}
+	if (tal == 'h' && vars->ts.map[(int)y - i][(int)x] == '1')
+		return (1);
+	if (tal == 'v' && vars->ts.map[(int)y][(int)x - i] == '1')
+		return (1);
+	return (0);
 }
 
 void	find_inter(t_vars *vars)
 {
-	t_point	player;
-	t_point	cam;
-	int		line_h;
+	int	i;
 
-	player.x = vars->tp.x;
-	player.y = vars->tp.y;
-	cam.x = vars->tp.pdx;
-	cam.y = vars->tp.pdy;
-	if (vars->tp.pa < M_PI)
-		line_h = (int)player.y;
-	else if (vars->tp.pa < M_PI)
-		line_h = (int)player.y + 1;
-	else
-		line_h = 0;
-	inter_line_h(vars, player, cam, line_h);
+	i = (int)vars->tp.y;
+	while (i && i < vars->ts.map_height)
+	{
+		intersection(vars, vars->tg.h[i], &(vars->tp.inter_h));
+		if (check_wall(vars, vars->tp.inter_h.x, vars->tp.inter_h.y, 'h') != 0)
+			break ;
+		if (vars->tp.pa < M_PI)
+			i--;
+		else
+			i++;
+	}
+	i = (int)vars->tp.x;
+	while (i && i < vars->ts.map_width)
+	{
+		intersection(vars, vars->tg.v[i], &(vars->tp.inter_v));
+		if (check_wall(vars, vars->tp.inter_v.x, vars->tp.inter_v.y, 'v') != 0)
+			break ;
+		if (vars->tp.pa < M_PI / 2 || vars->tp.pa > 3 * M_PI / 2)
+			i++;
+		else
+			i--;
+	}
 }
+
+// void	find_inter(t_vars *vars)
+// {
+// 	int	i;
+
+// 	i = (int)vars->tp.y;
+// 	vars->tp.inter_h.x = vars->tp.x;
+// 	vars->tp.inter_h.y = vars->tp.y;
+// 	if (vars->tp.pa < M_PI)
+// 	{
+// 		while (i)
+// 		{
+// 			intersection(vars, vars->tg.h[i], &(vars->tp.inter_h));
+// 			if (check_wallh(vars, vars->tp.inter_h.x, vars->tp.inter_h.y) != 0)
+// 				break ;
+// 			i--;
+// 		}
+// 	}
+// 	else if (vars->tp.pa > M_PI)
+// 	{
+// 		i++;
+// 		while (i < vars->ts.map_height)
+// 		{
+// 			intersection(vars, vars->tg.h[i], &(vars->tp.inter_h));
+// 			if (check_wallh(vars, vars->tp.inter_h.x, vars->tp.inter_h.y) != 0)
+// 				break ;
+// 			i++;
+// 		}
+// 	}
+// 	else if (vars->tp.pa == M_PI || vars->tp.pa == 0)
+// 	{
+// 		vars->tp.inter_h.x = vars->tp.x;
+// 		vars->tp.inter_h.y = vars->tp.y;
+// 	}
+// 	i = (int)vars->tp.x;
+// 	vars->tp.inter_v.x = vars->tp.x;
+// 	vars->tp.inter_v.y = vars->tp.y;
+// 	if (vars->tp.pa > M_PI / 2 && vars->tp.pa < 3 * M_PI / 2)
+// 	{
+// 		while (i)
+// 		{
+// 			intersection(vars, vars->tg.v[i], &(vars->tp.inter_v));
+// 			if (vars->tp.inter_v.y < 0 || vars->tp.inter_v.x < 0
+// 				|| check_wallv(vars, vars->tp.inter_v.x, vars->tp.inter_v.y)
+// 				 != 0)
+// 				break ;
+// 			i--;
+// 		}
+// 	}
+// 	else if ((vars->tp.pa < M_PI / 2 && vars->tp.pa > 0)
+// 		|| (vars->tp.pa > 3 * M_PI / 2 && vars->tp.pa < 2 * M_PI))
+// 	{
+// 		i++;
+// 		while (i < vars->ts.map_width)
+// 		{
+// 			intersection(vars, vars->tg.v[i - 1], &(vars->tp.inter_v));
+// 			if (vars->tp.inter_v.y < 0 || vars->tp.inter_v.x < 0
+// 				|| check_wallv(vars, vars->tp.inter_v.x, vars->tp.inter_v.y)
+// 				 != 0)
+// 				break ;
+// 			i++;
+// 		}
+// 	}
+// 	else if (vars->tp.pa == M_PI / 2 || vars->tp.pa == 3 * M_PI / 2)
+// 	{
+// 		vars->tp.inter_v.x = vars->tp.x;
+// 		vars->tp.inter_v.y = vars->tp.y;
+// 	}
+// }
 
 void	lines_init(t_vars *vars)
 {
 	int	i;
 
+	vars->tg.h = ft_calloc(vars->ts.map_height + 1, sizeof(t_lines));
+	vars->tg.v = ft_calloc(vars->ts.map_width + 1, sizeof(t_lines));
 	i = 0;
 	while (i < vars->ts.map_height)
 	{
-		vars->tl.v[i][0].x = 0;
-		vars->tl.v[i][0].y = i;
-		vars->tl.v[i][1].x = 1;
-		vars->tl.v[i][1].y = i;
+		vars->tg.h[i].a.x = 0;
+		vars->tg.h[i].a.y = i;
+		vars->tg.h[i].b.x = 1;
+		vars->tg.h[i].b.y = i;
 		i++;
 	}
 	i = 0;
-	while (i < vars->ts.map_height)
+	while (i < vars->ts.map_width)
 	{
-		vars->tl.v[i][0].x = i;
-		vars->tl.v[i][0].y = 0;
-		vars->tl.v[i][1].x = i;
-		vars->tl.v[i][1].y = 1;
+		vars->tg.v[i].a.x = i;
+		vars->tg.v[i].a.y = 0;
+		vars->tg.v[i].b.x = i;
+		vars->tg.v[i].b.y = 1;
 		i++;
 	}
 }
-
 
 void	spawn_init(t_vars *vars)
 {
@@ -213,49 +352,6 @@ int	raytouch(t_vars *vars, int x, int y)
 	return (0);
 }
 
-void	raycast(t_vars *vars)
-{
-	int		r;
-	r = 0;
-	vars->tv.ra = vars->tp.pa;
-	while (r < vars->tv.r)
-	{
-		vars->tv.dof = 0;
-		if (vars->tv.ra < M_PI)
-		{
-			
-		}
-		else if (vars->tv.ra > M_PI)
-		{
-			
-		}
-		else if (vars->tv.ra == 0 || vars->tv.ra == M_PI)
-		{
-			vars->tv.rx = vars->tp.x;
-			vars->tv.ry = vars->tp.y;
-			vars->tv.dof = 8;
-		}
-		while (vars->tv.dof < 8)
-		{
-			if (raytouch(vars, vars->tv.rx, vars->tv.ry) == 1)
-				vars->tv.dof = 8;
-			else if (raytouch(vars, vars->tv.rx, vars->tv.ry) == 0)
-			{
-				vars->tv.rx += vars->tv.xo;
-				vars->tv.ry += vars->tv.yo;
-				vars->tv.dof++;
-			}
-			else if (raytouch(vars, vars->tv.rx, vars->tv.ry) == -1)
-			{
-				vars->tv.rx = vars->tp.x;
-				vars->tv.ry = vars->tp.y;
-				vars->tv.dof = 8;
-			}
-		}
-		r++;
-	}
-}
-
 int	main(int argc, char **argv)
 {
 	int		i;
@@ -265,6 +361,7 @@ int	main(int argc, char **argv)
 	i = 0;
 	j = 0;
 	struct_init(&vars.ts);
+
 	if (argc == 2)
 	{
 		vars.ts.map = NULL;
@@ -276,9 +373,8 @@ int	main(int argc, char **argv)
 		parse_settings(&vars.ts);
 		settings_check(&vars);
 		map_check(&vars.ts);
-		dprintf(1, "yo");
 		map_size(&vars.ts);
-		dprintf(1, "yo2");
+		map_transform(&vars);
 		if (vars.ts.map_width > vars.ts.map_height)
 			vars.minimap_size = vars.ts.r[0] / vars.ts.map_width;
 		else
@@ -294,7 +390,7 @@ int	main(int argc, char **argv)
 		printf("\033[92mColor floor\033[0m --> [%d]\n", vars.ts.f);
 		printf("\033[92mColor ciel\033[0m --> [%d]\n", vars.ts.c);
 		printf("\033[33m-----------MAP---------------\033[0m\n");
-		while (vars.ts.map[i])
+		while (i < vars.ts.map_height)
 		{
 			printf("\033[92mligne [%d] :\033[0m %s", i, vars.ts.map[i]);
 			i++;
@@ -306,6 +402,7 @@ int	main(int argc, char **argv)
 	vars.win = mlx_new_window(vars.mlx, vars.ts.r[0], vars.ts.r[1], "Cub3d");
 	spawn_player(&vars);
 	spawn_init(&vars);
+	lines_init(&vars);
 	vars.tp.pdx = cos(vars.tp.pa) * 5;
 	vars.tp.pdy = -sin(vars.tp.pa) * 5;
 	mlx_hook(vars.win, 2, 1L << 0, key_hook, &vars);
@@ -317,6 +414,46 @@ int	main(int argc, char **argv)
 	mlx_loop(vars.mlx);
 	return (0);
 }
+
+// int	check_wallh(t_vars *vars, float x, float y)
+// {
+// 	int test = 0;
+
+// 	if (vars->tp.pa < M_PI && vars->tp.pa > 0)
+// 		test = 1;
+// 	if (y >= ft_strlen_split(vars->ts.map)
+// 		|| x >= (int)ft_strlen(vars->ts.map[(int)y])
+// 		|| x < 0 || y - test <= 0)
+// 	{
+// 		vars->tp.inter_h.z = -1;
+// 		return (-1);
+// 	}
+// 	else if (x < 0 || x > vars->ts.map_width)
+// 		return (-1);
+// 	else if (vars->ts.map[(int)(y - test)][(int)x] == '1')
+// 		return (1);
+// 	return (0);
+// }
+
+// int	check_wallv(t_vars *vars, float x, float y)
+// {
+// 	int test = 0;
+
+// 	if (vars->tp.pa > M_PI / 2 && vars->tp.pa < 3 * M_PI / 2)
+// 		test = 1;
+// 	if (y > ft_strlen_split(vars->ts.map)
+// 		|| x >= (int)ft_strlen(vars->ts.map[(int)y])
+// 		|| x < 0 || y < 0 || x > vars->ts.map_width)
+// 	{
+// 		vars->tp.inter_v.z = -1;
+// 		vars->tp.inter_v.x = 0;
+// 		vars->tp.inter_v.y = 0;
+// 		return (-1);
+// 	}
+// 	else if (vars->ts.map[(int)y][(int)(x - test)] == '1')
+// 		return (1);
+// 	return (0);
+// }
 
 /*int main()
 {
