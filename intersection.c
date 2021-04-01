@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:58:52 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/01 14:07:20 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/01 15:28:59 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ int	check_wall(t_vars *vars, float x, float y, char tal)
 			vars->tp.inter_v[j].z = -1;
 		return (-1);
 	}
-	if (tal == 'h' && vars->ts.map[(int)y - i][(int)x] == '1')
+	if (tal == 'h' && y - 1 >= 0 && vars->ts.map[(int)y - i][(int)x] == '1')
 		return (1);
-	if (tal == 'v' && vars->ts.map[(int)y][(int)x - i] == '1')
+	if (tal == 'v' && x - 1 >= 0 && vars->ts.map[(int)y][(int)x - i] == '1')
 		return (1);
 	return (0);
 }

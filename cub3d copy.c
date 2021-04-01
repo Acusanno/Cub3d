@@ -6,11 +6,12 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/01 15:32:50 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/01 14:31:49 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <math.h>
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -72,7 +73,7 @@ int	key_hook(int keycode, t_vars *vars)
 	vars->tp.pdx = cos(vars->tp.pa) * 5;
 	vars->tp.pdy = -sin(vars->tp.pa) * 5;
 	find_all_inter(vars);
-	// printf("Keycode = %d\n", keycode);
+	printf("Keycode = %d\n", keycode);
 	return (0);
 }
 
@@ -84,48 +85,9 @@ int	shutdown(int keycode, t_vars *vars)
 	return (0);
 }
 
-void	update_player_pos(t_vars *vars)
-{
-	vars->tp.pdx = cos(vars->tp.pa) * 5;
-	vars->tp.pdy = -sin(vars->tp.pa) * 5;
-	if (vars->tc.w == 1 && vars->tc.shift == 1)
-	{
-		vars->tp.y += vars->tp.pdy / 30;
-		vars->tp.x += vars->tp.pdx / 30;
-	}
-	else if (vars->tc.w == 1)
-	{
-		vars->tp.y += vars->tp.pdy / 50;
-		vars->tp.x += vars->tp.pdx / 50;
-	}
-	if (vars->tc.s)
-	{
-		vars->tp.y -= vars->tp.pdy / 50;
-		vars->tp.x -= vars->tp.pdx / 50;
-	}
-	if (vars->tc.left == 1)
-		vars->tp.pa += M_PI / 35;
-	if (vars->tc.right == 1)
-		vars->tp.pa -= M_PI / 35;
-	if (vars->tc.a == 1)
-	{
-		vars->tp.x += cos(vars->tp.pa + (M_PI / 2)) / 30;
-		vars->tp.y -= sin(vars->tp.pa + (M_PI / 2)) / 30;
-	}
-	if (vars->tc.d == 1)
-	{
-		vars->tp.x -= cos(vars->tp.pa + (M_PI / 2)) / 30;
-		vars->tp.y += sin(vars->tp.pa + (M_PI / 2)) / 30;
-	}
-}
-
 int	render_next_frame(t_vars *vars)
 {
-	update_player_pos(vars);
-	vars->tp.pdx = cos(vars->tp.pa) * 5;
-	vars->tp.pdy = -sin(vars->tp.pa) * 5;
-	find_all_inter(vars);
-	if (vars->tc.tab == 1)
+	if (vars->minimap_display == 1)
 	{
 		map_draw(vars);
 		my_mlx_pixel_put(&vars->img, vars->tp.x * vars->minimap_size,
@@ -164,54 +126,7 @@ void	find_all_inter(t_vars *vars)
 	}
 }
 
-int	key_pressed(int keycode, t_vars *vars)
-{
-	if (keycode == UP || keycode == W)
-		vars->tc.w = 1;
-	if (keycode == LEFT)
-		vars->tc.left = 1;
-	if (keycode == RIGHT)
-		vars->tc.right = 1;
-	if (keycode == A)
-		vars->tc.a = 1;
-	if (keycode == D)
-		vars->tc.d = 1;
-	if (keycode == DOWN || keycode == S)
-		vars->tc.s = 1;
-	if (keycode == TAB)
-		vars->tc.tab = 1;
-	if (keycode == SHIFT)
-		vars->tc.shift = 1;
-	if (keycode == ESC)
-	{
-		mlx_destroy_window(vars->mlx, vars->win);
-		exit(0);
-	}
-	return (0);
-}
-
-int	key_released(int keycode, t_vars *vars)
-{
-	if (keycode == UP || keycode == W)
-		vars->tc.w = 0;
-	if (keycode == LEFT)
-		vars->tc.left = 0;
-	if (keycode == RIGHT)
-		vars->tc.right = 0;
-	if (keycode == A)
-		vars->tc.a = 0;
-	if (keycode == D)
-		vars->tc.d = 0;
-	if (keycode == DOWN || keycode == S)
-		vars->tc.s = 0;
-	if (keycode == TAB)
-		vars->tc.tab = 0;
-	if (keycode == SHIFT)
-		vars->tc.shift = 0;
-	return (0);
-}
-
-int	main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
 	int		i;
 	int		j;
@@ -261,12 +176,12 @@ int	main(int argc, char **argv)
 	spawn_player(&vars);
 	spawn_init(&vars);
 	lines_init(&vars);
-	vars.tp.pdx = cos(vars.tp.pa);
-	vars.tp.pdy = -sin(vars.tp.pa);
+	vars.tp.pdx = cos(vars.tp.pa) * 5;
+	vars.tp.pdy = -sin(vars.tp.pa) * 5;
 	//key hook, met le bouton pressé a 1
-	mlx_hook(vars.win, 2, 1L << 0, key_pressed, &vars);
+	mlx_hook(vars.win, 2, 1L << 0, key_hook, &vars);
 	//key hook (release), le bouton est mis a 0 au relachement
-	mlx_hook(vars.win, 3, 1L << 1, key_released, &vars);
+	// mlx_hook(vars.win, 2, 1L << 0, key_hook, &vars);
 	mlx_hook(vars.win, 17, 0L, &shutdown, &vars);
 	vars.img.img = mlx_new_image(vars.mlx, vars.ts.r[0], vars.ts.r[1]);
 	vars.img.addr = mlx_get_data_addr(vars.img.img, &vars.img.bits_per_pixel,

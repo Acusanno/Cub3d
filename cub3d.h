@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/01 14:21:48 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/01 14:50:32 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <math.h>
 # include "mlx.h"
 # include "libft/libft.h"
+# define W 13
+# define A 0
+# define S 1
+# define D 2
 # define UP 126
 # define DOWN 125
 # define LEFT 123
@@ -106,6 +110,8 @@ typedef struct s_controls {
 	int				d;
 	int				left;
 	int				right;
+	int				tab;
+	int				shift;
 }					t_controls;
 
 typedef struct s_vars {
@@ -119,6 +125,7 @@ typedef struct s_vars {
 	t_settings		ts;
 	t_rays			tv;
 	t_grid			tg;
+	t_controls		tc;
 }					t_vars;
 
 void				struct_init(t_settings *ts);
