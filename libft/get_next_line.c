@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 09:03:22 by acusanno          #+#    #+#             */
-/*   Updated: 2021/02/24 10:21:57 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/01 09:35:21 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ char	*before_lb(char *str, int *ret)
 		return (NULL);
 	while (str[i] && str[i] != '\n')
 		i++;
-	if (!(str_return = malloc(sizeof(char) * (i + 1))))
+	str_return = malloc(sizeof(char) * (i + 1));
+	if (!str_return)
 	{
 		*ret = -1;
 		return (NULL);
@@ -54,7 +55,7 @@ char	*before_lb(char *str, int *ret)
 	return (ft_strlcpy_gnl(str_return, str, i + 1));
 }
 
-int		buff_change(char **buffer, char ***line, char **tmp)
+int	buff_change(char **buffer, char ***line, char **tmp)
 {
 	int		ret;
 
@@ -70,26 +71,36 @@ int		buff_change(char **buffer, char ***line, char **tmp)
 	return (0);
 }
 
-int		get_next_line(int fd, char **line)
+int	gnl_while(char **buffer, char **tmp, int *read_return, int fd)
+{
+	while (!ft_isline_break(*buffer) && *read_return != 0)
+	{
+		*read_return = read(fd, *tmp, BUFFER_SIZE);
+		if (*read_return == -1)
+		{
+			free(*tmp);
+			return (-1);
+		}
+		(*tmp)[*read_return] = '\0';
+		*buffer = ft_strjoin2(*buffer, *tmp);
+		if (*buffer == 0)
+			return (-1);
+	}
+	return (0);
+}
+
+int	get_next_line(int fd, char **line)
 {
 	char			*tmp;
 	static char		*buffer;
 	int				read_return;
 
-	if (fd < 0 || !line || BUFFER_SIZE <= 0 ||
-			(!(tmp = malloc(BUFFER_SIZE + 1))))
+	tmp = malloc(BUFFER_SIZE + 1);
+	if (fd < 0 || !line || BUFFER_SIZE <= 0 || (!tmp))
 		return (-1);
 	read_return = 1;
-	while (!ft_isline_break(buffer) && read_return != 0)
-	{
-		if ((read_return = read(fd, tmp, BUFFER_SIZE)) == -1)
-			free(tmp);
-		if (read_return == -1)
-			return (-1);
-		tmp[read_return] = '\0';
-		if (!(buffer = ft_strjoin(buffer, tmp)))
-			return (-1);
-	}
+	if (gnl_while(&buffer, &tmp, &read_return, fd) == -1)
+		return (-1);
 	if (buff_change(&buffer, &line, &tmp) == -1)
 		return (-1);
 	if (read_return == 0)

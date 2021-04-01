@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 13:10:52 by acusanno          #+#    #+#             */
-/*   Updated: 2020/11/25 13:20:25 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/31 08:40:21 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libft.h"
+#include <stdio.h>
 
 char	*ft_strdup(char *src)
 {
@@ -19,8 +20,9 @@ char	*ft_strdup(char *src)
 	size_t	i;
 
 	i = 0;
-	if (!(dest = malloc(sizeof(char) * ft_strlen(src) + 1)))
-		return (0);
+	dest = malloc(sizeof(char) * ft_strlen(src) + 1);
+	if (!dest)
+		return (NULL);
 	while (src[i])
 	{
 		dest[i] = src[i];

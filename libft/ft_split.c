@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 09:20:31 by acusanno          #+#    #+#             */
-/*   Updated: 2020/12/02 14:52:40 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/31 08:42:48 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	ft_isset(char c, char set)
 
 static	int	countword(char const *s, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (*s)
@@ -41,18 +41,19 @@ static char	**free_split(char **str_tot, int i)
 	while (--i >= 0)
 		free(str_tot[i]);
 	free(str_tot);
-	return (0);
+	return (NULL);
 }
 
-char		**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**str_tot;
 	char	*start;
 	int		i;
 
 	i = 0;
-	if (s == 0 || !(str_tot = malloc(sizeof(char *) * (countword(s, c) + 1))))
-		return (0);
+	str_tot = malloc(sizeof(char *) * (countword(s, c) + 1));
+	if (!s || !(str_tot))
+		return (NULL);
 	while (*s)
 	{
 		while (*s && ft_isset(*s, c) == 1)
@@ -62,10 +63,10 @@ char		**ft_split(char const *s, char c)
 			s++;
 		if (s != start)
 		{
-			if (!(str_tot[i] = malloc(sizeof(char) * (s - start + 1))))
+			(str_tot[i] = malloc(sizeof(char) * (s - start + 1)));
+			if (!(str_tot[i]))
 				return (free_split(str_tot, i));
-			ft_strlcpy(str_tot[i], start, s - start + 1);
-			i++;
+			ft_strlcpy(str_tot[i++], start, s - start + 1);
 		}
 	}
 	str_tot[i] = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 16:48:06 by acusanno          #+#    #+#             */
-/*   Updated: 2020/11/25 11:40:31 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/30 10:14:50 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strchr(const char *s, int c)
 	while (i <= len)
 	{
 		if (s[i] == ch)
-			return (char *)&s[i];
+			return ((char *)&s[i]);
 		i++;
 	}
 	return (0);

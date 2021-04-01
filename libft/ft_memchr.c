@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:29:58 by acusanno          #+#    #+#             */
-/*   Updated: 2020/11/25 11:19:47 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/30 09:17:14 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*ft_memchr(const void *s, int c, size_t n)
 	while (i < n)
 	{
 		if (str[i] == c)
-			return (char *)&str[i];
+			return ((char *)&str[i]);
 		i++;
 	}
 	return (0);

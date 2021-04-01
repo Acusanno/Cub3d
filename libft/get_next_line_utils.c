@@ -6,15 +6,16 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 12:57:05 by acusanno          #+#    #+#             */
-/*   Updated: 2021/02/24 10:22:53 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/31 09:16:46 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
-int		ft_strlen_gnl(const char *str)
+int	ft_strlen_gnl(const char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)
@@ -24,38 +25,33 @@ int		ft_strlen_gnl(const char *str)
 	return (i);
 }
 
-char	*ft_strjoin(char const *prefixe, char const *suffixe)
+char	*ft_strjoin2(char const *prefixe, char const *suffixe)
 {
 	char	*concat;
 	int		len;
 	int		i;
 	int		j;
 
-	i = 0;
-	j = 0;
+	i = -1;
+	j = -1;
 	if (!prefixe && !suffixe)
 		return (NULL);
 	len = ft_strlen_gnl(prefixe) + ft_strlen_gnl(suffixe);
-	if (!(concat = malloc(sizeof(char) * (len + 1))))
+	(concat = malloc(sizeof(char) * (len + 1)));
+	if (!concat)
 		return (NULL);
-	while (i < ft_strlen_gnl(prefixe))
-	{
+	while (++i < ft_strlen_gnl(prefixe))
 		concat[i] = prefixe[i];
-		i++;
-	}
-	while (j < ft_strlen_gnl(suffixe))
-	{
+	while (++j < ft_strlen_gnl(suffixe))
 		concat[i + j] = suffixe[j];
-		j++;
-	}
 	concat[len] = 0;
 	free((char *)prefixe);
 	return (concat);
 }
 
-int		ft_isline_break(const char *s)
+int	ft_isline_break(const char *s)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!s)
@@ -71,7 +67,7 @@ int		ft_isline_break(const char *s)
 
 char	*ft_strlcpy_gnl(char *dst, const char *src, size_t dstsize)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (src == 0)
@@ -97,7 +93,8 @@ char	*ftgsubstr(char const *s, int start, size_t len, int *ret2)
 	unsigned int	i;
 
 	i = 0;
-	if (!(str = malloc(sizeof(char) * len + 1)))
+	str = malloc(sizeof(char) * len + 1);
+	if (!str)
 	{
 		*ret2 = -1;
 		return (0);

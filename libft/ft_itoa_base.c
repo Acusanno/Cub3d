@@ -6,16 +6,16 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 09:45:38 by acusanno          #+#    #+#             */
-/*   Updated: 2021/01/25 13:24:46 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/30 09:13:15 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 
-int		ft_count(size_t nb, char *base)
+int	ft_count(size_t nb, char *base)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (nb < 0)

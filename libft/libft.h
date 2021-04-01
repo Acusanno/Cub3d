@@ -6,18 +6,19 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 15:56:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/02/24 10:09:20 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/31 08:56:58 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _LIBFT_H
-# define _LIBFT_H
+#ifndef LIBFT_H
+# define LIBFT_H
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include "get_next_line.h"
 
-typedef struct		s_list
+typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
@@ -47,7 +48,7 @@ int					ft_isalpha(char c);
 void				ft_bzero(void *s, size_t n);
 int					ft_atoi(const char *str);
 char				*ft_strnstr(const char *haystack, const char *needle,
-		size_t len);
+						size_t len);
 void				*ft_memmove(void *dst, const void *src, size_t len);
 void				*ft_memchr(const void *s, int c, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
@@ -71,7 +72,7 @@ void				ft_lstdelone(t_list *lst, void (*del) (void *));
 void				ft_lstclear(t_list **lst, void (*del) (void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f) (void *),
-		void (*del) (void *));
+						void (*del) (void *));
 char				*ft_itoa_base(size_t nb, char *base);
 int					min(int i, int j);
 int					max(int i, int j);

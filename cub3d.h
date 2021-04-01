@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/19 10:13:19 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/01 14:04:43 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,11 @@ typedef struct s_pixel {
 	float	pdx;
 	float	pdy;
 	float	pa;
+	float	ra;
+	int		ri;
 	int		color;
-	t_point	inter_h;
-	t_point	inter_v;
+	t_point	*inter_h;
+	t_point	*inter_v;
 }					t_pixel;
 
 typedef struct s_rays {
@@ -131,11 +133,19 @@ int					is_spawn(char c);
 void				spawn_player(t_vars *vars);
 void				raycast(t_vars *vars);
 void				lines_init(t_vars *vars);
+void				spawn_init(t_vars *vars);
 t_point				inter_line_v(t_vars *vars, t_point player,
 						t_point cam, int line);
 t_point				inter_line_h(t_vars *vars, t_point player,
 						t_point cam, int line);
-void				find_inter(t_vars *vars);
+void				find_inter_h(t_vars *vars);
+void				find_inter_v(t_vars *vars);
+void				find_all_inter(t_vars *vars);
 int					intersection(t_vars *vars, t_lines line, t_point *res);
+int					raytouch(t_vars *vars, int x, int y);
+void				map_transform(t_vars *vars);
+void				set_x_y(t_point *res, double first, double second);
+double				line_slope(float a1, float a2, float b1, float b2);
+int					check_wall(t_vars *vars, float x, float y, char tal);
 
 #endif

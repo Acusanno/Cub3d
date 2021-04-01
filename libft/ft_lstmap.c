@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 12:50:58 by acusanno          #+#    #+#             */
-/*   Updated: 2020/11/27 15:16:05 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/30 09:16:01 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ t_list	*ft_lstmap(t_list *lst, void *(*f) (void *), void (*del) (void *))
 	ptr = NULL;
 	while (lst != NULL)
 	{
-		if (!(temp = ft_lstnew(f(lst->content))))
+		temp = ft_lstnew(f(lst->content));
+		if (!temp)
 		{
 			ft_lstclear(&ptr, del);
 			return (NULL);

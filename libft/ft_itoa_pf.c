@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:16:35 by acusanno          #+#    #+#             */
-/*   Updated: 2021/01/22 13:30:57 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/30 09:13:57 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	nb_character(long int n)
 {
-	long int i;
+	long int	i;
 
 	i = 0;
 	if (n <= 0)
@@ -30,7 +30,7 @@ static int	nb_character(long int n)
 	return (i);
 }
 
-char		*ft_itoa_pf(int n)
+char	*ft_itoa_pf(int n)
 {
 	char		*str;
 	int			j;
@@ -38,7 +38,8 @@ char		*ft_itoa_pf(int n)
 
 	tot = n;
 	j = nb_character(n) - 1;
-	if (!(str = malloc(sizeof(char) * (nb_character(tot) + 1))))
+	str = malloc(sizeof(char) * (nb_character(tot) + 1));
+	if (!str)
 		return (0);
 	if (tot < 0)
 	{

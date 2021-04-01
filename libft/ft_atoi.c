@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 13:00:05 by acusanno          #+#    #+#             */
-/*   Updated: 2020/12/02 14:53:14 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/30 09:11:18 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	ft_atoi(const char *str)
 {
-	int i;
-	int out;
-	int sign;
-	int len;
+	int	i;
+	int	out;
+	int	sign;
+	int	len;
 
 	len = 0;
 	i = 0;

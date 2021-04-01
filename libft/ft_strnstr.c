@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 10:56:31 by acusanno          #+#    #+#             */
-/*   Updated: 2020/11/25 09:40:43 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/30 10:17:00 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 
-int		ft_len(char *str)
+int	ft_len(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -24,8 +24,8 @@ int		ft_len(char *str)
 
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	size_t i;
-	size_t j;
+	size_t	i;
+	size_t	j;
 
 	if (!*needle)
 		return ((char *)haystack);
@@ -36,7 +36,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 		if (haystack[i] == needle[j])
 		{
 			while (haystack[i + j] == needle[j] && haystack[i + j]
-					&& needle[j] && i + j < len)
+				&& needle[j] && i + j < len)
 				j++;
 			if (!needle[j])
 				return ((char *)&haystack[i]);

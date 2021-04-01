@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acusanno <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 14:29:54 by acusanno          #+#    #+#             */
-/*   Updated: 2020/11/27 12:16:19 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/03/30 10:17:40 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	ft_isinset(const char c, char const *set)
 	return (0);
 }
 
-char		*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set)
 {
 	char	*start;
 	char	*end;
@@ -49,7 +49,8 @@ char		*ft_strtrim(char const *s1, char const *set)
 	end++;
 	if (end - start < 0)
 		return (ft_strdup(""));
-	if (!(s3 = malloc(sizeof(char) * (end - start + 1))))
+	s3 = malloc(sizeof(char) * (end - start + 1));
+	if (!s3)
 		return (0);
 	ft_strlcpy(s3, start, end - start + 1);
 	return (s3);
