@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   cub3d2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/01 14:22:22 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/01 14:20:18 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include <math.h>
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -126,7 +125,15 @@ void	find_all_inter(t_vars *vars)
 	}
 }
 
-int		main(int argc, char **argv)
+int	key_pressed(int keycode, t_vars *vars)
+{
+	if (keycode == UP || keycode == W)
+}
+
+int	key_released(int keycode, t_vars *vars)
+{}
+
+int	main(int argc, char **argv)
 {
 	int		i;
 	int		j;
@@ -179,9 +186,9 @@ int		main(int argc, char **argv)
 	vars.tp.pdx = cos(vars.tp.pa) * 5;
 	vars.tp.pdy = -sin(vars.tp.pa) * 5;
 	//key hook, met le bouton pressé a 1
-	mlx_hook(vars.win, 2, 1L << 0, key_hook, &vars);
+	mlx_hook(vars.win, 2, 1L << 0, key_pressed, &vars);
 	//key hook (release), le bouton est mis a 0 au relachement
-	// mlx_hook(vars.win, 2, 1L << 0, key_hook, &vars);
+	mlx_hook(vars.win, 3, 1L << 0, key_released, &vars);
 	mlx_hook(vars.win, 17, 0L, &shutdown, &vars);
 	vars.img.img = mlx_new_image(vars.mlx, vars.ts.r[0], vars.ts.r[1]);
 	vars.img.addr = mlx_get_data_addr(vars.img.img, &vars.img.bits_per_pixel,

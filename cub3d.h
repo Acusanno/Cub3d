@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/01 14:04:43 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/01 14:21:48 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,15 @@ typedef struct s_grid {
 	t_lines			*h;
 	t_lines			*v;
 }					t_grid;
+
+typedef struct s_controls {
+	int				w;
+	int				a;
+	int				s;
+	int				d;
+	int				left;
+	int				right;
+}					t_controls;
 
 typedef struct s_vars {
 	void			*mlx;

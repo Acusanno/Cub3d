@@ -6,19 +6,19 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/04/01 14:06:55 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/04/01 14:29:04 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 
-			init.c \
-SRCS =		cub3d.c \
+SRCS =		init.c \
+			cub3d.c \
 			parsing.c \
 			map_size.c \
 			map_check.c \
 			intersection.c \
-			parsing_utils.c
+			parsing_utils.c \
 
 GCCF = gcc -g3 -O3 -fsanitize=address -Wall -Werror -Wextra -g
 
