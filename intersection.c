@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:58:52 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/01 15:28:59 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/02 11:00:52 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,12 @@ void	find_inter_h(t_vars *vars)
 		if (check_wall(vars, vars->tp.inter_h[ri].x,
 				vars->tp.inter_h[ri].y, 'h') != 0)
 			break ;
-		if (vars->tp.pa < M_PI)
+		if (vars->tp.ra < M_PI)
 			i++;
-		if (vars->tp.pa > M_PI)
+		if (vars->tp.ra > M_PI)
 			i--;
+		else
+			vars->tp.inter_h[ri].z = -1;
 	}
 }
 
@@ -116,5 +118,7 @@ void	find_inter_v(t_vars *vars)
 			i--;
 		if (vars->tp.ra > M_PI / 2 && vars->tp.ra < 3 * M_PI / 2)
 			i++;
+		else
+			vars->tp.inter_h[ri].z = -1;
 	}
 }

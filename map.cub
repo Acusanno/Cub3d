@@ -1,4 +1,4 @@
-R 640 580
+R 1000 1000
 
 NO ./north_texture1   
 SO ./south_texture

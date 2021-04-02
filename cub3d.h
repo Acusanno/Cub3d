@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/01 14:50:32 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/02 10:26:23 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,6 @@ typedef struct s_vars {
 	void			*mlx;
 	void			*win;
 	int				minimap_size;
-	int				minimap_display;
-	int				run;
 	t_data			img;
 	t_pixel			tp;
 	t_settings		ts;
