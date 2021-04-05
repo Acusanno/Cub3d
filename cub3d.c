@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/02 11:11:45 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/05 13:40:57 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,24 @@ void	update_player_pos(t_vars *vars)
 	vars->tp.pdy = -sin(vars->tp.pa) * 5;
 	if (vars->tc.w == 1 && vars->tc.shift == 1)
 	{
-		vars->tp.y += vars->tp.pdy / 30;
-		vars->tp.x += vars->tp.pdx / 30;
+		if (vars->ts.map[(int)(vars->tp.y + vars->tp.pdy / 30)][(int)vars->tp.x] != '1')
+			vars->tp.y += vars->tp.pdy / 30;
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + vars->tp.pdx / 30)] != '1')
+			vars->tp.x += vars->tp.pdx / 30;
 	}
 	else if (vars->tc.w == 1)
 	{
-		vars->tp.y += vars->tp.pdy / 50;
-		vars->tp.x += vars->tp.pdx / 50;
+		if (vars->ts.map[(int)(vars->tp.y + vars->tp.pdy / 80)][(int)vars->tp.x] != '1')
+			vars->tp.y += vars->tp.pdy / 80;
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + vars->tp.pdx / 80)] != '1')
+			vars->tp.x += vars->tp.pdx / 80;
 	}
 	if (vars->tc.s)
 	{
-		vars->tp.y -= vars->tp.pdy / 50;
-		vars->tp.x -= vars->tp.pdx / 50;
+		if (vars->ts.map[(int)(vars->tp.y - vars->tp.pdy / 80)][(int)vars->tp.x] != '1')
+			vars->tp.y -= vars->tp.pdy / 80;
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x - vars->tp.pdx / 80)] != '1')
+			vars->tp.x -= vars->tp.pdx / 80;
 	}
 	if (vars->tc.left == 1)
 		vars->tp.pa += M_PI / 35;
@@ -53,14 +59,22 @@ void	update_player_pos(t_vars *vars)
 		vars->tp.pa -= M_PI / 35;
 	if (vars->tc.a == 1)
 	{
-		vars->tp.x += cos(vars->tp.pa + (M_PI / 2)) / 30;
-		vars->tp.y -= sin(vars->tp.pa + (M_PI / 2)) / 30;
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + cos(vars->tp.pa + (M_PI / 2)) / 30)] != '1')
+			vars->tp.x += cos(vars->tp.pa + (M_PI / 2)) / 30;
+		if (vars->ts.map[(int)(vars->tp.y - sin(vars->tp.pa + (M_PI / 2)) / 30)][(int)vars->tp.x] != '1')
+			vars->tp.y -= sin(vars->tp.pa + (M_PI / 2)) / 30;
 	}
 	if (vars->tc.d == 1)
 	{
-		vars->tp.x -= cos(vars->tp.pa + (M_PI / 2)) / 30;
-		vars->tp.y += sin(vars->tp.pa + (M_PI / 2)) / 30;
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + cos(vars->tp.pa - (M_PI / 2)) / 30)] != '1')
+			vars->tp.x += cos(vars->tp.pa - (M_PI / 2)) / 30;
+		if (vars->ts.map[(int)(vars->tp.y - sin(vars->tp.pa - (M_PI / 2)) / 30)][(int)vars->tp.x] != '1')
+			vars->tp.y -= sin(vars->tp.pa - (M_PI / 2)) / 30;
 	}
+	if (vars->tp.pa < 0)
+		vars->tp.pa += 2 * M_PI;
+	else if (vars->tp.pa > (2 * M_PI))
+		vars->tp.pa -= 2 * M_PI;
 }
 
 int	render_next_frame(t_vars *vars)
@@ -82,18 +96,41 @@ int	render_next_frame(t_vars *vars)
 		i = 0;
 		while (i < vars->ts.r[0])
 		{
-			if (vars->tp.inter_h[i].z != -1 && vars->tp.inter_h[i].x
-				< vars->ts.map_width && vars->tp.inter_h[i].x > 0)
-				my_mlx_pixel_put(&vars->img, vars->tp.inter_h[i].x * vars->minimap_size, vars->tp.inter_h[i].y * vars->minimap_size, 0x00FF00FF);
-			if (vars->tp.inter_v[i].z != -1 && vars->tp.inter_v[i].x
-				< vars->ts.map_width && vars->tp.inter_v[i].x > 0
-				&& vars->tp.inter_v[i].y >= 0)
-				my_mlx_pixel_put(&vars->img, vars->tp.inter_v[i].x * vars->minimap_size, vars->tp.inter_v[i].y * vars->minimap_size, 0x00FF00FF);
+			if (vars->tp.inter_h[i].x <= vars->ts.map_width
+				&& vars->tp.inter_h[i].y <= vars->ts.map_height
+				&& vars->tp.inter_h[i].x >= 0
+				&& vars->tp.inter_h[i].y >= 0)
+				my_mlx_pixel_put(&vars->img, vars->tp.inter_h[i].x
+					* vars->minimap_size, vars->tp.inter_h[i].y
+					* vars->minimap_size, 0x00FF00FF);
 			i++;
 		}
 	}
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 	return (0);
+}
+
+t_point	find_closest(t_vars *vars, t_point inter_h, t_point inter_v)
+{
+	t_point	result;
+
+	if (inter_h.z == -1 && inter_v.z != -1)
+		return (inter_v);
+	if (inter_v.z == -1 && inter_h.z != -1)
+		return (inter_h);
+	if (sqrt(pow(vars->tp.x - inter_h.x, 2) + pow(vars->tp.y - inter_h.y, 2))
+		< sqrt(pow(vars->tp.x - inter_v.x, 2)
+			+ pow(vars->tp.y - inter_v.y, 2)))
+	{
+		result.x = inter_h.x;
+		result.y = inter_h.y;
+	}
+	else
+	{
+		result.x = inter_v.x;
+		result.y = inter_v.y;
+	}
+	return (result);
 }
 
 void	find_all_inter(t_vars *vars)
@@ -115,19 +152,39 @@ void	find_all_inter(t_vars *vars)
 		vars->tp.inter_v[vars->tp.ri].z = 0;
 		vars->tp.ri++;
 	}
+	vars->tp.ri = 0;
 	while (vars->tp.ri < vars->ts.r[0])
 	{
+		if (vars->tp.ra < 0)
+			vars->tp.ra += 2 * M_PI;
+		else if (vars->tp.ra > (2 * M_PI))
+			vars->tp.ra -= 2 * M_PI;
 		find_inter_h(vars);
 		find_inter_v(vars);
+		// if (vars->tp.inter_h[vars->tp.ri].z == -1)
+		// {
+		// 	vars->tp.inter_h[vars->tp.ri].x = 0;
+		// 	vars->tp.inter_h[vars->tp.ri].y = 0;
+		// }
+		// if (vars->tp.inter_v[vars->tp.ri].z == -1)
+		// {
+		// 	vars->tp.inter_v[vars->tp.ri].x = 0;
+		// 	vars->tp.inter_v[vars->tp.ri].y = 0;
+		// }
+		vars->tp.inter_h[vars->tp.ri] = find_closest(vars, vars->tp.inter_h[vars->tp.ri],
+				vars->tp.inter_v[vars->tp.ri]);
 		vars->tp.ra += ratioangle;
 		vars->tp.ri++;
 	}
 	dprintf(1, "h[0].x = %f, h[0].y = %f\n", vars->tp.inter_h[0].x, vars->tp.inter_h[0].y);
-	dprintf(1, "v[0].x = %f, v[0].y = %f\n", vars->tp.inter_v[0].x, vars->tp.inter_v[0].y);
+	// dprintf(1, "v[0].z = %f\n", vars->tp.inter_v[0].z);
+	// dprintf(1, "h[0].z = %f\n", vars->tp.inter_h[0].z);
 	dprintf(1, "h[500].x = %f, h[500].y = %f\n", vars->tp.inter_h[500].x, vars->tp.inter_h[500].y);
-	dprintf(1, "v[500].x = %f, v[500].y = %f\n", vars->tp.inter_v[500].x, vars->tp.inter_v[500].y);
+	// dprintf(1, "v[500].z = %f\n", vars->tp.inter_v[500].z);
+	// dprintf(1, "h[500].z = %f\n", vars->tp.inter_h[500].z);
 	dprintf(1, "h[999].x = %f, h[999].y = %f\n", vars->tp.inter_h[999].x, vars->tp.inter_h[999].y);
-	dprintf(1, "v[999].x = %f, v[999].y = %f\n", vars->tp.inter_v[999].x, vars->tp.inter_v[999].y);
+	// dprintf(1, "v[999].z = %f\n", vars->tp.inter_v[999].z);
+	// dprintf(1, "h[999].z = %f\n", vars->tp.inter_h[999].z);
 }
 
 int	key_pressed(int keycode, t_vars *vars)

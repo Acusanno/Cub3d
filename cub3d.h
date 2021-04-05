@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/02 10:26:23 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/05 10:26:46 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,8 @@ t_point				inter_line_h(t_vars *vars, t_point player,
 void				find_inter_h(t_vars *vars);
 void				find_inter_v(t_vars *vars);
 void				find_all_inter(t_vars *vars);
-int					intersection(t_vars *vars, t_lines line, t_point *res);
+int					intersection(t_vars *vars, t_lines line, t_point *res,
+						t_point a2);
 int					raytouch(t_vars *vars, int x, int y);
 void				map_transform(t_vars *vars);
 void				set_x_y(t_point *res, double first, double second);

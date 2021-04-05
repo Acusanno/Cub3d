@@ -1,4 +1,4 @@
-R 1000 1000
+R 1920 1080
 
 NO ./north_texture1   
 SO ./south_texture

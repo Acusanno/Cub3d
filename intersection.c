@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:58:52 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/02 11:00:52 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/05 13:46:51 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ double	line_slope(float a1, float a2, float b1, float b2)
 		return ((a2 - b2) / (a1 - b1));
 }
 
-int	intersection(t_vars *vars, t_lines line, t_point *res)
+int	intersection(t_vars *vars, t_lines line, t_point *res, t_point a2)
 {
 	double	slope_a;
 	double	slope_b;
@@ -28,7 +28,7 @@ int	intersection(t_vars *vars, t_lines line, t_point *res)
 
 	res->z = 0;
 	a1 = vars->tp;
-	slope_a = line_slope(a1.x, a1.y, a1.pdx + a1.x, a1.pdy + a1.y);
+	slope_a = line_slope(a1.x, a1.y, a2.x, a2.y);
 	slope_b = line_slope(line.a.x, line.a.y, line.b.x, line.b.y);
 	if (slope_a == slope_b || (isnan(slope_a) && isnan(slope_b)))
 	{
@@ -52,10 +52,9 @@ int	check_wall(t_vars *vars, float x, float y, char tal)
 
 	i = 0;
 	j = vars->tp.ri;
-	if (tal == 'h' && vars->tp.ra < M_PI)
-		i = 1;
-	else if (tal == 'v' && vars->tp.ra > M_PI / 2
-		&& vars->tp.ra < 3 * M_PI / 2)
+	if ((tal == 'h' && vars->tp.ra < M_PI)
+		|| (tal == 'v' && vars->tp.ra > M_PI / 2
+			&& vars->tp.ra < 3 * M_PI / 2))
 		i = 1;
 	if (x < 0 || y < 0 || x > vars->ts.map_width
 		|| y > vars->ts.map_height)
@@ -66,9 +65,11 @@ int	check_wall(t_vars *vars, float x, float y, char tal)
 			vars->tp.inter_v[j].z = -1;
 		return (-1);
 	}
-	if (tal == 'h' && y - 1 >= 0 && vars->ts.map[(int)y - i][(int)x] == '1')
+	if (tal == 'h' && y - 1 >= 0 && x >= 0
+		&& vars->ts.map[(int)y - i][(int)x] == '1')
 		return (1);
-	if (tal == 'v' && x - 1 >= 0 && vars->ts.map[(int)y][(int)x - i] == '1')
+	if (tal == 'v' && x - 1 >= 0 && y >= 0
+		&& vars->ts.map[(int)y][(int)x - i] == '1')
 		return (1);
 	return (0);
 }
@@ -77,23 +78,26 @@ void	find_inter_h(t_vars *vars)
 {
 	int		i;
 	int		ri;
+	t_point	a2;
 	t_point	result;
 
+	a2.x = vars->tp.x + cos(vars->tp.ra);
+	a2.y = vars->tp.y - sin(vars->tp.ra);
 	i = (int)vars->tp.y;
 	ri = vars->tp.ri;
+	if (vars->tp.ra > M_PI && vars->tp.ra < 2 * M_PI)
+		i++;
 	while (i && i < vars->ts.map_height)
 	{
-		intersection(vars, vars->tg.h[i], &result);
+		intersection(vars, vars->tg.h[i], &result, a2);
 		vars->tp.inter_h[ri] = result;
 		if (check_wall(vars, vars->tp.inter_h[ri].x,
 				vars->tp.inter_h[ri].y, 'h') != 0)
 			break ;
-		if (vars->tp.ra < M_PI)
-			i++;
-		if (vars->tp.ra > M_PI)
+		if (vars->tp.ra < M_PI && vars->tp.ra > 0)
 			i--;
-		else
-			vars->tp.inter_h[ri].z = -1;
+		else if (vars->tp.ra > M_PI && vars->tp.ra < 2 * M_PI)
+			i++;
 	}
 }
 
@@ -101,24 +105,25 @@ void	find_inter_v(t_vars *vars)
 {
 	int		i;
 	int		ri;
+	t_point	a2;
 	t_point	result;
 
+	a2.x = vars->tp.x + cos(vars->tp.ra);
+	a2.y = vars->tp.y - sin(vars->tp.ra);
 	i = (int)vars->tp.x;
 	ri = vars->tp.ri;
-	if (vars->tp.ra > M_PI / 2 && vars->tp.ra < 3 * M_PI / 2)
+	if (vars->tp.ra < M_PI / 2 || vars->tp.ra > 3 * M_PI / 2)
 		i++;
 	while (i && i < vars->ts.map_width)
 	{
-		intersection(vars, vars->tg.v[i], &result);
+		intersection(vars, vars->tg.v[i], &result, a2);
 		vars->tp.inter_v[ri] = result;
 		if (check_wall(vars, vars->tp.inter_v[ri].x,
 				vars->tp.inter_v[ri].y, 'v') != 0)
 			break ;
 		if (vars->tp.ra < M_PI / 2 || vars->tp.ra > 3 * M_PI / 2)
-			i--;
-		if (vars->tp.ra > M_PI / 2 && vars->tp.ra < 3 * M_PI / 2)
 			i++;
-		else
-			vars->tp.inter_h[ri].z = -1;
+		else if (vars->tp.ra > M_PI / 2 && vars->tp.ra < 3 * M_PI / 2)
+			i--;
 	}
 }
