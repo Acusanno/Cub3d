@@ -6,18 +6,22 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/05 13:40:57 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 15:45:25 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void	my_mlx_pixel_put(t_vars *vars, int x, int y, int color)
 {
 	char		*dst;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
+	if (x >= 0 && y >= 0 && x < vars->ts.r[0] && y < vars->ts.r[1])
+	{
+		dst = vars->img.addr + (y * vars->img.line_length
+				+ x * (vars->img.bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
+	}
 }
 
 int	shutdown(int keycode, t_vars *vars)
@@ -34,16 +38,20 @@ void	update_player_pos(t_vars *vars)
 	vars->tp.pdy = -sin(vars->tp.pa) * 5;
 	if (vars->tc.w == 1 && vars->tc.shift == 1)
 	{
-		if (vars->ts.map[(int)(vars->tp.y + vars->tp.pdy / 30)][(int)vars->tp.x] != '1')
+		if (vars->ts.map[(int)(vars->tp.y + vars->tp.pdy / 30)]
+			[(int)vars->tp.x] != '1')
 			vars->tp.y += vars->tp.pdy / 30;
-		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + vars->tp.pdx / 30)] != '1')
+		if (vars->ts.map[(int)vars->tp.y]
+			[(int)(vars->tp.x + vars->tp.pdx / 30)] != '1')
 			vars->tp.x += vars->tp.pdx / 30;
 	}
 	else if (vars->tc.w == 1)
 	{
-		if (vars->ts.map[(int)(vars->tp.y + vars->tp.pdy / 80)][(int)vars->tp.x] != '1')
+		if (vars->ts.map[(int)(vars->tp.y + vars->tp.pdy / 80)]
+			[(int)vars->tp.x] != '1')
 			vars->tp.y += vars->tp.pdy / 80;
-		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + vars->tp.pdx / 80)] != '1')
+		if (vars->ts.map[(int)vars->tp.y]
+			[(int)(vars->tp.x + vars->tp.pdx / 80)] != '1')
 			vars->tp.x += vars->tp.pdx / 80;
 	}
 	if (vars->tc.s)
@@ -77,6 +85,54 @@ void	update_player_pos(t_vars *vars)
 		vars->tp.pa -= 2 * M_PI;
 }
 
+void	draw_column(t_vars *vars, int ri, float ratio_height)
+{
+	int	start;
+	int	end;
+	int	i;
+
+	i = 0;
+	start = (vars->ts.r[1] - ratio_height) / 2;
+	end = (vars->ts.r[1] + ratio_height) / 2;
+	if (vars->tc.ctrl == 1)
+		start -= 80;
+	if (vars->tc.ctrl == 1)
+		end -= 80;
+	while (i < start && i < vars->ts.r[1])
+	{
+		my_mlx_pixel_put(vars, ri, i, 0x51F4F5);
+		i++;
+	}
+	while (i < end && i < vars->ts.r[1])
+	{
+		if (vars->tp.face[vars->tp.ri - ri] == 'v')
+			my_mlx_pixel_put(vars, ri, i, 0x3345FF);
+		else
+			my_mlx_pixel_put(vars, ri, i, 0x6672E8);
+		i++;
+	}
+	while (i < vars->ts.r[1])
+	{
+		my_mlx_pixel_put(vars, ri, i, 0x52280F);
+		i++;
+	}
+}
+
+void	draw_screen(t_vars *vars)
+{
+	float	ratio_height;
+	int		ri;
+
+	ratio_height = 0;
+	ri = vars->tp.ri;
+	while (ri > 0)
+	{
+		ratio_height = vars->ts.r[1] / vars->tp.dist[ri];
+		draw_column(vars, vars->tp.ri - ri, ratio_height);
+		ri--;
+	}
+}
+
 int	render_next_frame(t_vars *vars)
 {
 	int	i;
@@ -86,11 +142,13 @@ int	render_next_frame(t_vars *vars)
 	vars->tp.pdy = -sin(vars->tp.pa) * 5;
 	find_all_inter(vars);
 	if (vars->tc.tab == 0)
+		draw_screen(vars);
+	if (vars->tc.tab == 1)
 	{
 		map_draw(vars);
-		my_mlx_pixel_put(&vars->img, vars->tp.x * vars->minimap_size,
+		my_mlx_pixel_put(vars, vars->tp.x * vars->minimap_size,
 			vars->tp.y * vars->minimap_size, 0x00FF0000);
-		my_mlx_pixel_put(&vars->img,
+		my_mlx_pixel_put(vars,
 			vars->tp.x * vars->minimap_size + vars->tp.pdx,
 			vars->tp.y * vars->minimap_size + vars->tp.pdy, 0x00FF00FF);
 		i = 0;
@@ -100,7 +158,7 @@ int	render_next_frame(t_vars *vars)
 				&& vars->tp.inter_h[i].y <= vars->ts.map_height
 				&& vars->tp.inter_h[i].x >= 0
 				&& vars->tp.inter_h[i].y >= 0)
-				my_mlx_pixel_put(&vars->img, vars->tp.inter_h[i].x
+				my_mlx_pixel_put(vars, vars->tp.inter_h[i].x
 					* vars->minimap_size, vars->tp.inter_h[i].y
 					* vars->minimap_size, 0x00FF00FF);
 			i++;
@@ -115,41 +173,84 @@ t_point	find_closest(t_vars *vars, t_point inter_h, t_point inter_v)
 	t_point	result;
 
 	if (inter_h.z == -1 && inter_v.z != -1)
+	{
+		vars->tp.face[vars->tp.ri] = 'v';
 		return (inter_v);
+	}
 	if (inter_v.z == -1 && inter_h.z != -1)
+	{
+		vars->tp.face[vars->tp.ri] = 'h';
 		return (inter_h);
+	}
 	if (sqrt(pow(vars->tp.x - inter_h.x, 2) + pow(vars->tp.y - inter_h.y, 2))
 		< sqrt(pow(vars->tp.x - inter_v.x, 2)
 			+ pow(vars->tp.y - inter_v.y, 2)))
 	{
 		result.x = inter_h.x;
 		result.y = inter_h.y;
+		vars->tp.face[vars->tp.ri] = 'h';
 	}
 	else
 	{
 		result.x = inter_v.x;
 		result.y = inter_v.y;
+		vars->tp.face[vars->tp.ri] = 'v';
 	}
 	return (result);
+}
+
+void	inter_init(t_vars *vars, int ri)
+{
+	vars->tp.inter_h[ri].x = 0;
+	vars->tp.inter_v[ri].x = 0;
+	vars->tp.inter_h[ri].y = 0;
+	vars->tp.inter_v[ri].y = 0;
+	vars->tp.inter_h[ri].z = 0;
+	vars->tp.inter_v[ri].z = 0;
+}
+
+void	distance_comp(t_vars *vars, int ri)
+{
+	find_inter_h(vars);
+	find_inter_v(vars);
+	vars->tp.inter_h[ri] = find_closest(vars, vars->tp.inter_h[ri],
+			vars->tp.inter_v[ri]);
+	if (sqrtf(pow(vars->tp.x - vars->tp.inter_h[ri].x, 2)
+			+ powf(vars->tp.y - vars->tp.inter_h[ri].y, 2))
+		< sqrtf(powf(vars->tp.x - vars->tp.inter_v[ri].x, 2)
+			+ powf(vars->tp.y - vars->tp.inter_v[ri].y, 2)))
+	{
+		vars->tp.dist[ri] = sqrtf(powf(vars->tp.x - vars->tp.inter_h[ri].x, 2)
+				+ powf(vars->tp.y - vars->tp.inter_h[ri].y, 2));
+	}
+	else
+	{
+		vars->tp.dist[ri] = sqrtf(powf(vars->tp.x - vars->tp.inter_v[ri].x, 2)
+				+ powf(vars->tp.y - vars->tp.inter_v[ri].y, 2));
+	}
 }
 
 void	find_all_inter(t_vars *vars)
 {
 	float	ratioangle;
 
+	if (vars->tp.inter_h)
+	{
+		free(vars->tp.inter_h);
+		free(vars->tp.inter_v);
+		free(vars->tp.face);
+		free(vars->tp.dist);
+	}
 	vars->tp.inter_h = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
 	vars->tp.inter_v = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
+	vars->tp.face = malloc(sizeof(char) * (vars->ts.r[0] + 1));
+	vars->tp.dist = malloc(sizeof(int) * (vars->ts.r[0] + 1));
 	vars->tp.ri = 0;
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
 	vars->tp.ra = vars->tp.pa - M_PI / 6;
 	while (vars->tp.ri < vars->ts.r[0])
 	{
-		vars->tp.inter_h[vars->tp.ri].x = 0;
-		vars->tp.inter_v[vars->tp.ri].x = 0;
-		vars->tp.inter_h[vars->tp.ri].y = 0;
-		vars->tp.inter_v[vars->tp.ri].y = 0;
-		vars->tp.inter_h[vars->tp.ri].z = 0;
-		vars->tp.inter_v[vars->tp.ri].z = 0;
+		inter_init(vars, vars->tp.ri);
 		vars->tp.ri++;
 	}
 	vars->tp.ri = 0;
@@ -159,32 +260,10 @@ void	find_all_inter(t_vars *vars)
 			vars->tp.ra += 2 * M_PI;
 		else if (vars->tp.ra > (2 * M_PI))
 			vars->tp.ra -= 2 * M_PI;
-		find_inter_h(vars);
-		find_inter_v(vars);
-		// if (vars->tp.inter_h[vars->tp.ri].z == -1)
-		// {
-		// 	vars->tp.inter_h[vars->tp.ri].x = 0;
-		// 	vars->tp.inter_h[vars->tp.ri].y = 0;
-		// }
-		// if (vars->tp.inter_v[vars->tp.ri].z == -1)
-		// {
-		// 	vars->tp.inter_v[vars->tp.ri].x = 0;
-		// 	vars->tp.inter_v[vars->tp.ri].y = 0;
-		// }
-		vars->tp.inter_h[vars->tp.ri] = find_closest(vars, vars->tp.inter_h[vars->tp.ri],
-				vars->tp.inter_v[vars->tp.ri]);
+		distance_comp(vars, vars->tp.ri);
 		vars->tp.ra += ratioangle;
 		vars->tp.ri++;
 	}
-	dprintf(1, "h[0].x = %f, h[0].y = %f\n", vars->tp.inter_h[0].x, vars->tp.inter_h[0].y);
-	// dprintf(1, "v[0].z = %f\n", vars->tp.inter_v[0].z);
-	// dprintf(1, "h[0].z = %f\n", vars->tp.inter_h[0].z);
-	dprintf(1, "h[500].x = %f, h[500].y = %f\n", vars->tp.inter_h[500].x, vars->tp.inter_h[500].y);
-	// dprintf(1, "v[500].z = %f\n", vars->tp.inter_v[500].z);
-	// dprintf(1, "h[500].z = %f\n", vars->tp.inter_h[500].z);
-	dprintf(1, "h[999].x = %f, h[999].y = %f\n", vars->tp.inter_h[999].x, vars->tp.inter_h[999].y);
-	// dprintf(1, "v[999].z = %f\n", vars->tp.inter_v[999].z);
-	// dprintf(1, "h[999].z = %f\n", vars->tp.inter_h[999].z);
 }
 
 int	key_pressed(int keycode, t_vars *vars)
@@ -205,6 +284,8 @@ int	key_pressed(int keycode, t_vars *vars)
 		vars->tc.tab = 1;
 	if (keycode == SHIFT)
 		vars->tc.shift = 1;
+	if (keycode == CTRL)
+		vars->tc.ctrl = 1;
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(vars->mlx, vars->win);
@@ -228,9 +309,11 @@ int	key_released(int keycode, t_vars *vars)
 	if (keycode == DOWN || keycode == S)
 		vars->tc.s = 0;
 	if (keycode == TAB)
-		vars->tc.tab = 0;
+		vars->tc.tab = 0;	
 	if (keycode == SHIFT)
 		vars->tc.shift = 0;
+	if (keycode == CTRL)
+		vars->tc.ctrl = 0;
 	return (0);
 }
 
@@ -247,7 +330,6 @@ int	main(int argc, char **argv)
 	{
 		vars.ts.map = NULL;
 		vars.ts.filename = argv[1];
-		vars.tv.r = 1;
 		vars.mlx = mlx_init();
 		parse_settings(&vars.ts);
 		settings_check(&vars);

@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/05 10:26:46 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 15:44:24 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define ESC 53
 # define TAB 48
 # define SHIFT 257
+# define CTRL 256
 # define RED "ff0000"
 # define GREEN "00ff00"
 # define BLUE "0000ff"
@@ -78,20 +79,9 @@ typedef struct s_pixel {
 	int		color;
 	t_point	*inter_h;
 	t_point	*inter_v;
+	char	*face;
+	float	*dist;
 }					t_pixel;
-
-typedef struct s_rays {
-	int				r;
-	int				mx;
-	int				my;
-	int				mp;
-	int				dof;
-	float			rx;
-	float			ry;
-	float			ra;
-	float			xo;
-	float			yo;
-}					t_rays;
 
 typedef struct s_lines {
 	t_point				a;
@@ -112,6 +102,7 @@ typedef struct s_controls {
 	int				right;
 	int				tab;
 	int				shift;
+	int				ctrl;
 }					t_controls;
 
 typedef struct s_vars {
@@ -121,7 +112,6 @@ typedef struct s_vars {
 	t_data			img;
 	t_pixel			tp;
 	t_settings		ts;
-	t_rays			tv;
 	t_grid			tg;
 	t_controls		tc;
 }					t_vars;
@@ -142,7 +132,7 @@ void				settings_check(t_vars *vars);
 void				map_size(t_settings *ts);
 void				draw_cube(int x, int y, int color, t_vars *vars);
 void				map_draw(t_vars *vars);
-void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void				my_mlx_pixel_put(t_vars *vars, int x, int y, int color);
 int					is_spawn(char c);
 void				spawn_player(t_vars *vars);
 void				raycast(t_vars *vars);

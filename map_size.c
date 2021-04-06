@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 10:26:14 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/18 11:06:15 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 15:44:56 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	draw_cube(int x, int y, int color, t_vars *vars)
 		j = 0;
 		while (j < vars->minimap_size)
 		{
-			my_mlx_pixel_put(&vars->img, x + i, y + j, color);
+			my_mlx_pixel_put(vars, x + i, y + j, color);
 			j++;
 		}
 		i++;

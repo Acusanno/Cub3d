@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:58:52 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/05 13:46:51 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 10:38:07 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ int	check_wall(t_vars *vars, float x, float y, char tal)
 		|| (tal == 'v' && vars->tp.ra > M_PI / 2
 			&& vars->tp.ra < 3 * M_PI / 2))
 		i = 1;
-	if (x < 0 || y < 0 || x > vars->ts.map_width
-		|| y > vars->ts.map_height)
+	if (x < 0 || y < 0 || x >= vars->ts.map_width
+		|| y >= vars->ts.map_height)
 	{
 		if (tal == 'h')
 			vars->tp.inter_h[j].z = -1;
@@ -65,10 +65,10 @@ int	check_wall(t_vars *vars, float x, float y, char tal)
 			vars->tp.inter_v[j].z = -1;
 		return (-1);
 	}
-	if (tal == 'h' && y - 1 >= 0 && x >= 0
+	if (tal == 'h' && y - 1 > 0 && x > 0
 		&& vars->ts.map[(int)y - i][(int)x] == '1')
 		return (1);
-	if (tal == 'v' && x - 1 >= 0 && y >= 0
+	if (tal == 'v' && x - 1 > 0 && y > 0
 		&& vars->ts.map[(int)y][(int)x - i] == '1')
 		return (1);
 	return (0);
