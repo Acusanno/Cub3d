@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:54:35 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/01 14:07:25 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/12 12:59:29 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	spawn_init(t_vars *vars)
 		vars->tp.pa = ((3 * M_PI) / 2);
 	if (vars->ts.spawn == 'E')
 		vars->tp.pa = 0;
-	if (vars->ts.spawn == 'O')
+	if (vars->ts.spawn == 'W')
 		vars->tp.pa = M_PI;
 }
 
@@ -54,6 +54,19 @@ void	set_x_y(t_point *res, double first, double second)
 {
 	res->x = first;
 	res->y = second;
+}
+
+void	controls_init(t_vars *vars)
+{
+	vars->tc.a = 0;
+	vars->tc.d = 0;
+	vars->tc.w = 0;
+	vars->tc.s = 0;
+	vars->tc.left = 0;
+	vars->tc.right = 0;
+	vars->tc.shift = 0;
+	vars->tc.tab = 0;
+	vars->tc.ctrl = 0;
 }
 
 void	map_transform(t_vars *vars)
@@ -79,6 +92,6 @@ void	map_transform(t_vars *vars)
 		newmap[i][j] = '\0';
 		i++;
 	}
-	free(vars->ts.map);
+	free_tab(vars->ts.map);
 	vars->ts.map = newmap;
 }

@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:03:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/15 13:31:37 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/12 09:37:13 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ void	struct_init(t_settings *ts)
 	ts->s = 0;
 	ts->f = -1;
 	ts->c = -1;
+	ts->map = 0;
 	ts->spawn = 0;
 }
 
-int		ft_strlen_split(char **str)
+int	ft_strlen_split(char **str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)
@@ -38,9 +39,9 @@ int		ft_strlen_split(char **str)
 	return (i);
 }
 
-int		check_fc(char **array)
+int	check_fc(char **array)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 3)
@@ -76,15 +77,12 @@ void	map_realloc(t_settings *ts, char *str, int i)
 	char	**tmp;
 	int		j;
 
-	j = 0;
-	tmp = malloc(sizeof(char *) * (i + 2));
+	j = i;
+	tmp = calloc(i + 2, sizeof(char *));
 	tmp[i] = ft_strdup(str);
 	tmp[i + 1] = 0;
-	while (j < i)
-	{
-		tmp[j] = ft_strdup(ts->map[j]);
-		j++;
-	}
+	while (j-- > 0)
+		tmp[j] = ts->map[j];
 	free(ts->map);
 	ts->map = tmp;
 }

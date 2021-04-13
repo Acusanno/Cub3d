@@ -1,11 +1,11 @@
 R 1920 1080
 
-NO ./north_texture1   
-SO ./south_texture
-WE ./west_texture
-EA ./east_texture
+NO ./textures/north.xpm   
+SO ./textures/south.xpm
+WE ./textures/west.xpm
+EA ./textures/east.xpm
 
-S ./sprite_texture
+S ./textures/tonneau.xpm
 
 F 120,100,0
 C 1,1,1
@@ -18,7 +18,7 @@ C 1,1,1
 10000000000000001        10001
 11000111000000001         101
 100001 1000000031111111111131
-100111 1000O00300000000000001
+100111 1000N00300000000000001
 1001   1111111111111111111111
 1001
 1001

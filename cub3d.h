@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/06 15:44:24 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/13 09:31:41 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,14 @@ typedef struct s_point {
 typedef struct s_data {
 	void			*img;
 	char			*addr;
+	char			*path;
 	int				bits_per_pixel;
 	int				line_length;
 	int				endian;
+	int				img_width;
+	int				img_height;
+	int				text_x;
+	int				text_y;
 }					t_data;
 
 typedef struct s_pixel {
@@ -110,10 +115,13 @@ typedef struct s_vars {
 	void			*win;
 	int				minimap_size;
 	t_data			img;
+	t_data			img2;
+	t_data			imgswap;
 	t_pixel			tp;
 	t_settings		ts;
 	t_grid			tg;
 	t_controls		tc;
+	t_data			*td;
 }					t_vars;
 
 void				struct_init(t_settings *ts);
@@ -121,11 +129,11 @@ int					ft_strlen_split(char **str);
 int					check_fc(char **array);
 void				put_tab(char **tab, t_settings *ts, char c);
 void				map_realloc(t_settings *ts, char *str, int i);
-void				parse_r(t_settings *ts, char *str);
-void				parse_nswes(t_settings *ts, char *str);
-int					parse_fc(t_settings *ts, char *str);
-void				parse_map(t_settings *ts, char *str);
-void				parse_settings(t_settings *ts);
+void				parse_r(t_vars *vars, char *str);
+void				parse_nswes(t_vars *vars, char *str);
+int					parse_fc(t_vars *vars, char *str);
+void				parse_map(t_vars *vars, char *str);
+void				parse_settings(t_vars *vars);
 void				check_space(t_settings *ts, int i, int j);
 void				map_check(t_settings *ts);
 void				settings_check(t_vars *vars);
@@ -152,5 +160,11 @@ void				map_transform(t_vars *vars);
 void				set_x_y(t_point *res, double first, double second);
 double				line_slope(float a1, float a2, float b1, float b2);
 int					check_wall(t_vars *vars, float x, float y, char tal);
+void				ft_exit(int code, t_vars *vars, char *truc);
+void				free_tab(char **tab);
+void				controls_init(t_vars *vars);
+void				put_path(t_vars *vars);
+void				read_img(t_vars *vars, int i);
+void				read_all_img(t_vars *vars);
 
 #endif

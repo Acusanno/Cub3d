@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 16:54:06 by acusanno          #+#    #+#              #
-#    Updated: 2021/04/06 15:00:48 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/04/07 08:14:26 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ OBJS_BONUS	= ${SRCS_BONUS:.c=.o}
 
 NAME		= libft.a
 
-CC			= gcc -g3 -g -fsanitize=address
+CC			= gcc -g3 -g
 
 AR			= ar rc
 
