@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/12 14:38:58 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/16 15:21:17 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,23 @@ void	update_player_pos(t_vars *vars)
 		vars->tp.pa -= 2 * M_PI;
 }
 
-void	draw_column(t_vars *vars, int ri, float ratio_height)
+void	step_init(t_vars *vars)
 {
-	int	start;
-	int	end;
-	int	i;
+	if (vars->tp.pa < M_PI && vars->tp.pa > 0)
+		vars->tp.step_x = -1;
+	else
+		vars->tp.step_x = 1;
+	if (vars->tp.pa > M_PI / 2 && vars->tp.pa < 3 * M_PI / 2)
+		vars->tp.step_y = -1;
+	else
+		vars->tp.step_y = 1;
+}
+
+void	draw_column(t_vars *vars, int ri, float ratio_height, int j)
+{
+	int		start;
+	int		end;
+	int		i;
 
 	i = 0;
 	start = (vars->ts.r[1] - ratio_height) / 2;
@@ -137,12 +149,19 @@ void	draw_column(t_vars *vars, int ri, float ratio_height)
 		my_mlx_pixel_put(vars, ri, i, 0x51F4F5);
 		i++;
 	}
+	step_init(vars);
+	if (vars->tp.face[ri] == 'h')
+		vars->td[j].text_x = fmodf(vars->tp.inter_h[ri].x, 1) * vars->td[j].img_width;
+	else if (vars->tp.face[ri] == 'v')
+		vars->td[j].text_x = fmodf(vars->tp.inter_h[ri].y, 1) * vars->td[j].img_width;
 	while (i < end && i < vars->ts.r[1])
 	{
-		if (vars->tp.face[vars->tp.ri - ri] == 'v')
-			my_mlx_pixel_put(vars, ri, i, 0x3345FF);
-		else
-			my_mlx_pixel_put(vars, ri, i, 0x6672E8);
+		vars->td[j].text_y = (i - start) * vars->td[j].img_height / (ratio_height);
+		vars->img.iaddr[i * vars->img.line_length / 4 + ri] = vars->td[j].iaddr[vars->td[j].text_y * vars->td[j].img_width + vars->td[j].text_x];
+		// if (vars->tp.face[vars->tp.ri - ri] == 'v')
+		// 	my_mlx_pixel_put(vars, ri, i, 0x3345FF);
+		// else
+		// 	my_mlx_pixel_put(vars, ri, i, 0x6672E8);
 		i++;
 	}
 	while (i < vars->ts.r[1])
@@ -152,18 +171,36 @@ void	draw_column(t_vars *vars, int ri, float ratio_height)
 	}
 }
 
+int	texture_index(float angle, char face)
+{
+	if (face == 'h' && angle > 0 && angle < M_PI)
+		return (0);
+	else if (face == 'h')
+		return (1);
+	if (face == 'v' && (angle < M_PI / 2 || angle > 3 * M_PI / 2))
+		return (3);
+	else
+		return (2);
+}
+
 void	draw_screen(t_vars *vars)
 {
 	float	ratio_height;
 	int		ri;
+	float	ratioangle;
+	int		i;
 
 	ratio_height = 0;
-	ri = vars->tp.ri;
-	while (ri > 0)
+	ri = 0;
+	ratioangle = (M_PI / 3) / vars->ts.r[0];
+	vars->tp.ra = vars->tp.pa + M_PI / 6;
+	while (ri < vars->ts.r[0])
 	{
+		vars->tp.ra -= ratioangle;
 		ratio_height = vars->ts.r[1] / vars->tp.dist[ri];
-		draw_column(vars, vars->tp.ri - ri, ratio_height);
-		ri--;
+		i = texture_index(vars->tp.ra, vars->tp.face[ri]);
+		draw_column(vars, ri, ratio_height, i);
+		ri++;
 	}
 }
 
@@ -283,22 +320,23 @@ void	find_all_inter(t_vars *vars)
 	vars->tp.dist = malloc(sizeof(int) * (vars->ts.r[0] + 2));
 	vars->tp.ri = 0;
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
-	vars->tp.ra = vars->tp.pa - M_PI / 6;
+	vars->tp.ra = vars->tp.pa + M_PI / 6;
 	while (vars->tp.ri <= vars->ts.r[0])
 	{
 		inter_init(vars, vars->tp.ri);
 		vars->tp.ri++;
 	}
 	vars->tp.ri = 0;
-	while (vars->tp.ri <= vars->ts.r[0])
+	while (vars->tp.ri < vars->ts.r[0])
 	{
 		if (vars->tp.ra < 0)
 			vars->tp.ra += 2 * M_PI;
 		else if (vars->tp.ra > (2 * M_PI))
 			vars->tp.ra -= 2 * M_PI;
 		distance_comp(vars, vars->tp.ri);
-		vars->tp.dist[vars->tp.ri] *= cos(vars->tp.pa - vars->tp.ra);
-		vars->tp.ra += ratioangle;
+		vars->tp.dist[vars->tp.ri]
+			*= cos(vars->tp.pa - vars->tp.ra);
+		vars->tp.ra -= ratioangle;
 		vars->tp.ri++;
 	}
 }
@@ -369,8 +407,9 @@ void	read_img(t_vars *vars, int i)
 {
 	vars->td[i].img = mlx_xpm_file_to_image(vars->mlx, vars->td[i].path,
 			&vars->td[i].img_width, &vars->td[i].img_height);
-	mlx_get_data_addr(vars->td[i].img, &vars->td[i].bits_per_pixel,
-		&vars->td[i].line_length, &vars->td[i].endian);
+	vars->td[i].iaddr = (int *)mlx_get_data_addr(vars->td[i].img,
+			&vars->td[i].bits_per_pixel, &vars->td[i].line_length,
+			&vars->td[i].endian);
 }
 
 void	put_path(t_vars *vars)
@@ -438,8 +477,12 @@ int	main(int argc, char **argv)
 	vars.img.img = mlx_new_image(vars.mlx, vars.ts.r[0], vars.ts.r[1]);
 	vars.img.addr = mlx_get_data_addr(vars.img.img, &vars.img.bits_per_pixel,
 			&vars.img.line_length, &vars.img.endian);
+	vars.img.iaddr = (int *)mlx_get_data_addr(vars.img.img, &vars.img.bits_per_pixel,
+			&vars.img.line_length, &vars.img.endian);
 	vars.img2.img = mlx_new_image(vars.mlx, vars.ts.r[0], vars.ts.r[1]);
 	vars.img2.addr = mlx_get_data_addr(vars.img2.img, &vars.img2.bits_per_pixel,
+			&vars.img2.line_length, &vars.img2.endian);
+	vars.img2.iaddr = (int *)mlx_get_data_addr(vars.img2.img, &vars.img2.bits_per_pixel,
 			&vars.img2.line_length, &vars.img2.endian);
 	read_all_img(&vars);
 	mlx_loop_hook(vars.mlx, render_next_frame, &vars);

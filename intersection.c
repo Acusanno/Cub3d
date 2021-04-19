@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:58:52 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/07 09:42:58 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/19 09:32:07 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,59 @@ int	intersection(t_vars *vars, t_lines line, t_point *res, t_point a2)
 		set_x_y(res, (slope_a * a1.x - slope_b * line.a.x + line.a.y - a1.y) \
 	    / (slope_a - slope_b), slope_b * (res->x - line.a.x) + line.a.y);
 	return (1);
+}
+
+int	inter_sprite(t_vars *vars, t_lines line, t_point *res, t_point a2)
+{
+	double	slope_a;
+	double	slope_b;
+	t_pixel	a1;
+
+	res->z = 0;
+	a1 = vars->tp;
+	slope_a = line_slope(a1.x, a1.y, a2.x, a2.y);
+	slope_b = line_slope(line.a.x, line.a.y, line.b.x, line.b.y);
+	if (slope_a == slope_b || (isnan(slope_a) && isnan(slope_b)))
+	{
+		res->z = -1;
+		return (-1);
+	}
+	else if (isnan(slope_a) && !isnan(slope_b))
+		set_x_y(res, a1.x, (a1.x - line.a.x) * slope_b + line.a.y);
+	else if (isnan(slope_b) && !isnan(slope_a))
+		set_x_y(res, line.a.x, (line.a.x - a1.x) * slope_a + a1.y);
+	else
+		set_x_y(res, (slope_a * a1.x - slope_b * line.a.x + line.a.y - a1.y) \
+	    / (slope_a - slope_b), slope_b * (res->x - line.a.x) + line.a.y);
+	return (1);
+}
+
+void	find_inter_s(t_vars *vars)
+{
+	int		i;
+	int		ri;
+	t_point	a2;
+	//t_point	a;
+	t_point	result;
+
+	i = (int)vars->tp.y;
+	ri = vars->tp.ri;
+	a2.x = vars->tp.x + cos(vars->tp.ra);
+	a2.y = vars->tp.y - sin(vars->tp.ra);
+	if (vars->tp.ra > M_PI && vars->tp.ra < 2 * M_PI)
+		i++;
+	while (i && i < vars->ts.map_height)
+	{
+		inter_sprite(vars, vars->tg.h[i], &result, a2);
+		vars->tp.inter_h[ri] = result;
+		if (check_wall(vars, vars->tp.inter_h[ri].x,
+				vars->tp.inter_h[ri].y, 'h') != 0)
+			break ;
+		if (vars->tp.ra < M_PI && vars->tp.ra > 0)
+			i--;
+		else if (vars->tp.ra > M_PI && vars->tp.ra < 2 * M_PI)
+			i++;
+	}
 }
 
 int	check_wall(t_vars *vars, float x, float y, char tal)
@@ -83,10 +136,10 @@ void	find_inter_h(t_vars *vars)
 	t_point	a2;
 	t_point	result;
 
-	a2.x = vars->tp.x + cos(vars->tp.ra);
-	a2.y = vars->tp.y - sin(vars->tp.ra);
 	i = (int)vars->tp.y;
 	ri = vars->tp.ri;
+	a2.x = vars->tp.x + cos(vars->tp.ra);
+	a2.y = vars->tp.y - sin(vars->tp.ra);
 	if (vars->tp.ra > M_PI && vars->tp.ra < 2 * M_PI)
 		i++;
 	while (i && i < vars->ts.map_height)
@@ -110,10 +163,10 @@ void	find_inter_v(t_vars *vars)
 	t_point	a2;
 	t_point	result;
 
-	a2.x = vars->tp.x + cos(vars->tp.ra);
-	a2.y = vars->tp.y - sin(vars->tp.ra);
 	i = (int)vars->tp.x;
 	ri = vars->tp.ri;
+	a2.x = vars->tp.x + cos(vars->tp.ra);
+	a2.y = vars->tp.y - sin(vars->tp.ra);
 	if (vars->tp.ra < M_PI / 2 || vars->tp.ra > 3 * M_PI / 2)
 		i++;
 	while (i && i < vars->ts.map_width)

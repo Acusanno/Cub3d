@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/13 09:31:41 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/16 09:36:42 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_point {
 typedef struct s_data {
 	void			*img;
 	char			*addr;
+	int				*iaddr;
 	char			*path;
 	int				bits_per_pixel;
 	int				line_length;
@@ -86,6 +87,8 @@ typedef struct s_pixel {
 	t_point	*inter_v;
 	char	*face;
 	float	*dist;
+	int		step_x;
+	int		step_y;
 }					t_pixel;
 
 typedef struct s_lines {
