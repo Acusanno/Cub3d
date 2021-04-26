@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/16 15:21:17 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/26 12:50:37 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,26 +73,34 @@ void	update_player_pos(t_vars *vars)
 	if (vars->tc.w == 1 && vars->tc.shift == 1)
 	{
 		if (vars->ts.map[(int)(vars->tp.y + vars->tp.pdy / 30)]
-			[(int)vars->tp.x] != '1')
+			[(int)vars->tp.x] != '1' && vars->ts.map[(int)
+			(vars->tp.y + vars->tp.pdy / 30)][(int)vars->tp.x] != '2')
 			vars->tp.y += vars->tp.pdy / 30;
-		if (vars->ts.map[(int)vars->tp.y]
-			[(int)(vars->tp.x + vars->tp.pdx / 30)] != '1')
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + vars->tp.pdx / 30)]
+			!= '1' && vars->ts.map[(int)vars->tp.y]
+			[(int)(vars->tp.x + vars->tp.pdx / 30)] != '2')
 			vars->tp.x += vars->tp.pdx / 30;
 	}
 	else if (vars->tc.w == 1)
 	{
 		if (vars->ts.map[(int)(vars->tp.y + vars->tp.pdy / 80)]
-			[(int)vars->tp.x] != '1')
+			[(int)vars->tp.x] != '1' && vars->ts.map[(int)
+			(vars->tp.y + vars->tp.pdy / 80)][(int)vars->tp.x] != '2')
 			vars->tp.y += vars->tp.pdy / 80;
-		if (vars->ts.map[(int)vars->tp.y]
-			[(int)(vars->tp.x + vars->tp.pdx / 80)] != '1')
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + vars->tp.pdx / 80)]
+			!= '1' && vars->ts.map[(int)vars->tp.y]
+			[(int)(vars->tp.x + vars->tp.pdx / 80)] != '2')
 			vars->tp.x += vars->tp.pdx / 80;
 	}
 	if (vars->tc.s)
 	{
-		if (vars->ts.map[(int)(vars->tp.y - vars->tp.pdy / 80)][(int)vars->tp.x] != '1')
+		if (vars->ts.map[(int)(vars->tp.y - vars->tp.pdy / 80)][(int)vars->tp.x]
+			!= '1' && vars->ts.map[(int)(vars->tp.y - vars->tp.pdy / 80)]
+			[(int)vars->tp.x] != '2')
 			vars->tp.y -= vars->tp.pdy / 80;
-		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x - vars->tp.pdx / 80)] != '1')
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x - vars->tp.pdx / 80)]
+			!= '1' && vars->ts.map[(int)vars->tp.y]
+			[(int)(vars->tp.x - vars->tp.pdx / 80)] != '2')
 			vars->tp.x -= vars->tp.pdx / 80;
 	}
 	if (vars->tc.left == 1)
@@ -101,34 +109,31 @@ void	update_player_pos(t_vars *vars)
 		vars->tp.pa -= M_PI / 35;
 	if (vars->tc.a == 1)
 	{
-		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + cos(vars->tp.pa + (M_PI / 2)) / 30)] != '1')
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + cos(vars->tp.pa
+				+ (M_PI / 2)) / 30)] != '1' && vars->ts.map[(int)vars->tp.y]
+			[(int)(vars->tp.x + cos(vars->tp.pa + (M_PI / 2)) / 30)] != '2')
 			vars->tp.x += cos(vars->tp.pa + (M_PI / 2)) / 30;
-		if (vars->ts.map[(int)(vars->tp.y - sin(vars->tp.pa + (M_PI / 2)) / 30)][(int)vars->tp.x] != '1')
+		if (vars->ts.map[(int)(vars->tp.y - sin(vars->tp.pa + (M_PI / 2)) / 30)]
+			[(int)vars->tp.x] != '1' && vars->ts.map[(int)(vars->tp.y
+				- sin(vars->tp.pa + (M_PI / 2)) / 30)][(int)vars->tp.x] != '2')
 			vars->tp.y -= sin(vars->tp.pa + (M_PI / 2)) / 30;
 	}
 	if (vars->tc.d == 1)
 	{
-		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x + cos(vars->tp.pa - (M_PI / 2)) / 30)] != '1')
+		if (vars->ts.map[(int)vars->tp.y][(int)(vars->tp.x
+			+ cos(vars->tp.pa - (M_PI / 2)) / 30)] != '1' && vars->ts.map
+			[(int)vars->tp.y][(int)(vars->tp.x + cos(vars->tp.pa
+				- (M_PI / 2)) / 30)] != '2')
 			vars->tp.x += cos(vars->tp.pa - (M_PI / 2)) / 30;
-		if (vars->ts.map[(int)(vars->tp.y - sin(vars->tp.pa - (M_PI / 2)) / 30)][(int)vars->tp.x] != '1')
+		if (vars->ts.map[(int)(vars->tp.y - sin(vars->tp.pa - (M_PI / 2)) / 30)]
+			[(int)vars->tp.x] != '1' && vars->ts.map[(int)(vars->tp.y
+				- sin(vars->tp.pa - (M_PI / 2)) / 30)][(int)vars->tp.x] != '2')
 			vars->tp.y -= sin(vars->tp.pa - (M_PI / 2)) / 30;
 	}
 	if (vars->tp.pa < 0)
 		vars->tp.pa += 2 * M_PI;
 	else if (vars->tp.pa > (2 * M_PI))
 		vars->tp.pa -= 2 * M_PI;
-}
-
-void	step_init(t_vars *vars)
-{
-	if (vars->tp.pa < M_PI && vars->tp.pa > 0)
-		vars->tp.step_x = -1;
-	else
-		vars->tp.step_x = 1;
-	if (vars->tp.pa > M_PI / 2 && vars->tp.pa < 3 * M_PI / 2)
-		vars->tp.step_y = -1;
-	else
-		vars->tp.step_y = 1;
 }
 
 void	draw_column(t_vars *vars, int ri, float ratio_height, int j)
@@ -149,7 +154,6 @@ void	draw_column(t_vars *vars, int ri, float ratio_height, int j)
 		my_mlx_pixel_put(vars, ri, i, 0x51F4F5);
 		i++;
 	}
-	step_init(vars);
 	if (vars->tp.face[ri] == 'h')
 		vars->td[j].text_x = fmodf(vars->tp.inter_h[ri].x, 1) * vars->td[j].img_width;
 	else if (vars->tp.face[ri] == 'v')
@@ -158,15 +162,61 @@ void	draw_column(t_vars *vars, int ri, float ratio_height, int j)
 	{
 		vars->td[j].text_y = (i - start) * vars->td[j].img_height / (ratio_height);
 		vars->img.iaddr[i * vars->img.line_length / 4 + ri] = vars->td[j].iaddr[vars->td[j].text_y * vars->td[j].img_width + vars->td[j].text_x];
-		// if (vars->tp.face[vars->tp.ri - ri] == 'v')
-		// 	my_mlx_pixel_put(vars, ri, i, 0x3345FF);
-		// else
-		// 	my_mlx_pixel_put(vars, ri, i, 0x6672E8);
 		i++;
 	}
 	while (i < vars->ts.r[1])
 	{
 		my_mlx_pixel_put(vars, ri, i, 0x52280F);
+		i++;
+	}
+}
+
+float	dist(t_point a, t_point b)
+{
+	float	res;
+
+	res = sqrtf(powf(a.x - b.x, 2) + powf(a.y - b.y, 2));
+	return (res);
+}
+
+void	draw_sprite(t_vars *vars, int ri, float ratio_height)
+{
+	int		start;
+	int		end;
+	int		i;
+	int		color;
+	float	ratio_width;
+
+	i = 0;
+	ratio_width = vars->ts.r[0] / (vars->tp.dist_sp[ri]);
+	start = (vars->ts.r[1] - ratio_height) / 2;
+	end = (vars->ts.r[1] + ratio_height) / 2;
+	if (vars->tc.ctrl == 1)
+		start -= 80;
+	if (vars->tc.ctrl == 1)
+		end -= 80;
+	while (i < start && i < vars->ts.r[1])
+		i++;
+	// vars->td[4].text_x = fmodf(vars->tp.inter_s[ri].y, 1) * vars->td[4].img_width + ri / vars->td[4].img_width;
+	vars->td[4].text_x = ((vars->td[4].img_width / 64 + dist(vars->ts.sprite[0],
+			vars->tp.inter_s[ri])) * (vars->td[4].img_width / 2));
+	// printf("%i\n", vars->td[4].text_x);
+	// vars->td[4].text_x = vars->td[4].img_width * fmod(vars->tp.inter_s[ri].y, 1);
+	//printf("x = %f, y = %f\n", vars->tp.inter_s[ri].x, vars->tp.inter_s[ri].y);
+	//printf("text_x = %d\n", vars->td[4].text_x);
+	while (i < end && i < vars->ts.r[1])
+	{
+		vars->td[4].text_y = (i - start) * vars->td[4].img_height
+			/ (ratio_height);
+		if (vars->td[4].text_x <= 64)
+			color = vars->td[4].iaddr[vars->td[4].text_y * vars->td[4].img_width
+					+ vars->td[4].text_x];
+		else
+			vars->tp.inter_s[ri].z = -1;
+		// if (dist(vars->tp.inter_s[ri], vars->ts.sprite[0])
+		// 	< vars->td[4].img_width / 2 && color)
+		if (vars->tp.inter_s[ri].z != -1 && color)
+			my_mlx_pixel_put(vars, ri, i, color);
 		i++;
 	}
 }
@@ -200,8 +250,21 @@ void	draw_screen(t_vars *vars)
 		ratio_height = vars->ts.r[1] / vars->tp.dist[ri];
 		i = texture_index(vars->tp.ra, vars->tp.face[ri]);
 		draw_column(vars, ri, ratio_height, i);
+		ratio_height = vars->ts.r[1] / vars->tp.dist_sp[ri];
+		if (vars->tp.inter_s[ri].z != -1)
+			draw_sprite(vars, ri, ratio_height);
 		ri++;
 	}
+	// i = 0;
+	// ri = 0;
+	// while (i < vars->ts.sprites)
+	// {
+	// 	while (ri < vars->td[4].img_width / 2)
+	// 	{
+	// 		ri++;
+	// 	}
+	// 	i++;
+	// }
 }
 
 int	render_next_frame(t_vars *vars)
@@ -244,7 +307,10 @@ int	render_next_frame(t_vars *vars)
 t_point	find_closest(t_vars *vars, t_point inter_h, t_point inter_v)
 {
 	t_point	result;
+	t_point	player;
 
+	player.x = vars->tp.x;
+	player.y = vars->tp.y;
 	if (inter_h.z == -1 && inter_v.z != -1)
 	{
 		vars->tp.face[vars->tp.ri] = 'v';
@@ -255,9 +321,7 @@ t_point	find_closest(t_vars *vars, t_point inter_h, t_point inter_v)
 		vars->tp.face[vars->tp.ri] = 'h';
 		return (inter_h);
 	}
-	if (sqrt(pow(vars->tp.x - inter_h.x, 2) + pow(vars->tp.y - inter_h.y, 2))
-		< sqrt(pow(vars->tp.x - inter_v.x, 2)
-			+ pow(vars->tp.y - inter_v.y, 2)))
+	if (dist(player, inter_h) < dist(player, inter_v))
 	{
 		result.x = inter_h.x;
 		result.y = inter_h.y;
@@ -276,31 +340,48 @@ void	inter_init(t_vars *vars, int ri)
 {
 	vars->tp.inter_h[ri].x = 0;
 	vars->tp.inter_v[ri].x = 0;
+	vars->tp.inter_s[ri].x = 0;
 	vars->tp.inter_h[ri].y = 0;
 	vars->tp.inter_v[ri].y = 0;
+	vars->tp.inter_s[ri].y = 0;
 	vars->tp.inter_h[ri].z = 0;
 	vars->tp.inter_v[ri].z = 0;
+	vars->tp.inter_s[ri].z = 0;
+}
+
+void	distance_comp_sp(t_vars *vars, int ri)
+{
+	t_point	player;
+
+	player.x = vars->tp.x;
+	player.y = vars->tp.y;
+	if (dist(player, vars->tp.inter_h[ri]) < dist(player, vars->tp.inter_s[ri])
+		|| dist(vars->tp.inter_s[ri], vars->ts.sprite[0])
+		> vars->td[4].img_width / 2)
+		vars->tp.inter_s[ri].z = -1;
+	else if (vars->tp.inter_s[ri].z != -1)
+	{
+		vars->tp.dist_sp[ri] = dist(player, vars->tp.inter_s[ri]);
+		vars->tp.dist_sp[ri] *= cos(vars->tp.pa - vars->tp.ra);
+	}
 }
 
 void	distance_comp(t_vars *vars, int ri)
 {
+	t_point	player;
+
+	player.x = vars->tp.x;
+	player.y = vars->tp.y;
+	vars->tp.nb_sp = 0;
 	find_inter_h(vars);
 	find_inter_v(vars);
+	find_inter_s(vars, 0);
 	vars->tp.inter_h[ri] = find_closest(vars, vars->tp.inter_h[ri],
 			vars->tp.inter_v[ri]);
-	if (sqrtf(pow(vars->tp.x - vars->tp.inter_h[ri].x, 2)
-			+ powf(vars->tp.y - vars->tp.inter_h[ri].y, 2))
-		< sqrtf(powf(vars->tp.x - vars->tp.inter_v[ri].x, 2)
-			+ powf(vars->tp.y - vars->tp.inter_v[ri].y, 2)))
-	{
-		vars->tp.dist[ri] = sqrtf(powf(vars->tp.x - vars->tp.inter_h[ri].x, 2)
-				+ powf(vars->tp.y - vars->tp.inter_h[ri].y, 2));
-	}
+	if (dist(player, vars->tp.inter_h[ri]) < dist(player, vars->tp.inter_v[ri]))
+		vars->tp.dist[ri] = dist(player, vars->tp.inter_h[ri]);
 	else
-	{
-		vars->tp.dist[ri] = sqrtf(powf(vars->tp.x - vars->tp.inter_v[ri].x, 2)
-				+ powf(vars->tp.y - vars->tp.inter_v[ri].y, 2));
-	}
+		vars->tp.dist[ri] = dist(player, vars->tp.inter_v[ri]);
 }
 
 void	find_all_inter(t_vars *vars)
@@ -311,13 +392,17 @@ void	find_all_inter(t_vars *vars)
 	{
 		free(vars->tp.inter_h);
 		free(vars->tp.inter_v);
+		free(vars->tp.inter_s);
 		free(vars->tp.face);
 		free(vars->tp.dist);
+		free(vars->tp.dist_sp);
 	}
 	vars->tp.inter_h = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
 	vars->tp.inter_v = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
+	vars->tp.inter_s = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
 	vars->tp.face = malloc(sizeof(char) * (vars->ts.r[0] + 1));
 	vars->tp.dist = malloc(sizeof(int) * (vars->ts.r[0] + 2));
+	vars->tp.dist_sp = malloc(sizeof(int) * (vars->ts.r[0] + 2));
 	vars->tp.ri = 0;
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
 	vars->tp.ra = vars->tp.pa + M_PI / 6;
@@ -336,9 +421,12 @@ void	find_all_inter(t_vars *vars)
 		distance_comp(vars, vars->tp.ri);
 		vars->tp.dist[vars->tp.ri]
 			*= cos(vars->tp.pa - vars->tp.ra);
+		distance_comp_sp(vars, vars->tp.ri);
 		vars->tp.ra -= ratioangle;
 		vars->tp.ri++;
 	}
+	// printf("dist = %f\n", vars->tp.dist_sp[vars->ts.r[0] / 2]);
+	// printf("x = %f, y = %f\n", vars->tp.x, vars->tp.y);
 }
 
 int	key_pressed(int keycode, t_vars *vars)
@@ -457,7 +545,7 @@ int	main(int argc, char **argv)
 		printf("\033[33m-----------MAP---------------\033[0m\n");
 		while (i < vars.ts.map_height)
 		{
-			printf("\033[92mligne [%d] :\033[0m %s", i, vars.ts.map[i]);
+			printf("\033[92mligne [%2d] :\033[0m %s", i, vars.ts.map[i]);
 			i++;
 			printf("\n");
 		}

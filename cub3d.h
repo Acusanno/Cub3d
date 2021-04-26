@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/16 09:36:42 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/23 08:36:36 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,20 @@
 # define CYAN "00ffff"
 # define WHITE "ffffff"
 
+typedef struct s_point {
+	float			x;
+	float			y;
+	float			z;
+}					t_point;
+
 typedef struct s_settings
 {
 	int				fd;
 	char			*filename;
 	int				r[2];
 	char			spawn;
+	t_point			*sprite;
+	int				sprites;
 	char			*no;
 	char			*so;
 	char			*we;
@@ -53,12 +61,6 @@ typedef struct s_settings
 	int				map_width;
 	int				map_height;
 }					t_settings;
-
-typedef struct s_point {
-	float			x;
-	float			y;
-	float			z;
-}					t_point;
 
 typedef struct s_data {
 	void			*img;
@@ -85,8 +87,11 @@ typedef struct s_pixel {
 	int		color;
 	t_point	*inter_h;
 	t_point	*inter_v;
+	t_point	*inter_s;
 	char	*face;
 	float	*dist;
+	float	*dist_sp;
+	int		nb_sp;
 	int		step_x;
 	int		step_y;
 }					t_pixel;
@@ -169,5 +174,8 @@ void				controls_init(t_vars *vars);
 void				put_path(t_vars *vars);
 void				read_img(t_vars *vars, int i);
 void				read_all_img(t_vars *vars);
+void				find_inter_s(t_vars *vars, int sprite);
+void				sprite_check(t_settings *ts);
+int					check_sprite(t_vars *vars, float x, float y);
 
 #endif

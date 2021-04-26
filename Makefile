@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/04/16 14:54:08 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/04/26 08:34:37 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS =		init.c \
 			intersection.c \
 			parsing_utils.c \
 
-GCCF = gcc -g3 -O3 -Wall -Werror -Wextra -g
+GCCF = gcc -g3 -O3 -Wall -Werror -Wextra -g -fsanitize=address
 
 OBJS = ${SRCS:.c=.o}
 

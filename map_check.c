@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 09:11:08 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/07 13:02:36 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/23 10:40:44 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	check_space(t_settings *ts, int i, int j)
 
 int	is_spawn(char c)
 {
-	if (c == 'N' || c == 'S' || c == 'O' || c == 'E')
+	if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
 		return (1);
 	return (0);
 }
@@ -97,6 +97,7 @@ void	map_check(t_settings *ts)
 	i = 0;
 	j = 0;
 	spawn = 0;
+	ts->sprites = 0;
 	while (ts->map[i])
 	{
 		j = 0;
@@ -105,10 +106,11 @@ void	map_check(t_settings *ts)
 			if (ts->map[i][j] != '1' && ts->map[i][j] != ' ')
 			{
 				if (is_spawn(ts->map[i][j]) == 1)
-				{
 					spawn++;
+				if (is_spawn(ts->map[i][j]) == 1)
 					ts->spawn = ts->map[i][j];
-				}
+				else if (ts->map[i][j] == '2')
+					ts->sprites++;
 				check_sides(ts, i, j);
 			}
 			j++;
@@ -117,4 +119,32 @@ void	map_check(t_settings *ts)
 	}
 	if (spawn != 1)
 		error_map();
+	sprite_check(ts);
+}
+
+void	sprite_check(t_settings *ts)
+{
+	int		i;
+	size_t	j;
+	int		sprite;
+
+	i = 0;
+	j = 0;
+	sprite = 0;
+	ts->sprite = malloc(sizeof(t_point) * ts->sprites);
+	while (ts->map[i])
+	{
+		j = 0;
+		while (ts->map[i][j])
+		{
+			if (ts->map[i][j] == '2')
+			{
+				ts->sprite[sprite].x = i + 0.5;
+				ts->sprite[sprite].y = j + 0.5;
+				sprite++;
+			}
+			j++;
+		}
+		i++;
+	}
 }
