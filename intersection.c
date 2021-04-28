@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:58:52 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/26 12:45:06 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/28 11:13:15 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,34 +103,34 @@ void	find_inter_s(t_vars *vars, int sprite)
 	t_point	joueur;
 
 	ri = vars->tp.ri;
+	sprite = 0;
 	joueur.x = vars->tp.x;
 	joueur.y = vars->tp.y;
 	a2.x = vars->tp.x + cos(vars->tp.ra);
 	a2.y = vars->tp.y - sin(vars->tp.ra);
 	b1 = vars->ts.sprite[sprite];
-	b2 = get_vec(joueur, b1);
-	// printf("%f, %f\n", b1.x, b1.y);
-	b2 = rot_90(b2);
-	// b2.x = b1.x - 1;
+	// b2 = get_vec(joueur, b1);
+	// printf("%f, %f\n", a2.x, a2.y);
+	// b2 = rot_90(b2);
+	b2.x = b1.x + cos(vars->tp.pa + 89.5);
+	b2.y = b1.y + -sin(vars->tp.pa + 89.5);
 	// b2.y = b2.x * (vars->tp.x - b1.x) + (b1.x * b1.x) - (vars->tp.x * b1.x)
 	// 	+ b1.y - (vars->tp.y * b1.y);
 	// b2.y /= (b1.y - vars->tp.y);
 	
 	// printf("player = %f,%f - %f,%f\n", vars->tp.x, vars->tp.y, a2.x, a2.y);
 	// printf("plan = %f,%f - %f,%f\n", b1.x, b1.y, b2.x, b2.y);
-	if (vars->tp.inter_s[ri].z == 1)
+	if (vars->tp.inter_s[ri].z == 1 && dist(vars->tp.inter_s[ri], b1) < vars->td[0].img_width)
 	{
-		if (vars->tp.nb_sp == 0)
-		{
+		// if (vars->tp.nb_sp == 0)
+		// {
 			result = sprite_insec(joueur, a2, b1, b2);
-			// printf("%f\n", result.x);
-			// printf("%f\n", result.y);
 			vars->tp.inter_s[ri].x = result.x;
 			vars->tp.inter_s[ri].y = result.y;
 			vars->tp.inter_s[ri].z = result.z;
 			// printf("inter_s[%d].x = %f, inter_s[%d].y = %f\n", ri, vars->tp.inter_s[ri].x, ri, vars->tp.inter_s[ri].y);
-			// vars->tp.nb_sp++;
-		}
+		// 	vars->tp.nb_sp++;
+		// }
 	}
 }
 

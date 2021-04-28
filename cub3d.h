@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/23 08:36:36 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/28 13:36:19 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ typedef struct s_pixel {
 	int		color;
 	t_point	*inter_h;
 	t_point	*inter_v;
-	t_point	*inter_s;
+	t_point	**inter_s;
 	char	*face;
 	float	*dist;
 	float	*dist_sp;
@@ -177,5 +177,6 @@ void				read_all_img(t_vars *vars);
 void				find_inter_s(t_vars *vars, int sprite);
 void				sprite_check(t_settings *ts);
 int					check_sprite(t_vars *vars, float x, float y);
+float				dist(t_point a, t_point b);
 
 #endif

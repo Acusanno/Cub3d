@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/26 12:50:37 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/04/28 13:36:49 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,37 +179,44 @@ float	dist(t_point a, t_point b)
 	return (res);
 }
 
-void	draw_sprite(t_vars *vars, int ri, float ratio_height)
+void	draw_sprite(t_vars *vars, int ri, float ratio_height, int sprite)
 {
 	int		start;
 	int		end;
 	int		i;
 	int		color;
-	float	ratio_width;
+	float	ratio;
+	float	distance;
 
 	i = 0;
-	ratio_width = vars->ts.r[0] / (vars->tp.dist_sp[ri]);
 	start = (vars->ts.r[1] - ratio_height) / 2;
 	end = (vars->ts.r[1] + ratio_height) / 2;
+	// start -= ratio_height / 4;
+	// end -= ratio_height / 4;
 	if (vars->tc.ctrl == 1)
 		start -= 80;
 	if (vars->tc.ctrl == 1)
 		end -= 80;
 	while (i < start && i < vars->ts.r[1])
 		i++;
+	// vars->td[4].text_x = (vars->td[4].img_width / 2 - vars->td[4].img_width * dist(vars->ts.sprite[0], vars->tp.inter_s[ri]) / 2);
 	// vars->td[4].text_x = fmodf(vars->tp.inter_s[ri].y, 1) * vars->td[4].img_width + ri / vars->td[4].img_width;
-	vars->td[4].text_x = ((vars->td[4].img_width / 64 + dist(vars->ts.sprite[0],
-			vars->tp.inter_s[ri])) * (vars->td[4].img_width / 2));
-	// printf("%i\n", vars->td[4].text_x);
-	// vars->td[4].text_x = vars->td[4].img_width * fmod(vars->tp.inter_s[ri].y, 1);
-	//printf("x = %f, y = %f\n", vars->tp.inter_s[ri].x, vars->tp.inter_s[ri].y);
-	//printf("text_x = %d\n", vars->td[4].text_x);
+	// if (vars->tp.inter_s[ri].x - vars->ts.sprite[0].x > 0 && vars->tp.ra > 0 && vars->tp.ra < M_PI)
+	// if ((vars->ts.sprite[0].x < vars->tp.inter_s[ri].x && vars->tp.y > vars->ts.sprite[0].y)
+	// 	|| (vars->ts.sprite[0].x > vars->tp.inter_s[ri].x && vars->tp.y < vars->ts.sprite[0].y))
+	// printf("%d\n", vars->ts.sprite[0].x > vars->tp.inter_s[ri].x);
+	distance = dist(vars->ts.sprite[sprite], vars->tp.inter_s[ri]);
+	if ((vars->tp.pa <= M_PI && vars->ts.sprite[sprite].x >= vars->tp.inter_s[ri].x)
+	|| (vars->tp.pa > M_PI && vars->ts.sprite[sprite].x < vars->tp.inter_s[ri].x))
+		distance *= -1;
+	vars->td[4].text_x = (vars->td[4].img_width / 2) + (vars->td[4].img_width * (distance));
+	ratio = (float)vars->td[4].img_height / ratio_height;
 	while (i < end && i < vars->ts.r[1])
 	{
 		vars->td[4].text_y = (i - start) * vars->td[4].img_height
 			/ (ratio_height);
-		if (vars->td[4].text_x <= 64)
-			color = vars->td[4].iaddr[vars->td[4].text_y * vars->td[4].img_width
+		if (vars->td[4].text_x < 64 && vars->td[4].text_x >= 0)
+			color = vars->td[4].iaddr[vars->td[4].text_y * vars->td[4].img_height
 					+ vars->td[4].text_x];
 		else
 			vars->tp.inter_s[ri].z = -1;
@@ -242,6 +249,7 @@ void	draw_screen(t_vars *vars)
 
 	ratio_height = 0;
 	ri = 0;
+	i = 0;
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
 	vars->tp.ra = vars->tp.pa + M_PI / 6;
 	while (ri < vars->ts.r[0])
@@ -250,21 +258,15 @@ void	draw_screen(t_vars *vars)
 		ratio_height = vars->ts.r[1] / vars->tp.dist[ri];
 		i = texture_index(vars->tp.ra, vars->tp.face[ri]);
 		draw_column(vars, ri, ratio_height, i);
-		ratio_height = vars->ts.r[1] / vars->tp.dist_sp[ri];
-		if (vars->tp.inter_s[ri].z != -1)
-			draw_sprite(vars, ri, ratio_height);
+		while (i < vars->ts.sprites)
+		{
+			ratio_height = vars->ts.r[1] / vars->tp.dist_sp[ri];
+			if (vars->tp.inter_s[ri].z != -1)
+				draw_sprite(vars, ri, ratio_height, i);
+			i++;
+		}
 		ri++;
 	}
-	// i = 0;
-	// ri = 0;
-	// while (i < vars->ts.sprites)
-	// {
-	// 	while (ri < vars->td[4].img_width / 2)
-	// 	{
-	// 		ri++;
-	// 	}
-	// 	i++;
-	// }
 }
 
 int	render_next_frame(t_vars *vars)
@@ -349,33 +351,40 @@ void	inter_init(t_vars *vars, int ri)
 	vars->tp.inter_s[ri].z = 0;
 }
 
-void	distance_comp_sp(t_vars *vars, int ri)
+void	distance_comp_sp(t_vars *vars, int ri, int sprite)
 {
 	t_point	player;
 
 	player.x = vars->tp.x;
 	player.y = vars->tp.y;
-	if (dist(player, vars->tp.inter_h[ri]) < dist(player, vars->tp.inter_s[ri])
-		|| dist(vars->tp.inter_s[ri], vars->ts.sprite[0])
-		> vars->td[4].img_width / 2)
-		vars->tp.inter_s[ri].z = -1;
-	else if (vars->tp.inter_s[ri].z != -1)
+	if (dist(player, vars->tp.inter_h[ri]) < dist(player, vars->tp.inter_s[ri][sprite])
+		|| dist(player, vars->tp.inter_v[ri]) < dist(player, vars->tp.inter_s[ri][sprite])
+		|| dist(vars->tp.inter_s[ri][sprite], vars->ts.sprite[sprite]) > vars->td[4].img_width / 2)
+		vars->tp.inter_s[ri][sprite].z = -1;
+	else if (vars->tp.inter_s[ri][sprite].z != -1)
 	{
 		vars->tp.dist_sp[ri] = dist(player, vars->tp.inter_s[ri]);
-		vars->tp.dist_sp[ri] *= cos(vars->tp.pa - vars->tp.ra);
+		vars->tp.dist_sp[ri] *= cos(vars->tp.pa - vars->tp.ra) / 1.3;
 	}
 }
 
 void	distance_comp(t_vars *vars, int ri)
 {
 	t_point	player;
+	int		i;
 
+	i = 0;
 	player.x = vars->tp.x;
 	player.y = vars->tp.y;
 	vars->tp.nb_sp = 0;
 	find_inter_h(vars);
 	find_inter_v(vars);
 	find_inter_s(vars, 0);
+	while (i < vars->ts.sprites)
+	{
+		distance_comp_sp(vars, ri, i);
+		i++;
+	}
 	vars->tp.inter_h[ri] = find_closest(vars, vars->tp.inter_h[ri],
 			vars->tp.inter_v[ri]);
 	if (dist(player, vars->tp.inter_h[ri]) < dist(player, vars->tp.inter_v[ri]))
@@ -421,7 +430,7 @@ void	find_all_inter(t_vars *vars)
 		distance_comp(vars, vars->tp.ri);
 		vars->tp.dist[vars->tp.ri]
 			*= cos(vars->tp.pa - vars->tp.ra);
-		distance_comp_sp(vars, vars->tp.ri);
+		//distance_comp_sp(vars, vars->tp.ri);
 		vars->tp.ra -= ratioangle;
 		vars->tp.ri++;
 	}
@@ -573,6 +582,7 @@ int	main(int argc, char **argv)
 	vars.img2.iaddr = (int *)mlx_get_data_addr(vars.img2.img, &vars.img2.bits_per_pixel,
 			&vars.img2.line_length, &vars.img2.endian);
 	read_all_img(&vars);
+	mlx_do_sync(vars.mlx);
 	mlx_loop_hook(vars.mlx, render_next_frame, &vars);
 	mlx_loop(vars.mlx);
 	return (0);
