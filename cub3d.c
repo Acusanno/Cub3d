@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/28 13:36:49 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/11 13:44:44 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,13 +143,14 @@ void	draw_column(t_vars *vars, int ri, float ratio_height, int j)
 	int		i;
 
 	i = 0;
+	//ri = -ri;
 	start = (vars->ts.r[1] - ratio_height) / 2;
 	end = (vars->ts.r[1] + ratio_height) / 2;
 	if (vars->tc.ctrl == 1)
 		start -= 80;
 	if (vars->tc.ctrl == 1)
 		end -= 80;
-	while (i < start && i < vars->ts.r[1])
+	while (i < start)
 	{
 		my_mlx_pixel_put(vars, ri, i, 0x51F4F5);
 		i++;
@@ -179,6 +180,44 @@ float	dist(t_point a, t_point b)
 	return (res);
 }
 
+// void	draw_sprite(t_vars *vars, int ri, float ratio_height, int sprite)
+// {
+// 	int		start;
+// 	int		end;
+// 	int		i;
+// 	int		color;
+// 	float	ratio;
+// 	float	distance;
+
+// 	i = 0;
+// 	start = (vars->ts.r[1] - ratio_height) / 2;
+// 	end = (vars->ts.r[1] + ratio_height) / 2;
+// 	if (vars->tc.ctrl == 1)
+// 		start -= vars->ts.r[1] / 50;
+// 	if (vars->tc.ctrl == 1)
+// 		end -= vars->ts.r[1] / 50;
+// 	while (i < start && i < vars->ts.r[1])
+// 		i++;
+// 	distance = dist(vars->ts.sprite[sprite], vars->tp.inter_s[sprite][ri]);
+// 	if ((vars->tp.pa < M_PI && vars->ts.sprite[sprite].x > vars->tp.inter_s[sprite][ri].x)
+// 	|| (vars->tp.pa > M_PI && vars->ts.sprite[sprite].x < vars->tp.inter_s[sprite][ri].x))
+// 		distance *= -1;
+// 	vars->td[4].text_x = (vars->td[4].img_width / 2)
+// 		+ (vars->td[4].img_width * (distance));
+// 	ratio = (float)vars->td[4].img_height / ratio_height;
+// 	while (++i < ratio_height && start < vars->ts.r[1])
+// 	{
+// 		// vars->td[4].text_y = (i - start) * vars->td[4].img_height
+// 		// 	/ (ratio_height);
+// 		if (vars->td[4].text_x < vars->td[4].img_width && vars->td[4].text_x >= 0)
+// 			color = vars->td[4].iaddr[vars->td[4].text_x + (int)((float)(i) * ratio) * vars->td[4].img_width];
+// 		else
+// 			vars->tp.inter_s[sprite][ri].z = -1;
+// 		if (vars->tp.inter_s[sprite][ri].z != -1 && color)
+// 			my_mlx_pixel_put(vars, ri, i, color);
+// 	}
+// }
+
 void	draw_sprite(t_vars *vars, int ri, float ratio_height, int sprite)
 {
 	int		start;
@@ -191,38 +230,29 @@ void	draw_sprite(t_vars *vars, int ri, float ratio_height, int sprite)
 	i = 0;
 	start = (vars->ts.r[1] - ratio_height) / 2;
 	end = (vars->ts.r[1] + ratio_height) / 2;
-	// start -= ratio_height / 4;
-	// end -= ratio_height / 4;
 	if (vars->tc.ctrl == 1)
 		start -= 80;
 	if (vars->tc.ctrl == 1)
 		end -= 80;
 	while (i < start && i < vars->ts.r[1])
 		i++;
-	// vars->td[4].text_x = (vars->td[4].img_width / 2 - vars->td[4].img_width * dist(vars->ts.sprite[0], vars->tp.inter_s[ri]) / 2);
-	// vars->td[4].text_x = fmodf(vars->tp.inter_s[ri].y, 1) * vars->td[4].img_width + ri / vars->td[4].img_width;
-	// if (vars->tp.inter_s[ri].x - vars->ts.sprite[0].x > 0 && vars->tp.ra > 0 && vars->tp.ra < M_PI)
-	// if ((vars->ts.sprite[0].x < vars->tp.inter_s[ri].x && vars->tp.y > vars->ts.sprite[0].y)
-	// 	|| (vars->ts.sprite[0].x > vars->tp.inter_s[ri].x && vars->tp.y < vars->ts.sprite[0].y))
-	// printf("%d\n", vars->ts.sprite[0].x > vars->tp.inter_s[ri].x);
-	distance = dist(vars->ts.sprite[sprite], vars->tp.inter_s[ri]);
-	if ((vars->tp.pa <= M_PI && vars->ts.sprite[sprite].x >= vars->tp.inter_s[ri].x)
-	|| (vars->tp.pa > M_PI && vars->ts.sprite[sprite].x < vars->tp.inter_s[ri].x))
+	distance = dist(vars->ts.sprite[sprite], vars->tp.inter_s[sprite][ri]);
+	if ((vars->tp.pa < M_PI && vars->ts.sprite[sprite].x > vars->tp.inter_s[sprite][ri].x)
+	|| (vars->tp.pa > M_PI && vars->ts.sprite[sprite].x < vars->tp.inter_s[sprite][ri].x))
 		distance *= -1;
-	vars->td[4].text_x = (vars->td[4].img_width / 2) + (vars->td[4].img_width * (distance));
+	vars->td[4].text_x = (vars->td[4].img_width / 2)
+		+ (vars->td[4].img_width * (distance));
 	ratio = (float)vars->td[4].img_height / ratio_height;
 	while (i < end && i < vars->ts.r[1])
 	{
 		vars->td[4].text_y = (i - start) * vars->td[4].img_height
 			/ (ratio_height);
-		if (vars->td[4].text_x < 64 && vars->td[4].text_x >= 0)
-			color = vars->td[4].iaddr[vars->td[4].text_y * vars->td[4].img_height
-					+ vars->td[4].text_x];
+		if (vars->td[4].text_x < vars->td[4].img_width && vars->td[4].text_x >= 0)
+			color = vars->td[4].iaddr[vars->td[4].text_y
+				* vars->td[4].img_height + vars->td[4].text_x];
 		else
-			vars->tp.inter_s[ri].z = -1;
-		// if (dist(vars->tp.inter_s[ri], vars->ts.sprite[0])
-		// 	< vars->td[4].img_width / 2 && color)
-		if (vars->tp.inter_s[ri].z != -1 && color)
+			vars->tp.inter_s[sprite][ri].z = -1;
+		if (vars->tp.inter_s[sprite][ri].z != -1 && color)
 			my_mlx_pixel_put(vars, ri, i, color);
 		i++;
 	}
@@ -230,7 +260,7 @@ void	draw_sprite(t_vars *vars, int ri, float ratio_height, int sprite)
 
 int	texture_index(float angle, char face)
 {
-	if (face == 'h' && angle > 0 && angle < M_PI)
+	if (face == 'h' && angle >= 0 && angle <= M_PI)
 		return (0);
 	else if (face == 'h')
 		return (1);
@@ -249,23 +279,50 @@ void	draw_screen(t_vars *vars)
 
 	ratio_height = 0;
 	ri = 0;
-	i = 0;
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
-	vars->tp.ra = vars->tp.pa + M_PI / 6;
+	vars->tp.ra = vars->tp.pa - M_PI / 6;
 	while (ri < vars->ts.r[0])
 	{
-		vars->tp.ra -= ratioangle;
+		i = 0;
+		vars->tp.ra += ratioangle;
 		ratio_height = vars->ts.r[1] / vars->tp.dist[ri];
 		i = texture_index(vars->tp.ra, vars->tp.face[ri]);
 		draw_column(vars, ri, ratio_height, i);
-		while (i < vars->ts.sprites)
+		while (i < vars->ts.nb_sp)
 		{
-			ratio_height = vars->ts.r[1] / vars->tp.dist_sp[ri];
-			if (vars->tp.inter_s[ri].z != -1)
+			ratio_height = vars->ts.r[1] / vars->tp.dist_sp[i][ri];
+			if (vars->tp.inter_s[i][ri].z != -1)
 				draw_sprite(vars, ri, ratio_height, i);
 			i++;
 		}
 		ri++;
+	}
+}
+
+void	check_sprite(t_vars *vars)
+{
+	int		i;
+	int		ri;
+	float	ratioangle;
+
+	i = 0;
+	ratioangle = (M_PI / 3) / vars->ts.r[0];
+	while (i < vars->ts.nb_sp)
+	{
+		ri = 0;
+		vars->tp.ra = vars->tp.pa + M_PI / 6;
+		while (ri < vars->ts.r[0])
+		{
+			//if ((vars->tp.pa < M_PI && vars->ts.sprite[i].x > vars->tp.inter_s[i][ri].x) || 
+			//(vars->tp.pa < M_PI && vars->ts.sprite[i].x > vars->tp.inter_s[i][ri].x))
+			 if ((vars->tp.pa > M_PI && vars->tp.y - vars->ts.sprite[i].y > 0)
+			 	|| ((vars->tp.pa < M_PI / 2 || vars->tp.pa > 3 * M_PI / 2)
+			 		&& vars->tp.x - vars->ts.sprite[i].x > 0))
+				vars->tp.inter_s[i][ri].z = -1;
+			vars->tp.ra -= ratioangle;
+			ri++;
+		}
+		i++;
 	}
 }
 
@@ -276,7 +333,10 @@ int	render_next_frame(t_vars *vars)
 	update_player_pos(vars);
 	vars->tp.pdx = cos(vars->tp.pa) * 5;
 	vars->tp.pdy = -sin(vars->tp.pa) * 5;
+	dist_center_sprite(vars);
+	sprite_ordering(vars);
 	find_all_inter(vars);
+	//check_sprite(vars);
 	if (vars->tc.tab == 0)
 		draw_screen(vars);
 	if (vars->tc.tab == 1)
@@ -306,19 +366,19 @@ int	render_next_frame(t_vars *vars)
 	return (0);
 }
 
-t_point	find_closest(t_vars *vars, t_point inter_h, t_point inter_v)
+t_point	close_wall(t_vars *vars, t_point inter_h, t_point inter_v)
 {
 	t_point	result;
 	t_point	player;
 
 	player.x = vars->tp.x;
 	player.y = vars->tp.y;
-	if (inter_h.z == -1 && inter_v.z != -1)
+	if (inter_h.z == -1)
 	{
 		vars->tp.face[vars->tp.ri] = 'v';
 		return (inter_v);
 	}
-	if (inter_v.z == -1 && inter_h.z != -1)
+	if (inter_v.z == -1)
 	{
 		vars->tp.face[vars->tp.ri] = 'h';
 		return (inter_h);
@@ -340,15 +400,22 @@ t_point	find_closest(t_vars *vars, t_point inter_h, t_point inter_v)
 
 void	inter_init(t_vars *vars, int ri)
 {
+	int	i;
+
+	i = 0;
 	vars->tp.inter_h[ri].x = 0;
 	vars->tp.inter_v[ri].x = 0;
-	vars->tp.inter_s[ri].x = 0;
 	vars->tp.inter_h[ri].y = 0;
 	vars->tp.inter_v[ri].y = 0;
-	vars->tp.inter_s[ri].y = 0;
 	vars->tp.inter_h[ri].z = 0;
 	vars->tp.inter_v[ri].z = 0;
-	vars->tp.inter_s[ri].z = 0;
+	while (i < vars->ts.nb_sp)
+	{
+		vars->tp.inter_s[i][ri].x = 0;
+		vars->tp.inter_s[i][ri].y = 0;
+		vars->tp.inter_s[i][ri].z = 0;
+		i++;
+	}
 }
 
 void	distance_comp_sp(t_vars *vars, int ri, int sprite)
@@ -357,14 +424,13 @@ void	distance_comp_sp(t_vars *vars, int ri, int sprite)
 
 	player.x = vars->tp.x;
 	player.y = vars->tp.y;
-	if (dist(player, vars->tp.inter_h[ri]) < dist(player, vars->tp.inter_s[ri][sprite])
-		|| dist(player, vars->tp.inter_v[ri]) < dist(player, vars->tp.inter_s[ri][sprite])
-		|| dist(vars->tp.inter_s[ri][sprite], vars->ts.sprite[sprite]) > vars->td[4].img_width / 2)
-		vars->tp.inter_s[ri][sprite].z = -1;
-	else if (vars->tp.inter_s[ri][sprite].z != -1)
+	if (dist(player, vars->tp.inter_h[ri]) < dist(player, vars->tp.inter_s[sprite][ri])
+		|| dist(player, vars->tp.inter_v[ri]) < dist(player, vars->tp.inter_s[sprite][ri]))
+		vars->tp.inter_s[sprite][ri].z = -1;
+	if (vars->tp.inter_s[sprite][ri].z != -1)
 	{
-		vars->tp.dist_sp[ri] = dist(player, vars->tp.inter_s[ri]);
-		vars->tp.dist_sp[ri] *= cos(vars->tp.pa - vars->tp.ra) / 1.3;
+		vars->tp.dist_sp[sprite][ri] = dist(player, vars->tp.inter_s[sprite][ri]);
+		vars->tp.dist_sp[sprite][ri] *= cos(vars->tp.pa - vars->tp.ra) / 1.3;
 	}
 }
 
@@ -376,66 +442,64 @@ void	distance_comp(t_vars *vars, int ri)
 	i = 0;
 	player.x = vars->tp.x;
 	player.y = vars->tp.y;
-	vars->tp.nb_sp = 0;
 	find_inter_h(vars);
 	find_inter_v(vars);
-	find_inter_s(vars, 0);
-	while (i < vars->ts.sprites)
+	while (i < vars->ts.nb_sp)
 	{
+		find_inter_s(vars, i);
 		distance_comp_sp(vars, ri, i);
 		i++;
 	}
-	vars->tp.inter_h[ri] = find_closest(vars, vars->tp.inter_h[ri],
+	vars->tp.inter_h[ri] = close_wall(vars, vars->tp.inter_h[ri],
 			vars->tp.inter_v[ri]);
-	if (dist(player, vars->tp.inter_h[ri]) < dist(player, vars->tp.inter_v[ri]))
+	if (vars->tp.face[vars->tp.ri] == 'h')
 		vars->tp.dist[ri] = dist(player, vars->tp.inter_h[ri]);
 	else
 		vars->tp.dist[ri] = dist(player, vars->tp.inter_v[ri]);
+}
+void	inter_malloc(t_vars *vars)
+{
+	int	i;
+
+	i = 0;
+	vars->tp.inter_h = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
+	vars->tp.inter_v = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
+	vars->tp.inter_s = malloc(sizeof(t_point *) * (vars->ts.nb_sp + 1));
+	vars->tp.dist_sp = malloc(sizeof(float *) * (vars->ts.nb_sp + 1));
+	while (i < vars->ts.nb_sp)
+	{
+		vars->tp.inter_s[i] = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
+		vars->tp.dist_sp[i] = malloc(sizeof(float) * (vars->ts.r[0] + 1));
+		i++;
+	}
+	vars->tp.face = malloc(sizeof(char) * (vars->ts.r[0] + 1));
+	vars->tp.dist = malloc(sizeof(int) * (vars->ts.r[0] + 2));
 }
 
 void	find_all_inter(t_vars *vars)
 {
 	float	ratioangle;
 
-	if (vars->tp.inter_h)
-	{
-		free(vars->tp.inter_h);
-		free(vars->tp.inter_v);
-		free(vars->tp.inter_s);
-		free(vars->tp.face);
-		free(vars->tp.dist);
-		free(vars->tp.dist_sp);
-	}
-	vars->tp.inter_h = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
-	vars->tp.inter_v = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
-	vars->tp.inter_s = malloc(sizeof(t_point) * (vars->ts.r[0] + 1));
-	vars->tp.face = malloc(sizeof(char) * (vars->ts.r[0] + 1));
-	vars->tp.dist = malloc(sizeof(int) * (vars->ts.r[0] + 2));
-	vars->tp.dist_sp = malloc(sizeof(int) * (vars->ts.r[0] + 2));
 	vars->tp.ri = 0;
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
-	vars->tp.ra = vars->tp.pa + M_PI / 6;
-	while (vars->tp.ri <= vars->ts.r[0])
+	vars->tp.ra = vars->tp.pa - M_PI / 6;
+	while (vars->tp.ri < vars->ts.r[0])
 	{
 		inter_init(vars, vars->tp.ri);
 		vars->tp.ri++;
 	}
 	vars->tp.ri = 0;
-	while (vars->tp.ri < vars->ts.r[0])
+	while (vars->tp.ri <= vars->ts.r[0])
 	{
 		if (vars->tp.ra < 0)
 			vars->tp.ra += 2 * M_PI;
 		else if (vars->tp.ra > (2 * M_PI))
 			vars->tp.ra -= 2 * M_PI;
 		distance_comp(vars, vars->tp.ri);
-		vars->tp.dist[vars->tp.ri]
-			*= cos(vars->tp.pa - vars->tp.ra);
-		//distance_comp_sp(vars, vars->tp.ri);
-		vars->tp.ra -= ratioangle;
+		vars->tp.dist[vars->tp.ri] *= cos(vars->tp.pa - vars->tp.ra);
+		vars->tp.ra += ratioangle;
 		vars->tp.ri++;
 	}
-	// printf("dist = %f\n", vars->tp.dist_sp[vars->ts.r[0] / 2]);
-	// printf("x = %f, y = %f\n", vars->tp.x, vars->tp.y);
 }
 
 int	key_pressed(int keycode, t_vars *vars)
@@ -518,6 +582,73 @@ void	put_path(t_vars *vars)
 	vars->td[4].path = vars->ts.s;
 }
 
+void	sprite_init(t_vars *vars)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = 0;
+	k = 0;
+	vars->ts.dist_center_sp = malloc(sizeof(float) * vars->ts.nb_sp);
+	vars->ts.sprite = malloc(sizeof(t_point) * vars->ts.nb_sp);
+	while (i < vars->ts.map_height)
+	{
+		j = 0;
+		while (j < vars->ts.map_width)
+		{
+			if (vars->ts.map[i][j] == '2')
+			{
+				vars->ts.sprite[k].x = j + 0.5;
+				vars->ts.sprite[k].y = i + 0.5;
+				k++;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void	dist_center_sprite(t_vars *vars)
+{
+	int		i;
+	t_point	player;
+
+	i = 0;
+	// if ((vars->ts.dist_center_sp))
+	// 	free(vars->ts.dist_center_sp);
+	player.x = vars->tp.x;
+	player.y = vars->tp.y;
+	while (i < vars->ts.nb_sp)
+	{
+		vars->ts.dist_center_sp[i] = dist(player, vars->ts.sprite[i]);
+		i++;
+	}
+}
+
+void	sprite_ordering(t_vars *vars)
+{
+	int		i;
+	float	swap_dist;
+	t_point	swap_sprite;
+
+	i = 0;
+	while (i < vars->ts.nb_sp - 1)
+	{
+		if (vars->ts.dist_center_sp[i] < vars->ts.dist_center_sp[i + 1])
+		{
+			swap_dist = vars->ts.dist_center_sp[i + 1];
+			vars->ts.dist_center_sp[i + 1] = vars->ts.dist_center_sp[i];
+			vars->ts.dist_center_sp[i] = swap_dist;
+			swap_sprite = vars->ts.sprite[i + 1];
+			vars->ts.sprite[i + 1] = vars->ts.sprite[i];
+			vars->ts.sprite[i] = swap_sprite;
+			i = -1;
+		}
+		i++;
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	int		i;
@@ -537,6 +668,7 @@ int	main(int argc, char **argv)
 		map_check(&vars.ts);
 		map_size(&vars.ts);
 		map_transform(&vars);
+		sprite_init(&vars);
 		if (vars.ts.map_width > vars.ts.map_height)
 			vars.minimap_size = vars.ts.r[0] / (vars.ts.map_width * 3);
 		else
@@ -565,6 +697,7 @@ int	main(int argc, char **argv)
 	spawn_player(&vars);
 	spawn_init(&vars);
 	lines_init(&vars);
+	inter_malloc(&vars);
 	vars.tp.pdx = cos(vars.tp.pa);
 	vars.tp.pdy = -sin(vars.tp.pa);
 	controls_init(&vars);
@@ -574,13 +707,14 @@ int	main(int argc, char **argv)
 	vars.img.img = mlx_new_image(vars.mlx, vars.ts.r[0], vars.ts.r[1]);
 	vars.img.addr = mlx_get_data_addr(vars.img.img, &vars.img.bits_per_pixel,
 			&vars.img.line_length, &vars.img.endian);
-	vars.img.iaddr = (int *)mlx_get_data_addr(vars.img.img, &vars.img.bits_per_pixel,
-			&vars.img.line_length, &vars.img.endian);
+	vars.img.iaddr = (int *)mlx_get_data_addr(vars.img.img,
+			&vars.img.bits_per_pixel, &vars.img.line_length, &vars.img.endian);
 	vars.img2.img = mlx_new_image(vars.mlx, vars.ts.r[0], vars.ts.r[1]);
 	vars.img2.addr = mlx_get_data_addr(vars.img2.img, &vars.img2.bits_per_pixel,
 			&vars.img2.line_length, &vars.img2.endian);
-	vars.img2.iaddr = (int *)mlx_get_data_addr(vars.img2.img, &vars.img2.bits_per_pixel,
-			&vars.img2.line_length, &vars.img2.endian);
+	vars.img2.iaddr = (int *)mlx_get_data_addr(vars.img2.img,
+			&vars.img2.bits_per_pixel, &vars.img2.line_length,
+			&vars.img2.endian);
 	read_all_img(&vars);
 	mlx_do_sync(vars.mlx);
 	mlx_loop_hook(vars.mlx, render_next_frame, &vars);

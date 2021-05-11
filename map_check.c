@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 09:11:08 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/23 10:40:44 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/03 10:21:29 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	map_check(t_settings *ts)
 	i = 0;
 	j = 0;
 	spawn = 0;
-	ts->sprites = 0;
+	ts->nb_sp = 0;
 	while (ts->map[i])
 	{
 		j = 0;
@@ -110,7 +110,7 @@ void	map_check(t_settings *ts)
 				if (is_spawn(ts->map[i][j]) == 1)
 					ts->spawn = ts->map[i][j];
 				else if (ts->map[i][j] == '2')
-					ts->sprites++;
+					ts->nb_sp++;
 				check_sides(ts, i, j);
 			}
 			j++;
@@ -131,7 +131,7 @@ void	sprite_check(t_settings *ts)
 	i = 0;
 	j = 0;
 	sprite = 0;
-	ts->sprite = malloc(sizeof(t_point) * ts->sprites);
+	ts->sprite = malloc(sizeof(t_point) * ts->nb_sp);
 	while (ts->map[i])
 	{
 		j = 0;

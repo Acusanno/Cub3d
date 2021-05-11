@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/28 13:36:19 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/11 10:46:08 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ typedef struct s_settings
 	int				r[2];
 	char			spawn;
 	t_point			*sprite;
-	int				sprites;
+	float			*dist_center_sp;
+	int				nb_sp;
 	char			*no;
 	char			*so;
 	char			*we;
@@ -90,8 +91,7 @@ typedef struct s_pixel {
 	t_point	**inter_s;
 	char	*face;
 	float	*dist;
-	float	*dist_sp;
-	int		nb_sp;
+	float	**dist_sp;
 	int		step_x;
 	int		step_y;
 }					t_pixel;
@@ -161,8 +161,8 @@ t_point				inter_line_h(t_vars *vars, t_point player,
 void				find_inter_h(t_vars *vars);
 void				find_inter_v(t_vars *vars);
 void				find_all_inter(t_vars *vars);
-int					intersection(t_vars *vars, t_lines line, t_point *res,
-						t_point a2);
+t_point				intersection(t_point a1, t_point a2, t_point b1,
+						t_point b2);
 int					raytouch(t_vars *vars, int x, int y);
 void				map_transform(t_vars *vars);
 void				set_x_y(t_point *res, double first, double second);
@@ -176,7 +176,9 @@ void				read_img(t_vars *vars, int i);
 void				read_all_img(t_vars *vars);
 void				find_inter_s(t_vars *vars, int sprite);
 void				sprite_check(t_settings *ts);
-int					check_sprite(t_vars *vars, float x, float y);
 float				dist(t_point a, t_point b);
+void				dist_center_sprite(t_vars *vars);
+void				sprite_ordering(t_vars *vars);
+int					which_sprite(t_vars *vars, float x, float y);
 
 #endif
