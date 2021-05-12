@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/11 10:46:08 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/12 10:11:36 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_data {
 typedef struct s_pixel {
 	float	x;
 	float	y;
+	t_point	player;
 	float	pdx;
 	float	pdy;
 	float	pa;

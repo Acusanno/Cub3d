@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/11 13:44:44 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/12 10:08:42 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ void	update_player_pos(t_vars *vars)
 		vars->tp.pa += 2 * M_PI;
 	else if (vars->tp.pa > (2 * M_PI))
 		vars->tp.pa -= 2 * M_PI;
+	if (vars->tp.pa == 0 || vars->tp.pa == 2 * M_PI)
+		vars->tp.pa += 0.001;
 }
 
 void	draw_column(t_vars *vars, int ri, float ratio_height, int j)
@@ -143,7 +145,6 @@ void	draw_column(t_vars *vars, int ri, float ratio_height, int j)
 	int		i;
 
 	i = 0;
-	//ri = -ri;
 	start = (vars->ts.r[1] - ratio_height) / 2;
 	end = (vars->ts.r[1] + ratio_height) / 2;
 	if (vars->tc.ctrl == 1)
@@ -260,7 +261,7 @@ void	draw_sprite(t_vars *vars, int ri, float ratio_height, int sprite)
 
 int	texture_index(float angle, char face)
 {
-	if (face == 'h' && angle >= 0 && angle <= M_PI)
+	if (face == 'h' && angle > 0 && angle < M_PI)
 		return (0);
 	else if (face == 'h')
 		return (1);
@@ -278,16 +279,16 @@ void	draw_screen(t_vars *vars)
 	int		i;
 
 	ratio_height = 0;
-	ri = 0;
+	ri = vars->ts.r[0];
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
 	vars->tp.ra = vars->tp.pa - M_PI / 6;
-	while (ri < vars->ts.r[0])
+	while (ri >= 0)
 	{
 		i = 0;
-		vars->tp.ra += ratioangle;
 		ratio_height = vars->ts.r[1] / vars->tp.dist[ri];
 		i = texture_index(vars->tp.ra, vars->tp.face[ri]);
 		draw_column(vars, ri, ratio_height, i);
+		i = 0;
 		while (i < vars->ts.nb_sp)
 		{
 			ratio_height = vars->ts.r[1] / vars->tp.dist_sp[i][ri];
@@ -295,7 +296,8 @@ void	draw_screen(t_vars *vars)
 				draw_sprite(vars, ri, ratio_height, i);
 			i++;
 		}
-		ri++;
+		vars->tp.ra += ratioangle;
+		ri--;
 	}
 }
 
@@ -315,9 +317,9 @@ void	check_sprite(t_vars *vars)
 		{
 			//if ((vars->tp.pa < M_PI && vars->ts.sprite[i].x > vars->tp.inter_s[i][ri].x) || 
 			//(vars->tp.pa < M_PI && vars->ts.sprite[i].x > vars->tp.inter_s[i][ri].x))
-			 if ((vars->tp.pa > M_PI && vars->tp.y - vars->ts.sprite[i].y > 0)
-			 	|| ((vars->tp.pa < M_PI / 2 || vars->tp.pa > 3 * M_PI / 2)
-			 		&& vars->tp.x - vars->ts.sprite[i].x > 0))
+			 if ((vars->tp.ra > M_PI && vars->tp.y - vars->ts.sprite[i].y > 0)
+				|| ((vars->tp.ra < M_PI / 2 || vars->tp.ra > 3 * M_PI / 2)
+			 		&& (vars->tp.x - vars->ts.sprite[i].x) > 0))
 				vars->tp.inter_s[i][ri].z = -1;
 			vars->tp.ra -= ratioangle;
 			ri++;
@@ -359,7 +361,6 @@ int	render_next_frame(t_vars *vars)
 		}
 	}
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
-	// mlx_put_image_to_window(vars->mlx, vars->win, vars->td[1].img, 0, 0);
 	vars->imgswap = vars->img;
 	vars->img = vars->img2;
 	vars->img2 = vars->img;
@@ -416,6 +417,7 @@ void	inter_init(t_vars *vars, int ri)
 		vars->tp.inter_s[i][ri].z = 0;
 		i++;
 	}
+	printf("%d\n", vars->ts.nb_sp);
 }
 
 void	distance_comp_sp(t_vars *vars, int ri, int sprite)
@@ -424,14 +426,10 @@ void	distance_comp_sp(t_vars *vars, int ri, int sprite)
 
 	player.x = vars->tp.x;
 	player.y = vars->tp.y;
-	if (dist(player, vars->tp.inter_h[ri]) < dist(player, vars->tp.inter_s[sprite][ri])
-		|| dist(player, vars->tp.inter_v[ri]) < dist(player, vars->tp.inter_s[sprite][ri]))
+	if (vars->tp.dist[ri] < dist(player, vars->tp.inter_s[sprite][ri]))
 		vars->tp.inter_s[sprite][ri].z = -1;
-	if (vars->tp.inter_s[sprite][ri].z != -1)
-	{
-		vars->tp.dist_sp[sprite][ri] = dist(player, vars->tp.inter_s[sprite][ri]);
-		vars->tp.dist_sp[sprite][ri] *= cos(vars->tp.pa - vars->tp.ra) / 1.3;
-	}
+	vars->tp.dist_sp[sprite][ri] = dist(player, vars->tp.inter_s[sprite][ri]);
+	vars->tp.dist_sp[sprite][ri] *= cos(vars->tp.pa - vars->tp.ra) / 1.3;
 }
 
 void	distance_comp(t_vars *vars, int ri)
@@ -444,18 +442,18 @@ void	distance_comp(t_vars *vars, int ri)
 	player.y = vars->tp.y;
 	find_inter_h(vars);
 	find_inter_v(vars);
-	while (i < vars->ts.nb_sp)
-	{
-		find_inter_s(vars, i);
-		distance_comp_sp(vars, ri, i);
-		i++;
-	}
 	vars->tp.inter_h[ri] = close_wall(vars, vars->tp.inter_h[ri],
 			vars->tp.inter_v[ri]);
 	if (vars->tp.face[vars->tp.ri] == 'h')
 		vars->tp.dist[ri] = dist(player, vars->tp.inter_h[ri]);
 	else
 		vars->tp.dist[ri] = dist(player, vars->tp.inter_v[ri]);
+	while (i < vars->ts.nb_sp)
+	{
+		find_inter_s(vars, i);
+		distance_comp_sp(vars, ri, i);
+		i++;
+	}
 }
 void	inter_malloc(t_vars *vars)
 {
@@ -480,16 +478,16 @@ void	find_all_inter(t_vars *vars)
 {
 	float	ratioangle;
 
-	vars->tp.ri = 0;
+	vars->tp.ri = vars->ts.r[0];
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
 	vars->tp.ra = vars->tp.pa - M_PI / 6;
-	while (vars->tp.ri < vars->ts.r[0])
+	while (vars->tp.ri > 0)
 	{
 		inter_init(vars, vars->tp.ri);
-		vars->tp.ri++;
+		vars->tp.ri--;
 	}
-	vars->tp.ri = 0;
-	while (vars->tp.ri <= vars->ts.r[0])
+	vars->tp.ri = vars->ts.r[0];
+	while (vars->tp.ri > 0)
 	{
 		if (vars->tp.ra < 0)
 			vars->tp.ra += 2 * M_PI;
@@ -498,7 +496,7 @@ void	find_all_inter(t_vars *vars)
 		distance_comp(vars, vars->tp.ri);
 		vars->tp.dist[vars->tp.ri] *= cos(vars->tp.pa - vars->tp.ra);
 		vars->tp.ra += ratioangle;
-		vars->tp.ri++;
+		vars->tp.ri--;
 	}
 }
 
@@ -615,8 +613,6 @@ void	dist_center_sprite(t_vars *vars)
 	t_point	player;
 
 	i = 0;
-	// if ((vars->ts.dist_center_sp))
-	// 	free(vars->ts.dist_center_sp);
 	player.x = vars->tp.x;
 	player.y = vars->tp.y;
 	while (i < vars->ts.nb_sp)

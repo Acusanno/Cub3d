@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:58:52 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/11 11:31:31 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/12 10:11:00 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,6 @@ double	line_slope(float a1, float a2, float b1, float b2)
 	else
 		return ((a2 - b2) / (a1 - b1));
 }
-
-// int	intersection(t_vars *vars, t_lines line, t_point *res, t_point a2)
-// {
-// 	double	slope_a;
-// 	double	slope_b;
-// 	t_pixel	a1;
-
-// 	res->z = 0;
-// 	a1 = vars->tp;
-// 	slope_a = line_slope(a1.x, a1.y, a2.x, a2.y);
-// 	slope_b = line_slope(line.a.x, line.a.y, line.b.x, line.b.y);
-// 	if (slope_a == slope_b || (isnan(slope_a) && isnan(slope_b)))
-// 	{
-// 		res->z = -1;
-// 		return (-1);
-// 	}
-// 	else if (isnan(slope_a) && !isnan(slope_b))
-// 		set_x_y(res, a1.x, (a1.x - line.a.x) * slope_b + line.a.y);
-// 	else if (isnan(slope_b) && !isnan(slope_a))
-// 		set_x_y(res, line.a.x, (line.a.x - a1.x) * slope_a + a1.y);
-// 	else
-// 		set_x_y(res, (slope_a * a1.x - slope_b * line.a.x + line.a.y - a1.y)
-// 			    / (slope_a - slope_b), slope_b * (res->x - line.a.x)
-// 			+ line.a.y);
-// 	return (1);
-// }
 
 t_point	intersection(t_point a1, t_point a2, t_point b1, t_point b2)
 {
@@ -119,43 +93,6 @@ void	find_inter_s(t_vars *vars, int sprite)
 	}
 }
 
-int	check_wall(t_vars *vars, float x, float y, char tal)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	j = vars->tp.ri;
-	if ((tal == 'h' && vars->tp.ra < M_PI)
-		|| (tal == 'v' && vars->tp.ra > M_PI / 2
-			&& vars->tp.ra < 3 * M_PI / 2))
-		i = 1;
-	if (x < 0 || y < 0 || x >= vars->ts.map_width
-		|| y >= vars->ts.map_height)
-	{
-		if (tal == 'h')
-			vars->tp.inter_h[j].z = -1;
-		else
-			vars->tp.inter_v[j].z = -1;
-		return (-1);
-	}
-	if (tal == 'h' && y - 1 > 0 && x > 0
-		&& (vars->ts.map[(int)y - i][(int)x] == '1'
-		|| vars->ts.map[(int)y - i][(int)x] == '3'))
-		return (1);
-	else if (tal == 'h' && y - 1 > 0 && x > 0
-		&& vars->ts.map[(int)y - i][(int)x] == '2')
-		return (2);
-	if (tal == 'v' && x - 1 > 0 && y > 0
-		&& (vars->ts.map[(int)y][(int)x - i] == '1'
-		|| vars->ts.map[(int)y][(int)x - i] == '3'))
-		return (1);
-	else if (tal == 'v' && x - 1 > 0 && y > 0
-		&& vars->ts.map[(int)y][(int)x - i] == '2')
-		return (2);
-	return (0);
-}
-
 int	wall_h(t_vars *vars, float x, float y)
 {
 	int		i;
@@ -201,39 +138,6 @@ int	wall_v(t_vars *vars, float x, float y)
 		return (2);
 	return (0);
 }
-
-// int		check_wall_and_sprite(t_vars *vars, int ri, char face)
-// {
-// 	int	check;
-
-// 	if (face == 'h')
-// 		check = check_wall(vars, vars->tp.inter_h[ri].x,
-// 				vars->tp.inter_h[ri].y, face);
-// 	else
-// 		check = check_wall(vars, vars->tp.inter_v[ri].x,
-// 				vars->tp.inter_v[ri].y, face);
-// 	if (check == 2 && face == 'h')
-// 	{
-// 		vars->tp.inter_s[sprite][ri].z = 1;
-// 		vars->ts.sprite[0].x = (int)vars->tp.inter_h[ri].x + 0.5;
-// 		if (vars->tp.ra > M_PI && vars->tp.ra < 2 * M_PI)
-// 			vars->ts.sprite[0].y = (int)vars->tp.inter_h[ri].y + 0.5;
-// 		else
-// 			vars->ts.sprite[0].y = (int)vars->tp.inter_h[ri].y - 0.5;
-// 	}
-// 	else if (check == 2 && face == 'v')
-// 	{
-// 		vars->tp.inter_s[sprite][ri].z = 1;
-// 		vars->ts.sprite[0].y = (int)vars->tp.inter_v[ri].y + 0.5;
-// 		if (vars->tp.ra > M_PI / 2 && vars->tp.ra < 3 * M_PI / 2)
-// 			vars->ts.sprite[0].x = (int)vars->tp.inter_v[ri].x - 0.5;
-// 		else
-// 			vars->ts.sprite[0].x = (int)vars->tp.inter_v[ri].x + 0.5;
-// 	}
-// 	if (check == 1 || check == 3)
-// 		return (1);
-// 	return (0);
-// }
 
 int		check_wall_h(t_vars *vars, int ri)
 {
