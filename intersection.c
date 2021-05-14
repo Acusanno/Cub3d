@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:58:52 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/12 10:11:00 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/14 10:06:00 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,49 +48,32 @@ t_point	intersection(t_point a1, t_point a2, t_point b1, t_point b2)
 	return (res);
 }
 
-t_point	rot_90(t_point sov)
-{
-	t_point	res;
-
-	res.x = sov.x * -0.00000367 - sov.y;
-	res.y = sov.x + sov.y * -0.00000367;
-	res.z = sov.z;
-	return (res);
-}
-
-t_point	get_vec(t_point first, t_point second)
-{
-	t_point		vec;
-
-	vec.x = second.x - first.x;
-	vec.y = second.y - first.y;
-	return (vec);
-}
-
 void	find_inter_s(t_vars *vars, int sprite)
 {
 	int		ri;
 	t_point	a2;
 	t_point	b1;
 	t_point	b2;
-	t_point result;
-	t_point	joueur;
 
 	ri = vars->tp.ri;
-	joueur.x = vars->tp.x;
-	joueur.y = vars->tp.y;
-	a2.x = joueur.x + cos(vars->tp.ra);
-	a2.y = joueur.y - sin(vars->tp.ra);
+	a2.x = vars->tp.player.x + cos(vars->tp.ra);
+	a2.y = vars->tp.player.y - sin(vars->tp.ra);
 	b1 = vars->ts.sprite[sprite];
 	b2.x = b1.x + cos(vars->tp.pa + 89.5);
 	b2.y = b1.y + -sin(vars->tp.pa + 89.5);
 	if (vars->tp.inter_s[sprite][ri].z != -1)
 	{
-		result = intersection(joueur, a2, b1, b2);
-		vars->tp.inter_s[sprite][ri].x = result.x;
-		vars->tp.inter_s[sprite][ri].y = result.y;
-		vars->tp.inter_s[sprite][ri].z = result.z;
+		b2 = intersection(vars->tp.player, a2, b1, b2);
+		vars->tp.inter_s[sprite][ri].x = b2.x;
+		vars->tp.inter_s[sprite][ri].y = b2.y;
+		vars->tp.inter_s[sprite][ri].z = b2.z;
 	}
+	if (vars->tp.player.x - b2.x < 0 && vars->tp.ra > M_PI / 2
+		&& vars->tp.ra < 3 * M_PI / 2)
+		vars->tp.inter_s[sprite][ri].z = -1;
+	else if (vars->tp.player.x - b2.x > 0 && (vars->tp.ra < M_PI / 2
+			|| vars->tp.ra > 3 * M_PI / 2))
+		vars->tp.inter_s[sprite][ri].z = -1;
 }
 
 int	wall_h(t_vars *vars, float x, float y)
@@ -204,20 +187,18 @@ void	find_inter_h(t_vars *vars)
 	int		i;
 	int		ri;
 	t_point	a2;
-	t_point	joueur;
 	t_point	result;
 
-	i = (int)vars->tp.y;
+	i = (int)vars->tp.player.y;
 	ri = vars->tp.ri;
-	joueur.x = vars->tp.x;
-	joueur.y = vars->tp.y;
-	a2.x = vars->tp.x + cos(vars->tp.ra);
-	a2.y = vars->tp.y - sin(vars->tp.ra);
+	a2.x = vars->tp.player.x + cos(vars->tp.ra);
+	a2.y = vars->tp.player.y - sin(vars->tp.ra);
 	if (vars->tp.ra > M_PI && vars->tp.ra < 2 * M_PI)
 		i++;
 	while (i && i < vars->ts.map_height)
 	{
-		result = intersection(joueur, a2, vars->tg.h[i].a, vars->tg.h[i].b);
+		result = intersection(vars->tp.player, a2, vars->tg.h[i].a,
+				vars->tg.h[i].b);
 		vars->tp.inter_h[ri] = result;
 		if (check_wall_h(vars, ri) == 1)
 			break ;
@@ -233,20 +214,18 @@ void	find_inter_v(t_vars *vars)
 	int		i;
 	int		ri;
 	t_point	a2;
-	t_point	joueur;
 	t_point	result;
 
-	i = (int)vars->tp.x;
+	i = (int)vars->tp.player.x;
 	ri = vars->tp.ri;
-	joueur.x = vars->tp.x;
-	joueur.y = vars->tp.y;
-	a2.x = vars->tp.x + cos(vars->tp.ra);
-	a2.y = vars->tp.y - sin(vars->tp.ra);
+	a2.x = vars->tp.player.x + cos(vars->tp.ra);
+	a2.y = vars->tp.player.y - sin(vars->tp.ra);
 	if (vars->tp.ra < M_PI / 2 || vars->tp.ra > 3 * M_PI / 2)
 		i++;
 	while (i && i < vars->ts.map_width)
 	{
-		result = intersection(joueur, a2, vars->tg.v[i].a, vars->tg.v[i].b);
+		result = intersection(vars->tp.player, a2, vars->tg.v[i].a,
+				vars->tg.v[i].b);
 		vars->tp.inter_v[ri] = result;
 		if (check_wall_v(vars, ri) == 1)
 			break ;

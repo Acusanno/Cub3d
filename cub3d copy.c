@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   cub3d copy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/01 14:31:49 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/12 10:14:17 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ int	key_hook(int keycode, t_vars *vars)
 	{
 		if (vars->run == 0)
 		{
-			vars->tp.y += vars->tp.pdy / 10;
+			vars->tp.player.y += vars->tp.pdy / 10;
 			vars->tp.x += vars->tp.pdx / 10;
 		}
 		else
 		{
-			vars->tp.y += vars->tp.pdy / 5;
+			vars->tp.player.y += vars->tp.pdy / 5;
 			vars->tp.x += vars->tp.pdx / 5;
 		}
 	}
@@ -40,12 +40,12 @@ int	key_hook(int keycode, t_vars *vars)
 	{
 		if (vars->run == 0)
 		{
-			vars->tp.y -= vars->tp.pdy / 10;
+			vars->tp.player.y -= vars->tp.pdy / 10;
 			vars->tp.x -= vars->tp.pdx / 10;
 		}
 		else
 		{
-			vars->tp.y -= vars->tp.pdy / 5;
+			vars->tp.player.y -= vars->tp.pdy / 5;
 			vars->tp.x -= vars->tp.pdx / 5;
 		}
 	}
@@ -91,10 +91,10 @@ int	render_next_frame(t_vars *vars)
 	{
 		map_draw(vars);
 		my_mlx_pixel_put(&vars->img, vars->tp.x * vars->minimap_size,
-			vars->tp.y * vars->minimap_size, 0x00FF0000);
+			vars->tp.player.y * vars->minimap_size, 0x00FF0000);
 		my_mlx_pixel_put(&vars->img,
 			vars->tp.x * vars->minimap_size + vars->tp.pdx,
-			vars->tp.y * vars->minimap_size + vars->tp.pdy, 0x00FF00FF);
+			vars->tp.player.y * vars->minimap_size + vars->tp.pdy, 0x00FF00FF);
 		// if (vars->tp.inter_h[30].z != -1 && vars->tp.inter_h[30].x < vars->ts.map_width
 		// 	&& vars->tp.inter_h[30].x > 0)
 		// 	my_mlx_pixel_put(&vars->img, vars->tp.inter_h[30].x * vars->minimap_size,

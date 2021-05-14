@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 10:26:14 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/12 08:41:16 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/12 10:14:17 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void	spawn_player(t_vars *vars)
 				break ;
 			else if (is_spawn(vars->ts.map[j][i]) == 1)
 			{
-				vars->tp.x = i;
-				vars->tp.y = j;
+				vars->tp.player.x = i;
+				vars->tp.player.y = j;
 				i++;
 			}
 			i++;
