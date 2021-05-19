@@ -6,19 +6,28 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/05/13 08:24:57 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/05/19 13:22:18 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 
-SRCS =		init.c \
-			cub3d.c \
-			parsing.c \
-			map_size.c \
-			map_check.c \
-			intersection.c \
-			parsing_utils.c \
+SRCS =		init.c  \
+			cub3d.c  \
+			texture.c \
+			parsing.c  \
+			display.c   \
+			map_size.c   \
+			keyboard.c    \
+			movement.c     \
+			map_check.c     \
+			structure.c      \
+			wall_rays.c       \
+			mlx_utils.c        \
+			sprite_tri.c        \
+			intersection.c       \
+			parsing_utils.c       \
+			intersection_utils.c   \
 
 GCCF = gcc -g3 -O3 -Wall -Werror -Wextra -g -fsanitize=address
 

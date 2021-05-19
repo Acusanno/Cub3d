@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/17 13:19:58 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/19 14:40:51 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ typedef struct s_pixel {
 	float	ra;
 	int		ri;
 	int		color;
+	int		start;
+	int		end;
 	t_point	*inter_h;
 	t_point	*inter_v;
 	t_point	**inter_s;
@@ -125,8 +127,6 @@ typedef struct s_vars {
 	void			*win;
 	int				minimap_size;
 	t_data			img;
-	t_data			img2;
-	t_data			imgswap;
 	t_pixel			tp;
 	t_settings		ts;
 	t_grid			tg;
@@ -134,6 +134,7 @@ typedef struct s_vars {
 	t_data			*td;
 }					t_vars;
 
+// Parsing du fichier de config
 void				struct_init(t_settings *ts);
 int					ft_strlen_split(char **str);
 int					check_fc(char **array);
@@ -144,44 +145,90 @@ void				parse_nswes(t_vars *vars, char *str);
 int					parse_fc(t_vars *vars, char *str);
 void				parse_map(t_vars *vars, char *str);
 void				parse_settings(t_vars *vars);
+void				map_transform(t_vars *vars);
+void				free_tab(char **tab);
+
+// Verification de validité de la map
 void				check_space(t_settings *ts, int i, int j);
 void				map_check(t_settings *ts);
-void				settings_check(t_vars *vars);
 void				map_size(t_settings *ts);
+
+// Verification de validité des parametres
+void				settings_check(t_vars *vars);
+
+// Affichage de la map
 void				draw_cube(int x, int y, int color, t_vars *vars);
 void				map_draw(t_vars *vars);
-void				my_mlx_pixel_put(t_vars *vars, int x, int y, int color);
-int					is_spawn(char c);
 void				spawn_player(t_vars *vars);
-void				raycast(t_vars *vars);
+int					is_spawn(char c);
+
+// Gestion des touches et des movements
+int					key_pressed(int keycode, t_vars *vars);
+int					key_released(int keycode, t_vars *vars);
+void				rotation(t_vars *vars);
+void				update_player_pos(t_vars *vars);
+
+// Création grille de la map
 void				lines_init(t_vars *vars);
-void				spawn_init(t_vars *vars);
+
+// Intersection avec grille
 t_point				inter_line_v(t_vars *vars, t_point player,
 						t_point cam, int line);
 t_point				inter_line_h(t_vars *vars, t_point player,
 						t_point cam, int line);
-void				find_inter_h(t_vars *vars);
-void				find_inter_v(t_vars *vars);
-void				find_all_inter(t_vars *vars);
+float				dist(t_point a, t_point b);
+
+// Calculs
 t_point				intersection(t_point a1, t_point a2, t_point b1,
 						t_point b2);
-int					raytouch(t_vars *vars, int x, int y);
-void				map_transform(t_vars *vars);
-void				set_x_y(t_point *res, double first, double second);
 double				line_slope(float a1, float a2, float b1, float b2);
-int					check_wall(t_vars *vars, float x, float y, char tal);
-void				ft_exit(int code, t_vars *vars, char *truc);
-void				free_tab(char **tab);
+void				set_x_y(t_point *res, double first, double second);
+void				raycast(t_vars *vars);
+int					raytouch(t_vars *vars, int x, int y);
+
+// Mallocs et initialisations
+void				spawn_init(t_vars *vars);
+void				inter_malloc(t_vars *vars);
+void				inter_init(t_vars *vars, int ri);
 void				controls_init(t_vars *vars);
-void				put_path(t_vars *vars);
+
+//	Calcul d'intersection des murs et des sprites
+int					wall_h(t_vars *vars, float x, float y);
+int					wall_v(t_vars *vars, float x, float y);
+void				find_inter_h(t_vars *vars);
+void				find_inter_v(t_vars *vars);
+void				find_inter_s(t_vars *vars, int sprite);
+int					check_wall(t_vars *vars, float x, float y, char tal);
+int					which_sprite(t_vars *vars, float x, float y);
+void				sprite_check(t_settings *ts);
+void				distance_comp(t_vars *vars, int ri);
+void				find_all_inter(t_vars *vars);
+
+// Textures
 void				read_img(t_vars *vars, int i);
 void				read_all_img(t_vars *vars);
-void				find_inter_s(t_vars *vars, int sprite);
-void				sprite_check(t_settings *ts);
-float				dist(t_point a, t_point b);
+int					texture_index(float angle, char face);
+void				put_path(t_vars *vars);
+void				text_x_wall(t_vars *vars, int j, int ri);
+void				text_x_sprite(t_vars *vars, int sprite, int ri);
+
+// Tri des sprites
+void				sprite_init(t_vars *vars);
 void				dist_center_sprite(t_vars *vars);
 void				sprite_ordering(t_vars *vars);
-int					which_sprite(t_vars *vars, float x, float y);
-void				rotation(t_vars *vars);
+
+// Affichage murs et sprites
+void				my_mlx_pixel_put(t_vars *vars, int x, int y, int color);
+void				start_end_init(t_vars *vars, float ratio_height);
+void				draw_column(t_vars *vars, int ri, float ratio_height,
+						int j);
+void				draw_sprite(t_vars *vars, int ri, float ratio_height,
+						int sprite);
+void				draw_screen(t_vars *vars);
+int					render_next_frame(t_vars *vars);
+
+// Fermer la fenêtre
+void				ft_exit(int code, t_vars *vars, char *truc);
+int					shutdown(int keycode, t_vars *vars);
 
 #endif
