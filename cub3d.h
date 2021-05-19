@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/12 10:11:36 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/17 13:19:58 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 typedef struct s_point {
 	float			x;
 	float			y;
-	float			z;
+	int				z;
 }					t_point;
 
 typedef struct s_settings
@@ -90,6 +90,7 @@ typedef struct s_pixel {
 	t_point	*inter_h;
 	t_point	*inter_v;
 	t_point	**inter_s;
+	int		*vis_sp;
 	char	*face;
 	float	*dist;
 	float	**dist_sp;
@@ -181,5 +182,6 @@ float				dist(t_point a, t_point b);
 void				dist_center_sprite(t_vars *vars);
 void				sprite_ordering(t_vars *vars);
 int					which_sprite(t_vars *vars, float x, float y);
+void				rotation(t_vars *vars);
 
 #endif
