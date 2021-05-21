@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/19 14:40:51 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 13:44:42 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ void				parse_map(t_vars *vars, char *str);
 void				parse_settings(t_vars *vars);
 void				map_transform(t_vars *vars);
 void				free_tab(char **tab);
+void				parsing(t_vars *vars);
 
 // Verification de validité de la map
 void				check_space(t_settings *ts, int i, int j);
@@ -157,10 +158,13 @@ void				map_size(t_settings *ts);
 void				settings_check(t_vars *vars);
 
 // Affichage de la map
-void				draw_cube(int x, int y, int color, t_vars *vars);
-void				map_draw(t_vars *vars);
 void				spawn_player(t_vars *vars);
 int					is_spawn(char c);
+void				draw_cube(int x, int y, int color, t_vars *vars);
+void				player_draw(t_vars *vars);
+void				rays_draw(t_vars *vars);
+void				map_draw(t_vars *vars);
+void				print_map(t_settings ts);
 
 // Gestion des touches et des movements
 int					key_pressed(int keycode, t_vars *vars);
@@ -226,6 +230,13 @@ void				draw_sprite(t_vars *vars, int ri, float ratio_height,
 						int sprite);
 void				draw_screen(t_vars *vars);
 int					render_next_frame(t_vars *vars);
+
+// Creation de la bitmap
+void				header_bmp(t_vars *vars, int fd);
+int					render_bitmap(t_vars *vars);
+void				img_to_bitmap(t_vars *vars, int fd);
+void				bitmap_create(t_vars *vars);
+void				full_bitmap(t_vars *vars);
 
 // Fermer la fenêtre
 void				ft_exit(int code, t_vars *vars, char *truc);

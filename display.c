@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 11:24:46 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/19 14:47:13 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 10:48:26 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,17 @@ void	text_x_wall(t_vars *vars, int j, int ri)
 			* vars->td[j].img_width;
 }
 
+// If-> distance *= -1 Pas sur
+// if ((vars->tp.player.y > vars->ts.sprite[sprite].y
+// && vars->tp.inter_s[sprite][ri].x < vars->ts.sprite[sprite].x)
+// || (vars->tp.player.y < vars->ts.sprite[sprite].y
+// && vars->tp.inter_s[sprite][ri].x > vars->ts.sprite[sprite].x))
+
 void	text_x_sprite(t_vars *vars, int sprite, int ri)
 {
 	float	distance;
 
 	distance = dist(vars->ts.sprite[sprite], vars->tp.inter_s[sprite][ri]);
-	// if ((vars->tp.player.y > vars->ts.sprite[sprite].y
-	// && vars->tp.inter_s[sprite][ri].x < vars->ts.sprite[sprite].x)
-	// || (vars->tp.player.y < vars->ts.sprite[sprite].y
-	// && vars->tp.inter_s[sprite][ri].x > vars->ts.sprite[sprite].x))
 	if ((vars->tp.pa <= M_PI && vars->ts.sprite[sprite].x
 			>= vars->tp.inter_s[sprite][ri].x)
 	|| (vars->tp.pa > M_PI && vars->ts.sprite[sprite].x

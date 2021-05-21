@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:02:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/23 10:44:53 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 10:46:14 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,31 @@ void	parse_map(t_vars *vars, char *str)
 	free(str);
 }
 
+void	character_check(t_vars *vars, char *str)
+{
+	if (*str)
+	{
+		if (*str == 'R')
+			parse_r(vars, str);
+		else if (*str == 'N' || *str == 'S' || *str == 'W' || *str == 'E')
+			parse_nswes(vars, str);
+		else if (*str == 'F' || *str == 'C')
+			parse_fc(vars, str);
+		else if (*str == ' ' || *str == '1')
+		{
+			parse_map(vars, str);
+			free(str);
+			return ;
+		}
+		else
+		{
+			printf("Error\n Settings invalid");
+			ft_exit(-1, vars, str);
+		}
+	}
+	free(str);
+}
+
 void	parse_settings(t_vars *vars)
 {
 	char	*str;
@@ -161,28 +186,6 @@ void	parse_settings(t_vars *vars)
 	str = NULL;
 	vars->ts.fd = open(vars->ts.filename, O_RDONLY);
 	while ((get_next_line(vars->ts.fd, &str)) != 0)
-	{
-		if (*str)
-		{
-			if (*str == 'R')
-				parse_r(vars, str);
-			else if (*str == 'N' || *str == 'S' || *str == 'W' || *str == 'E')
-				parse_nswes(vars, str);
-			else if (*str == 'F' || *str == 'C')
-				parse_fc(vars, str);
-			else if (*str == ' ' || *str == '1')
-			{
-				parse_map(vars, str);
-				free(str);
-				return ;
-			}
-			else
-			{
-				printf("Error\n Settings invalid");
-				ft_exit(-1, vars, str);
-			}
-		}
-		free(str);
-	}
+		character_check(vars, str);
 	free(str);
 }

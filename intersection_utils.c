@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 11:09:44 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/19 11:12:19 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 10:38:25 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	wall_v(t_vars *vars, float x, float y)
 	return (0);
 }
 
-int		which_sprite(t_vars *vars, float x, float y)
+int	which_sprite(t_vars *vars, float x, float y)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 10:26:14 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/17 09:13:33 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 10:40:54 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ void	map_draw(t_vars *vars)
 	int	i;
 	int	j;
 
-	j = 0;
-	while (j < vars->ts.map_height)
+	j = -1;
+	while (++j < vars->ts.map_height)
 	{
-		i = 0;
-		while (i < vars->ts.map_width)
+		i = -1;
+		while (++i < vars->ts.map_width)
 		{
 			if (i >= (int)ft_strlen(vars->ts.map[j]))
 				draw_cube(i, j, 0x0000ff, vars);
@@ -98,8 +98,6 @@ void	map_draw(t_vars *vars)
 				draw_cube(i, j, 0x00ffff, vars);
 			else if (is_spawn(vars->ts.map[j][i]) == 1)
 				draw_cube(i, j, 0x00ffff, vars);
-			i++;
 		}
-		j++;
 	}
 }
