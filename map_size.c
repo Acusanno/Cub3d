@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 10:26:14 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 10:40:54 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 13:50:21 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	map_size(t_settings *ts)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	ts->map_width = 0;

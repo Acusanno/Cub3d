@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 13:44:42 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 14:38:24 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,7 @@ int					check_wall(t_vars *vars, float x, float y, char tal);
 int					which_sprite(t_vars *vars, float x, float y);
 void				sprite_check(t_settings *ts);
 void				distance_comp(t_vars *vars, int ri);
+void				draw_all_sprite(t_vars *vars);
 void				find_all_inter(t_vars *vars);
 
 // Textures

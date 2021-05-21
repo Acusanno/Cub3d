@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 10:25:02 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 14:38:28 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,7 @@ void	draw_screen(t_vars *vars)
 		ratio_height = vars->ts.r[1] / vars->tp.dist[ri];
 		i = texture_index(vars->tp.ra, vars->tp.face[ri]);
 		draw_column(vars, ri, ratio_height, i);
-		i = 0;
-		while (i < vars->ts.nb_sp)
-		{
-			if (vars->tp.vis_sp[i] && vars->tp.dist_sp[i][ri] > 0.5)
-			{
-				ratio_height = vars->ts.r[1] / vars->tp.dist_sp[i][ri];
-				draw_sprite(vars, ri, ratio_height, i);
-			}
-			i++;
-		}
+		draw_all_sprite(vars);
 		vars->tp.ra += ratioangle;
 		ri--;
 	}
@@ -70,10 +61,25 @@ int	render_next_frame(t_vars *vars)
 	return (0);
 }
 
+void	find_all_sprite(t_vars *vars)
+{
+	int	i;
+
+	i = -1;
+	while (++i < vars->ts.nb_sp)
+	{
+		rotation(vars);
+		if (vars->tp.vis_sp[i])
+			find_inter_s(vars, i);
+		if (vars->tp.dist[vars->tp.ri] < dist(vars->tp.player,
+				vars->tp.inter_s[i][vars->tp.ri]))
+			vars->tp.inter_s[i][vars->tp.ri].z = -1;
+	}
+}
+
 void	find_all_inter(t_vars *vars)
 {
 	float	ratioangle;
-	int		i;
 
 	vars->tp.ri = vars->ts.r[0];
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
@@ -92,17 +98,7 @@ void	find_all_inter(t_vars *vars)
 		rotation(vars);
 		distance_comp(vars, vars->tp.ri);
 		vars->tp.dist[vars->tp.ri] *= cos(vars->tp.pa - vars->tp.ra);
-		i = 0;
-		while (i < vars->ts.nb_sp)
-		{
-			rotation(vars);
-			if (vars->tp.vis_sp[i])
-				find_inter_s(vars, i);
-			if (vars->tp.dist[vars->tp.ri] < dist(vars->tp.player,
-					vars->tp.inter_s[i][vars->tp.ri]))
-				vars->tp.inter_s[i][vars->tp.ri].z = -1;
-			i++;
-		}
+		find_all_sprite(vars);
 		vars->tp.ra += ratioangle;
 		vars->tp.ri--;
 	}

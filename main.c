@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 08:33:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 13:45:04 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 14:28:12 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,17 @@ void	parsing(t_vars *vars)
 	read_all_img(vars);
 }	
 
+void	create_img(t_vars *vars)
+{
+	vars->img.img = mlx_new_image(vars->mlx, vars->ts.r[0], vars->ts.r[1]);
+	vars->img.addr = mlx_get_data_addr(vars->img.img,
+			&vars->img.bits_per_pixel, &vars->img.line_length,
+			&vars->img.endian);
+	vars->img.iaddr = (int *)mlx_get_data_addr(vars->img.img,
+			&vars->img.bits_per_pixel, &vars->img.line_length,
+			&vars->img.endian);
+}
+
 int	main(int argc, char **argv)
 {
 	t_vars	vars;
@@ -73,13 +84,7 @@ int	main(int argc, char **argv)
 		mlx_hook(vars.win, 2, 1L << 0, key_pressed, &vars);
 		mlx_hook(vars.win, 3, 1L << 1, key_released, &vars);
 		mlx_hook(vars.win, 17, 0L, &shutdown, &vars);
-		vars.img.img = mlx_new_image(vars.mlx, vars.ts.r[0], vars.ts.r[1]);
-		vars.img.addr = mlx_get_data_addr(vars.img.img,
-				&vars.img.bits_per_pixel, &vars.img.line_length,
-				&vars.img.endian);
-		vars.img.iaddr = (int *)mlx_get_data_addr(vars.img.img,
-				&vars.img.bits_per_pixel, &vars.img.line_length,
-				&vars.img.endian);
+		create_img(&vars);
 		mlx_loop_hook(vars.mlx, render_next_frame, &vars);
 		mlx_loop(vars.mlx);
 	}
