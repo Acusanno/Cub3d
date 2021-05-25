@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/25 08:50:13 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 10:20:21 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 14:07:11 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 void	check_space(t_settings *ts, int i, int j)
 {
 	if (!(ts->map[i][j]) || ts->map[i][j] == ' ')
-	{
-		printf("Error\n Map invalid");
-		exit(-1);
-	}
+		error_map();
 }
 
 int	is_spawn(char c)
@@ -46,6 +43,6 @@ void	put_spawn(t_settings *ts, int i, size_t j)
 		&& is_spawn(ts->map[i][j]) != 1))
 	{
 		printf("Error\n Character in map doesn't exist");
-		ft_exit(-1, NULL, NULL);
+		ft_exit(-1, NULL);
 	}
 }

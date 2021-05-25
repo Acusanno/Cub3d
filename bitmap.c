@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 12:34:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 10:07:13 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 13:57:13 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	bitmap_create(t_vars *vars)
 	if (fd == -1)
 	{
 		printf("Error\nCouldn't create screen.bmp.\n");
-		ft_exit(-1, vars, NULL);
+		ft_exit(-1, NULL);
 	}
 	header_bmp(vars, fd);
 	img_to_bitmap(vars, fd);

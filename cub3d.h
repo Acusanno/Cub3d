@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 10:58:48 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 13:55:59 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_settings
 	int				blank_line;
 	int				save;
 	t_point			*sprite;
+	t_point			*save_sprite;
 	float			*dist_center_sp;
 	int				nb_sp;
 	char			*no;
@@ -246,7 +247,7 @@ void				bitmap_create(t_vars *vars);
 void				full_bitmap(t_vars *vars);
 
 // Fermer la fenêtre
-void				ft_exit(int code, t_vars *vars, char *truc);
+void				ft_exit(int code, char *truc);
 int					shutdown(int keycode, t_vars *vars);
 
 #endif

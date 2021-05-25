@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/05/25 10:59:05 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/05/25 15:12:40 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,7 @@ $(NAME) :	${OBJS} libft/libft.a
 			ln -sf minilibx/libmlx.dylib
 
 libft/libft.a :
-			$(MAKE) -C libft/ 
+			$(MAKE) -C libft
 
 all :		${NAME}
 

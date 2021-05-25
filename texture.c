@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 12:33:29 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 10:25:50 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 13:57:07 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	put_path(t_vars *vars)
 		if (fd == -1)
 		{
 			printf("Error\n Texture file invalid");
-			ft_exit(-1, vars, NULL);
+			ft_exit(-1, NULL);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 11:24:46 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 08:40:30 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 15:26:12 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@ void	text_x_wall(t_vars *vars, int j, int ri)
 		vars->td[j].text_x = fmodf(vars->tp.inter_h[ri].y, 1)
 			* vars->td[j].img_width;
 }
-
-// If-> distance *= -1 Pas sur
-// if ((vars->tp.player.y > vars->ts.sprite[sprite].y
-// && vars->tp.inter_s[sprite][ri].x < vars->ts.sprite[sprite].x)
-// || (vars->tp.player.y < vars->ts.sprite[sprite].y
-// && vars->tp.inter_s[sprite][ri].x > vars->ts.sprite[sprite].x))
 
 void	text_x_sprite(t_vars *vars, int sprite, int ri)
 {
@@ -62,7 +56,7 @@ void	draw_column(t_vars *vars, int ri, int j)
 	start_end_init(vars, ratio_height);
 	i = -1;
 	while (++i < vars->tp.start)
-		my_mlx_pixel_put(vars, ri, i, 0x63A2FD);
+		my_mlx_pixel_put(vars, ri, i, vars->ts.c);
 	text_x_wall(vars, j, ri);
 	while (i < vars->tp.end)
 	{
@@ -78,7 +72,7 @@ void	draw_column(t_vars *vars, int ri, int j)
 	}
 	i--;
 	while (i++ < vars->ts.r[1])
-		my_mlx_pixel_put(vars, ri, i, 0x2F2F42);
+		my_mlx_pixel_put(vars, ri, i, vars->ts.f);
 }
 
 void	draw_sprite(t_vars *vars, int ri, float ratio_height, int sprite)

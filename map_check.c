@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 09:11:08 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 10:23:16 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 15:09:44 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ void	sprite_check(t_settings *ts)
 	int		sprite;
 
 	i = 0;
-	j = 0;
 	sprite = 0;
 	ts->sprite = malloc(sizeof(t_point) * ts->nb_sp);
+	ts->save_sprite = ts->sprite;
 	while (ts->map[i])
 	{
 		j = 0;

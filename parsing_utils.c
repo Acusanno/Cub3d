@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:03:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 10:25:42 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 14:08:06 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,6 @@ void	struct_init(t_settings *ts)
 	ts->spawn = 0;
 }
 
-int	ft_strlen_split(char **str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-		i++;
-	return (i);
-}
-
 int	check_fc(char **array)
 {
 	int	i;
@@ -57,6 +45,23 @@ int	check_fc(char **array)
 	return (0);
 }
 
+void	check_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (i < 3)
+	{
+		if (ft_strncmp(ft_itoa(ft_atoi(tab[i])), tab[i],
+				ft_strlen(tab[i])) != 0)
+		{
+			printf("Error\n Wrong color");
+			ft_exit(-1, NULL);
+		}
+		i++;
+	}
+}
+
 void	put_tab(char **tab, t_settings *ts, char c)
 {
 	if (c == 'C')
@@ -71,6 +76,7 @@ void	put_tab(char **tab, t_settings *ts, char c)
 		ts->f += (ft_atoi(tab[1]) * 256);
 		ts->f += ft_atoi(tab[2]);
 	}
+	check_tab(tab);
 }
 
 void	map_realloc(t_settings *ts, char *str, int i)

@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:54:35 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 08:05:40 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 13:03:42 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ void	spawn_init(t_vars *vars)
 	if (vars->ts.spawn == 'S')
 		vars->tp.pa = ((3 * M_PI) / 2);
 	if (vars->ts.spawn == 'E')
-		vars->tp.pa = 0.0;
+		vars->tp.pa = 0.02;
 	if (vars->ts.spawn == 'W')
-		vars->tp.pa = M_PI;
+		vars->tp.pa = M_PI + 0.02;
 }
 
 void	set_x_y(t_point *res, double first, double second)

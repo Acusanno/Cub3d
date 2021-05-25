@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 12:37:41 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/19 12:38:15 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 13:56:10 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	key_pressed(int keycode, t_vars *vars)
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(vars->mlx, vars->win);
-		ft_exit(0, vars, NULL);
+		ft_exit(0, NULL);
 	}
 	return (0);
 }

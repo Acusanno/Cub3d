@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 13:20:54 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/19 13:21:17 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 13:56:05 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,12 @@ int	shutdown(int keycode, t_vars *vars)
 {
 	(void)keycode;
 	(void)vars;
-	ft_exit(0, vars, NULL);
+	ft_exit(0, NULL);
 	return (0);
 }
 
-void	ft_exit(int code, t_vars *vars, char *truc)
+void	ft_exit(int code, char *truc)
 {
-	(void)vars;
 	if (truc != NULL)
 		free(truc);
 	exit(code);

@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/25 09:09:35 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 09:54:21 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 14:08:03 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@ void	free_tab(char **tab)
 		i++;
 	}
 	free(tab);
+}
+
+int	ft_strlen_split(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
 }
 
 void	character_check(t_vars *vars, char *str)
@@ -44,7 +56,7 @@ void	character_check(t_vars *vars, char *str)
 		else
 		{
 			printf("Error\n Settings invalid");
-			ft_exit(-1, vars, str);
+			ft_exit(-1, str);
 		}
 	}
 	free(str);
@@ -58,14 +70,14 @@ void	parse_r(t_vars *vars, char *str)
 	if (vars->ts.r[0] != 0 || vars->ts.r[1] != 0)
 	{
 		printf("Error\n Resolution defined multiple times\n");
-		ft_exit(-1, vars, str);
+		ft_exit(-1, str);
 	}
 	array = ft_split(str, ' ');
 	i = ft_strlen_split(array);
 	if (i != 3 || ft_strlen(array[0]) > 1)
 	{
 		printf("Error\n Wrong number of resolution arguments\n");
-		ft_exit(-1, vars, str);
+		ft_exit(-1, str);
 	}
 	vars->ts.r[0] = ft_atoi(array[1]);
 	vars->ts.r[1] = ft_atoi(array[2]);
@@ -73,6 +85,6 @@ void	parse_r(t_vars *vars, char *str)
 	if (vars->ts.r[0] <= 0 || vars->ts.r[1] <= 0)
 	{
 		printf("Error\n Wrong resolution arguments\n");
-		ft_exit(-1, vars, str);
+		ft_exit(-1, str);
 	}
 }
