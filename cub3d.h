@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 14:38:24 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 10:58:48 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ typedef struct s_settings
 	char			*filename;
 	int				r[2];
 	char			spawn;
+	int				nb_spawn;
+	int				blank_line;
+	int				save;
 	t_point			*sprite;
 	float			*dist_center_sp;
 	int				nb_sp;
@@ -140,8 +143,9 @@ int					ft_strlen_split(char **str);
 int					check_fc(char **array);
 void				put_tab(char **tab, t_settings *ts, char c);
 void				map_realloc(t_settings *ts, char *str, int i);
+void				character_check(t_vars *vars, char *str);
 void				parse_r(t_vars *vars, char *str);
-void				parse_nswes(t_vars *vars, char *str);
+void				parse_nswes(t_vars *vars, char *str, int i);
 int					parse_fc(t_vars *vars, char *str);
 void				parse_map(t_vars *vars, char *str);
 void				parse_settings(t_vars *vars);
@@ -151,6 +155,9 @@ void				parsing(t_vars *vars);
 
 // Verification de validité de la map
 void				check_space(t_settings *ts, int i, int j);
+int					is_spawn(char c);
+void				error_map(void);
+void				put_spawn(t_settings *ts, int i, size_t j);
 void				map_check(t_settings *ts);
 void				map_size(t_settings *ts);
 
@@ -225,8 +232,7 @@ void				sprite_ordering(t_vars *vars);
 // Affichage murs et sprites
 void				my_mlx_pixel_put(t_vars *vars, int x, int y, int color);
 void				start_end_init(t_vars *vars, float ratio_height);
-void				draw_column(t_vars *vars, int ri, float ratio_height,
-						int j);
+void				draw_column(t_vars *vars, int ri, int j);
 void				draw_sprite(t_vars *vars, int ri, float ratio_height,
 						int sprite);
 void				draw_screen(t_vars *vars);

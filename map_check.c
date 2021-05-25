@@ -6,33 +6,11 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 09:11:08 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 10:38:56 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 10:23:16 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	check_space(t_settings *ts, int i, int j)
-{
-	if (!(ts->map[i][j]) || ts->map[i][j] == ' ')
-	{
-		printf("Error\n Map invalid");
-		exit(-1);
-	}
-}
-
-int	is_spawn(char c)
-{
-	if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
-		return (1);
-	return (0);
-}
-
-void	error_map(void)
-{
-	printf("Error\n Map invalid");
-	exit(-1);
-}
 
 void	check_resolution(t_vars *vars)
 {
@@ -42,9 +20,9 @@ void	check_resolution(t_vars *vars)
 	x = 0;
 	y = 0;
 	mlx_get_screen_size(vars->mlx, &x, &y);
-	if (vars->ts.r[0] > x)
+	if (vars->ts.r[0] > x && vars->ts.save == 0)
 		vars->ts.r[0] = x;
-	if (vars->ts.r[1] > y)
+	if (vars->ts.r[1] > y && vars->ts.save == 0)
 		vars->ts.r[1] = y;
 }
 
@@ -63,6 +41,11 @@ void	settings_check(t_vars *vars)
 	if (!(vars->ts.r[0]) || !(vars->ts.r[1]))
 	{
 		printf("Error\n Wrong number of settings defined\n");
+		exit(-1);
+	}
+	if (!(vars->ts.map))
+	{
+		printf("Error\n There is no map\n");
 		exit(-1);
 	}
 	check_resolution(vars);
@@ -92,11 +75,9 @@ void	map_check(t_settings *ts)
 {
 	int		i;
 	size_t	j;
-	int		spawn;
 
 	i = 0;
-	j = 0;
-	spawn = 0;
+	ts->nb_spawn = 0;
 	ts->nb_sp = 0;
 	while (ts->map[i])
 	{
@@ -105,21 +86,15 @@ void	map_check(t_settings *ts)
 		{
 			if (ts->map[i][j] != '1' && ts->map[i][j] != ' ')
 			{
-				if (is_spawn(ts->map[i][j]) == 1)
-					spawn++;
-				if (is_spawn(ts->map[i][j]) == 1)
-					ts->spawn = ts->map[i][j];
-				else if (ts->map[i][j] == '2')
-					ts->nb_sp++;
+				put_spawn(ts, i, j);
 				check_sides(ts, i, j);
 			}
 			j++;
 		}
 		i++;
 	}
-	if (spawn != 1)
+	if (ts->nb_spawn != 1)
 		error_map();
-	sprite_check(ts);
 }
 
 void	sprite_check(t_settings *ts)

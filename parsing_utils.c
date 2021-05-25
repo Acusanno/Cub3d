@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:03:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/04/12 09:37:13 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 10:25:42 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	struct_init(t_settings *ts)
 {
+	ts->save = 0;
 	ts->r[0] = 0;
 	ts->r[1] = 0;
 	ts->no = 0;
@@ -78,7 +79,7 @@ void	map_realloc(t_settings *ts, char *str, int i)
 	int		j;
 
 	j = i;
-	tmp = calloc(i + 2, sizeof(char *));
+	tmp = ft_calloc(i + 2, sizeof(char *));
 	tmp[i] = ft_strdup(str);
 	tmp[i + 1] = 0;
 	while (j-- > 0)

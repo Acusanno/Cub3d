@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 10:24:34 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 14:38:05 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 08:06:26 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ void	draw_all_sprite(t_vars *vars)
 	i = 0;
 	while (i < vars->ts.nb_sp)
 	{
-		if (vars->tp.vis_sp[i] && vars->tp.dist_sp[i][ri] > 0.5)
+		if (vars->tp.vis_sp[i] && vars->tp.dist_sp[i][vars->tp.ri] > 0.5)
 		{
-			ratio_height = vars->ts.r[1] / vars->tp.dist_sp[i][ri];
-			draw_sprite(vars, ri, ratio_height, i);
+			ratio_height = vars->ts.r[1] / vars->tp.dist_sp[i][vars->tp.ri];
+			draw_sprite(vars, vars->tp.ri, ratio_height, i);
 		}
 		i++;
 	}

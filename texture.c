@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 12:33:29 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/19 12:35:03 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 10:25:50 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	read_img(t_vars *vars, int i)
 
 void	read_all_img(t_vars *vars)
 {
-	vars->td = calloc(5, sizeof(t_data));
+	vars->td = ft_calloc(5, sizeof(t_data));
 	put_path(vars);
 	read_img(vars, 0);
 	read_img(vars, 1);
@@ -46,9 +46,23 @@ int	texture_index(float angle, char face)
 
 void	put_path(t_vars *vars)
 {
+	int	i;
+	int	fd;
+
+	i = 0;
 	vars->td[0].path = vars->ts.no;
 	vars->td[1].path = vars->ts.so;
 	vars->td[2].path = vars->ts.we;
 	vars->td[3].path = vars->ts.ea;
 	vars->td[4].path = vars->ts.s;
+	while (i < 5)
+	{
+		fd = open(vars->td[i].path, O_RDONLY);
+		if (fd == -1)
+		{
+			printf("Error\n Texture file invalid");
+			ft_exit(-1, vars, NULL);
+		}
+		i++;
+	}
 }

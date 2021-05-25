@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/05/21 13:57:29 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/05/25 10:59:05 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,9 @@ SRCS =		init.c  \
 			intersection.c         \
 			parsing_utils.c         \
 			display_utils.c          \
-			intersection_utils.c      \
+			parsing_utils2.c          \
+			map_check_utils.c          \
+			intersection_utils.c        \
 
 GCCF = gcc -g3 -O3 -Wall -Werror -Wextra -g #-fsanitize=address
 
@@ -45,7 +47,7 @@ _ROSE = \033[95m
 _CYAN = \033[96m
 
 %.o : 		%.c
-			${GCCF} -c $< -o $@ -Iminilibx
+			${GCCF}-c $< -o $@ -Iminilibx 
 
 $(NAME) :	${OBJS} libft/libft.a
 			${GCCF} minilibx/libmlx.dylib libft/libft.a $(OBJS) -o $(NAME)

@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 14:38:28 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 08:05:33 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,21 @@ float	dist(t_point a, t_point b)
 void	draw_screen(t_vars *vars)
 {
 	float	ratio_height;
-	int		ri;
 	float	ratioangle;
 	int		i;
 
 	ratio_height = 0;
-	ri = vars->ts.r[0];
+	vars->tp.ri = vars->ts.r[0];
 	ratioangle = (M_PI / 3) / vars->ts.r[0];
 	vars->tp.ra = vars->tp.pa - M_PI / 6;
-	while (ri >= 0)
+	while (vars->tp.ri >= 0)
 	{
 		rotation(vars);
-		ratio_height = vars->ts.r[1] / vars->tp.dist[ri];
-		i = texture_index(vars->tp.ra, vars->tp.face[ri]);
-		draw_column(vars, ri, ratio_height, i);
+		i = texture_index(vars->tp.ra, vars->tp.face[vars->tp.ri]);
+		draw_column(vars, vars->tp.ri, i);
 		draw_all_sprite(vars);
 		vars->tp.ra += ratioangle;
-		ri--;
+		vars->tp.ri--;
 	}
 }
 

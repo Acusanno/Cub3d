@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 11:24:46 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 10:48:26 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 08:40:30 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	text_x_sprite(t_vars *vars, int sprite, int ri)
 	float	distance;
 
 	distance = dist(vars->ts.sprite[sprite], vars->tp.inter_s[sprite][ri]);
-	if ((vars->tp.pa <= M_PI && vars->ts.sprite[sprite].x
-			>= vars->tp.inter_s[sprite][ri].x)
+	if ((vars->tp.pa < M_PI && vars->ts.sprite[sprite].x
+			> vars->tp.inter_s[sprite][ri].x)
 	|| (vars->tp.pa > M_PI && vars->ts.sprite[sprite].x
 			< vars->tp.inter_s[sprite][ri].x))
 		distance *= -1;
@@ -52,11 +52,13 @@ void	start_end_init(t_vars *vars, float ratio_height)
 		vars->tp.end -= vars->ts.r[1] / 10;
 }
 
-void	draw_column(t_vars *vars, int ri, float ratio_height, int j)
+void	draw_column(t_vars *vars, int ri, int j)
 {
 	int		i;
 	int		color;
+	float	ratio_height;
 
+	ratio_height = vars->ts.r[1] / vars->tp.dist[vars->tp.ri];
 	start_end_init(vars, ratio_height);
 	i = -1;
 	while (++i < vars->tp.start)

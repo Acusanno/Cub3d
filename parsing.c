@@ -6,47 +6,19 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:02:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 13:59:23 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 09:58:04 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	parse_r(t_vars *vars, char *str)
+void	parse_nswes(t_vars *vars, char *str, int i)
 {
-	int		i;
-	char	**array;
-
-	if (vars->ts.r[0] != 0 || vars->ts.r[1] != 0)
-	{
-		printf("Error\n Resolution defined multiple times\n");
-		ft_exit(-1, vars, str);
-	}
-	array = ft_split(str, ' ');
-	i = ft_strlen_split(array);
-	if (i != 3)
-	{
-		printf("Error\n Wrong number of resolution arguments\n");
-		ft_exit(-1, vars, str);
-	}
-	vars->ts.r[0] = ft_atoi(array[1]);
-	vars->ts.r[1] = ft_atoi(array[2]);
-	free_tab(array);
-	if (vars->ts.r[0] <= 0 || vars->ts.r[1] <= 0)
-	{
-		printf("Error\n Wrong resolution arguments\n");
-		ft_exit(-1, vars, str);
-	}
-}
-
-void	parse_nswes(t_vars *vars, char *str)
-{
-	int		i;
 	char	**array;
 
 	array = ft_split(str, ' ');
 	i = ft_strlen_split(array);
-	if (i != 2)
+	if (i != 2 || ft_strlen(array[0]) > 2)
 	{
 		printf("Error\n Wrong number of arguments");
 		ft_exit(-1, vars, str);
@@ -59,7 +31,7 @@ void	parse_nswes(t_vars *vars, char *str)
 		vars->ts.we = ft_strdup(array[1]);
 	else if (array[0][0] == 'E' && !vars->ts.ea)
 		vars->ts.ea = ft_strdup(array[1]);
-	else if (array[0][0] == 'S' && !vars->ts.s)
+	else if (array[0][0] == 'S' && !vars->ts.s && ft_strlen(array[0]) == 1)
 		vars->ts.s = ft_strdup(array[1]);
 	else
 	{
@@ -67,19 +39,6 @@ void	parse_nswes(t_vars *vars, char *str)
 		ft_exit(-1, vars, str);
 	}
 	free_tab(array);
-}
-
-void	free_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
 }
 
 int	parse_fc(t_vars *vars, char *str)
@@ -91,7 +50,7 @@ int	parse_fc(t_vars *vars, char *str)
 	array = ft_split(str, ' ');
 	tab = ft_split(array[1], ',');
 	i = ft_strlen_split(tab);
-	if (i != 3)
+	if (i != 3 || ft_strlen(array[0]) > 1)
 	{
 		printf("Error\n Wrong number of color arguments\n");
 		ft_exit(-1, vars, str);
@@ -110,73 +69,43 @@ int	parse_fc(t_vars *vars, char *str)
 	return (0);
 }
 
+void	parse_line(t_vars *vars, char *str, int i)
+{
+	if (vars->ts.blank_line == 0)
+	{
+		map_realloc(&vars->ts, str, i);
+		free(str);
+	}
+	else
+	{
+		printf("Error\n Map invalid");
+		ft_exit(-1, vars, str);
+	}
+}
+
 void	parse_map(t_vars *vars, char *str)
 {
 	int		i;
-	int		j;
 
 	i = 1;
-	j = 0;
+	vars->ts.blank_line = 0;
 	vars->ts.map = malloc(sizeof(char *));
 	vars->ts.map[0] = ft_strdup(str);
 	while (get_next_line(vars->ts.fd, &str) != 0)
 	{
 		if (str[0])
 		{
-			if (j == 0)
-			{
-				map_realloc(&vars->ts, str, i);
-				free(str);
-				i++;
-			}
-			else
-			{
-				printf("Error\n Map invalid");
-				ft_exit(-1, vars, str);
-			}
+			parse_line(vars, str, i);
+			i++;
 		}
 		else
 		{
 			free(str);
-			j++;
+			vars->ts.blank_line++;
 		}
 	}
 	if (str[0])
-	{
-		if (j == 0)
-			map_realloc(&vars->ts, str, i);
-		else
-		{
-			printf("Error\n Map invalid");
-			ft_exit(-1, vars, str);
-		}
-	}
-	free(str);
-}
-
-void	character_check(t_vars *vars, char *str)
-{
-	if (*str)
-	{
-		if (*str == 'R')
-			parse_r(vars, str);
-		else if (*str == 'N' || *str == 'S' || *str == 'W' || *str == 'E')
-			parse_nswes(vars, str);
-		else if (*str == 'F' || *str == 'C')
-			parse_fc(vars, str);
-		else if (*str == ' ' || *str == '1')
-		{
-			parse_map(vars, str);
-			free(str);
-			return ;
-		}
-		else
-		{
-			printf("Error\n Settings invalid");
-			ft_exit(-1, vars, str);
-		}
-	}
-	free(str);
+		parse_line(vars, str, i);
 }
 
 void	parse_settings(t_vars *vars)
@@ -185,6 +114,11 @@ void	parse_settings(t_vars *vars)
 
 	str = NULL;
 	vars->ts.fd = open(vars->ts.filename, O_RDONLY);
+	if (vars->ts.fd == -1)
+	{
+		printf("Error\n Cub file invalid");
+		ft_exit(-1, vars, NULL);
+	}
 	while ((get_next_line(vars->ts.fd, &str)) != 0)
 		character_check(vars, str);
 	free(str);

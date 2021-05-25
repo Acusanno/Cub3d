@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 08:33:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 14:28:12 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 10:58:40 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	parsing(t_vars *vars)
 	parse_settings(vars);
 	settings_check(vars);
 	map_check(&vars->ts);
+	sprite_check(&vars->ts);
 	map_size(&vars->ts);
 	map_transform(vars);
 	sprite_init(vars);

@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 13:13:51 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/19 13:14:58 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 08:03:46 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,18 @@ void	distance_comp(t_vars *vars, int ri)
 
 void	rotation(t_vars *vars)
 {
-	if (vars->tp.ra < 0)
-		vars->tp.ra += 2 * M_PI;
-	else if (vars->tp.ra > (2 * M_PI))
-		vars->tp.ra -= 2 * M_PI;
-	else if (vars->tp.pa < 0)
-		vars->tp.pa += 2 * M_PI;
-	else if (vars->tp.pa > (2 * M_PI))
-		vars->tp.pa -= 2 * M_PI;
+	while (vars->tp.ra < 0 || vars->tp.ra > 2 * M_PI)
+	{
+		if (vars->tp.ra < 0)
+			vars->tp.ra += 2 * M_PI;
+		else if (vars->tp.ra > (2 * M_PI))
+			vars->tp.ra -= 2 * M_PI;
+	}
+	while (vars->tp.pa < 0 || vars->tp.pa > 2 * M_PI)
+	{
+		if (vars->tp.pa < 0)
+			vars->tp.pa += 2 * M_PI;
+		else if (vars->tp.pa > (2 * M_PI))
+			vars->tp.pa -= 2 * M_PI;
+	}
 }

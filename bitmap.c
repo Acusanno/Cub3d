@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 12:34:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 13:49:44 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/25 10:07:13 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	render_bitmap(t_vars *vars)
 
 void	full_bitmap(t_vars *vars)
 {
+	vars->ts.save = 1;
 	parsing(vars);
 	print_map(vars->ts);
 	vars->img.img = mlx_new_image(vars->mlx, vars->ts.r[0], vars->ts.r[1]);
