@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 16:54:06 by acusanno          #+#    #+#              #
-#    Updated: 2021/04/07 08:14:26 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/05/26 08:19:36 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ CFLAGS		= -Wall -Wextra -Werror
 			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 $(NAME):	${OBJS} ${HEADER}
-			${AR} ${NAME} $?
+			${AR} ${NAME} ${OBJS}
 
 all:		${NAME}
 
@@ -58,4 +58,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re bonus

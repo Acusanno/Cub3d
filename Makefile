@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/05/25 15:12:40 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/05/26 08:36:53 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,9 +32,9 @@ SRCS =		init.c  \
 			display_utils.c          \
 			parsing_utils2.c          \
 			map_check_utils.c          \
-			intersection_utils.c        \
+			intersection_utils.c
 
-GCCF = gcc -g3 -O3 -Wall -Werror -Wextra -g #-fsanitize=address
+GCCF = gcc -g3 -O3 -Wall -Werror -Wextra -g
 
 OBJS = ${SRCS:.c=.o}
 
@@ -45,18 +45,19 @@ _GREEN = \033[92m
 _RED = \033[91m
 _ROSE = \033[95m
 _CYAN = \033[96m
+.PHONY :	all clean fclean re libft_
 
 %.o : 		%.c
-			${GCCF}-c $< -o $@ -Iminilibx 
+			${GCCF} -c $< -o $@ -Iminilibx 
 
-$(NAME) :	${OBJS} libft/libft.a
+all :		libft_ ${NAME}
+
+$(NAME) :	${OBJS} ./cub3d.h libft/libft.a
 			${GCCF} minilibx/libmlx.dylib libft/libft.a $(OBJS) -o $(NAME)
 			ln -sf minilibx/libmlx.dylib
 
-libft/libft.a :
+libft_ :
 			$(MAKE) -C libft
-
-all :		${NAME}
 
 clean :
 			rm -f ${OBJS}
@@ -65,9 +66,8 @@ clean :
 
 fclean :	clean
 			rm -f ${NAME}
-			rm -f libft/libft.a
+			${MAKE} -C libft/ fclean
 
 re :		fclean all
 
 
-.PHONY :	all clean fclean re ${NAME}
