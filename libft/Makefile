@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 16:54:06 by acusanno          #+#    #+#              #
-#    Updated: 2021/05/26 08:19:36 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/05/26 09:32:49 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,13 +39,13 @@ HEADER		= ./libft.h
 
 CFLAGS		= -Wall -Wextra -Werror
 
-%.o: %.c	${HEADER}
-			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+all:		${NAME}
 
 $(NAME):	${OBJS} ${HEADER}
 			${AR} ${NAME} ${OBJS}
 
-all:		${NAME}
+%.o: %.c	${HEADER}
+			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 bonus:		${OBJS_BONUS} ${OBJS}
 			${AR} ${NAME} ${OBJS_BONUS} ${OBJS}

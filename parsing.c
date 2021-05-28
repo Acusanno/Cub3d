@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:02:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 15:16:56 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/28 10:28:24 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	parse_fc(t_vars *vars, char *str)
 
 	array = ft_split(str, ' ');
 	tab = ft_split(array[1], ',');
+
 	i = ft_strlen_split(tab);
 	if (i != 3 || ft_strlen(array[0]) > 1)
 	{
@@ -64,8 +65,8 @@ int	parse_fc(t_vars *vars, char *str)
 		ft_exit(-1, str);
 	}
 	put_tab(tab, &vars->ts, array[0][0]);
-	free_tab(array);
 	free_tab(tab);
+	free_tab(array);
 	return (0);
 }
 

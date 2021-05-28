@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:03:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 14:08:06 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/28 09:55:54 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,19 @@ int	check_fc(char **array)
 
 void	check_tab(char **tab)
 {
-	int	i;
+	int		i;
+	char	*str;
 
 	i = 0;
 	while (i < 3)
 	{
-		if (ft_strncmp(ft_itoa(ft_atoi(tab[i])), tab[i],
-				ft_strlen(tab[i])) != 0)
+		str = ft_itoa(ft_atoi(tab[i]));
+		if (ft_strncmp(str, tab[i], ft_strlen(tab[i])) != 0)
 		{
 			printf("Error\n Wrong color");
 			ft_exit(-1, NULL);
 		}
+		free(str);
 		i++;
 	}
 }

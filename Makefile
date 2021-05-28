@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/05/26 08:36:53 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/05/26 09:39:35 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,11 +52,14 @@ _CYAN = \033[96m
 
 all :		libft_ ${NAME}
 
-$(NAME) :	${OBJS} ./cub3d.h libft/libft.a
+$(NAME) :	${OBJS} ./cub3d.h | libft/libft.a
 			${GCCF} minilibx/libmlx.dylib libft/libft.a $(OBJS) -o $(NAME)
 			ln -sf minilibx/libmlx.dylib
 
 libft_ :
+			$(MAKE) -C libft
+
+libft/libft.a :
 			$(MAKE) -C libft
 
 clean :

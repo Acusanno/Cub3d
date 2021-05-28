@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 11:16:09 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 08:53:55 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/28 09:11:00 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,6 @@ void	update_player_pos(t_vars *vars)
 		move_leftward(vars);
 	if (vars->tc.d == 1)
 		move_rightward(vars);
+	if (vars->tp.pa > 4.59 && vars->tp.pa < 4.60)
+		vars->tp.pa += 0.1;
 }
