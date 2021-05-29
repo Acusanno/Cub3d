@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 11:16:09 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/28 09:11:00 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 11:35:34 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 void	move_forward(t_vars *vars, int shift)
 {
 	if (vars->ts.map[(int)(vars->tp.player.y + vars->tp.pdy / 4)]
-		[(int)vars->tp.player.x] != '1' && vars->ts.map[(int)
-		(vars->tp.player.y + vars->tp.pdy / 4)][(int)vars->tp.player.x] != '2')
+		[(int)vars->tp.player.x] != '1')
 	{
 		if (shift == 1)
 			vars->tp.player.y += vars->tp.pdy / 8;
@@ -24,9 +23,7 @@ void	move_forward(t_vars *vars, int shift)
 			vars->tp.player.y += vars->tp.pdy / 15;
 	}
 	if (vars->ts.map[(int)vars->tp.player.y]
-		[(int)(vars->tp.player.x + vars->tp.pdx / 4)]
-		!= '1' && vars->ts.map[(int)vars->tp.player.y]
-		[(int)(vars->tp.player.x + vars->tp.pdx / 4)] != '2')
+		[(int)(vars->tp.player.x + vars->tp.pdx / 4)] != '1')
 	{
 		if (shift == 1)
 			vars->tp.player.x += vars->tp.pdx / 8;
@@ -38,40 +35,31 @@ void	move_forward(t_vars *vars, int shift)
 void	move_backward(t_vars *vars)
 {
 	if (vars->ts.map[(int)(vars->tp.player.y - vars->tp.pdy / 4)]
-		[(int)vars->tp.player.x] != '1' && vars->ts.map[(int)(vars->tp.player.y
-		- vars->tp.pdy / 4)][(int)vars->tp.player.x] != '2')
+		[(int)vars->tp.player.x] != '1')
 		vars->tp.player.y -= vars->tp.pdy / 15;
 	if (vars->ts.map[(int)vars->tp.player.y][(int)(vars->tp.player.x
-		- vars->tp.pdx / 4)] != '1' && vars->ts.map[(int)vars->tp.player.y]
-		[(int)(vars->tp.player.x - vars->tp.pdx / 4)] != '2')
+		- vars->tp.pdx / 4)] != '1')
 		vars->tp.player.x -= vars->tp.pdx / 15;
 }
 
 void	move_leftward(t_vars *vars)
 {
 	if (vars->ts.map[(int)vars->tp.player.y]
-		[(int)(vars->tp.player.x + cos(vars->tp.pa + (M_PI / 2)) / 4)] != '1'
-		&& vars->ts.map[(int)vars->tp.player.y][(int)(vars->tp.player.x
-		+ cos(vars->tp.pa + (M_PI / 2)) / 4)] != '2')
+		[(int)(vars->tp.player.x + cos(vars->tp.pa + (M_PI / 2)) / 4)] != '1')
 		vars->tp.player.x += cos(vars->tp.pa + (M_PI / 2)) / 30;
 	if (vars->ts.map[(int)(vars->tp.player.y - sin(vars->tp.pa
 				+ (M_PI / 2)) / 4)]
-		[(int)vars->tp.player.x] != '1' && vars->ts.map[(int)(vars->tp.player.y
-		- sin(vars->tp.pa + (M_PI / 2)) / 4)][(int)vars->tp.player.x] != '2')
+		[(int)vars->tp.player.x] != '1')
 		vars->tp.player.y -= sin(vars->tp.pa + (M_PI / 2)) / 30;
 }
 
 void	move_rightward(t_vars *vars)
 {
 	if (vars->ts.map[(int)vars->tp.player.y][(int)(vars->tp.player.x
-		+ cos(vars->tp.pa - (M_PI / 2)) / 4)] != '1'
-		&& vars->ts.map[(int)vars->tp.player.y][(int)(vars->tp.player.x
-		+ cos(vars->tp.pa - (M_PI / 2)) / 4)] != '2')
+		+ cos(vars->tp.pa - (M_PI / 2)) / 4)] != '1')
 		vars->tp.player.x += cos(vars->tp.pa - (M_PI / 2)) / 30;
 	if (vars->ts.map[(int)(vars->tp.player.y - sin(vars->tp.pa
-				- (M_PI / 2)) / 4)][(int)vars->tp.player.x] != '1'
-		&& vars->ts.map[(int)(vars->tp.player.y - sin(vars->tp.pa - (M_PI / 2))
-		/ 4)][(int)vars->tp.player.x] != '2')
+				- (M_PI / 2)) / 4)][(int)vars->tp.player.x] != '1')
 		vars->tp.player.y -= sin(vars->tp.pa - (M_PI / 2)) / 30;
 }
 

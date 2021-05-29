@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 11:09:44 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 08:25:05 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 11:37:04 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,8 @@ int	wall_h(t_vars *vars, float x, float y)
 		vars->tp.inter_h[j].z = -1;
 		return (-1);
 	}
-	if (y - 1 > 0 && x > 0 && (vars->ts.map[(int)y - i][(int)x] == '1'
-		|| vars->ts.map[(int)y - i][(int)x] == '3'))
+	if (y - 1 > 0 && x > 0 && (vars->ts.map[(int)y - i][(int)x] == '1'))
 		return (1);
-	else if (y - 1 > 0 && x > 0 && vars->ts.map[(int)y - i][(int)x] == '2')
-		return (2);
 	return (0);
 }
 
@@ -58,26 +55,9 @@ int	wall_v(t_vars *vars, float x, float y)
 		vars->tp.inter_v[j].z = -1;
 		return (-1);
 	}
-	if (x - 1 > 0 && y > 0 && (vars->ts.map[(int)y][(int)x - i] == '1'
-		|| vars->ts.map[(int)y][(int)x - i] == '3'))
+	if (x - 1 > 0 && y > 0 && (vars->ts.map[(int)y][(int)x - i] == '1'))
 		return (1);
-	else if (x - 1 > 0 && y > 0 && vars->ts.map[(int)y][(int)x - i] == '2')
-		return (2);
 	return (0);
-}
-
-int	which_sprite(t_vars *vars, float x, float y)
-{
-	int	i;
-
-	i = 0;
-	while (i < vars->ts.nb_sp)
-	{
-		if (vars->ts.sprite[i].x == x + 0.5 && vars->ts.sprite[i].y == y + 0.5)
-			return (i);
-		i++;
-	}
-	return (-1);
 }
 
 t_point	intersection(t_point a1, t_point a2, t_point b1, t_point b2)

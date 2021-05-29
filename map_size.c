@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 10:26:14 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/21 13:50:21 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 11:34:29 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,6 @@ void	map_draw(t_vars *vars)
 			else if (vars->ts.map[j][i] == ' ')
 				draw_cube(i, j, 0x0000ff, vars);
 			else if (vars->ts.map[j][i] == '1')
-				draw_cube(i, j, 0xffffff, vars);
-			else if (vars->ts.map[j][i] == '2')
-				draw_cube(i, j, 0xff8300, vars);
-			else if (vars->ts.map[j][i] == '3')
 				draw_cube(i, j, 0xffffff, vars);
 			else if (vars->ts.map[j][i] == '0')
 				draw_cube(i, j, 0x00ffff, vars);

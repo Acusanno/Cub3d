@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/05/26 09:39:35 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/05/29 13:00:45 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,23 +15,21 @@ NAME = cub3d
 SRCS =		init.c  \
 			main.c   \
 			cub3d.c   \
-			bitmap.c   \
-			texture.c   \
-			parsing.c    \
-			display.c     \
-			map_size.c     \
-			keyboard.c      \
-			movement.c       \
-			map_check.c       \
-			structure.c        \
-			wall_rays.c         \
-			mlx_utils.c          \
-			sprite_tri.c          \
-			intersection.c         \
-			parsing_utils.c         \
-			display_utils.c          \
-			parsing_utils2.c          \
-			map_check_utils.c          \
+			texture.c  \
+			parsing.c   \
+			display.c    \
+			map_size.c    \
+			keyboard.c     \
+			movement.c      \
+			map_check.c      \
+			structure.c       \
+			wall_rays.c        \
+			mlx_utils.c         \
+			intersection.c       \
+			parsing_utils.c       \
+			display_utils.c        \
+			parsing_utils2.c        \
+			map_check_utils.c        \
 			intersection_utils.c
 
 GCCF = gcc -g3 -O3 -Wall -Werror -Wextra -g

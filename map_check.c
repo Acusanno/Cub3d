@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 09:11:08 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 15:09:44 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 11:47:21 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,8 @@
 
 void	check_resolution(t_vars *vars)
 {
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	mlx_get_screen_size(vars->mlx, &x, &y);
-	if (vars->ts.r[0] > x && vars->ts.save == 0)
-		vars->ts.r[0] = x;
-	if (vars->ts.r[1] > y && vars->ts.save == 0)
-		vars->ts.r[1] = y;
+	vars->ts.r[0] = 1920;
+	vars->ts.r[1] = 1080;
 }
 
 void	settings_check(t_vars *vars)
@@ -34,11 +26,6 @@ void	settings_check(t_vars *vars)
 		exit(-1);
 	}
 	if (!(vars->ts.ea) || (vars->ts.f == -1) || (vars->ts.c == -1))
-	{
-		printf("Error\n Wrong number of settings defined\n");
-		exit(-1);
-	}
-	if (!(vars->ts.r[0]) || !(vars->ts.r[1]))
 	{
 		printf("Error\n Wrong number of settings defined\n");
 		exit(-1);
@@ -95,31 +82,4 @@ void	map_check(t_settings *ts)
 	}
 	if (ts->nb_spawn != 1)
 		error_map();
-}
-
-void	sprite_check(t_settings *ts)
-{
-	int		i;
-	size_t	j;
-	int		sprite;
-
-	i = 0;
-	sprite = 0;
-	ts->sprite = malloc(sizeof(t_point) * ts->nb_sp);
-	ts->save_sprite = ts->sprite;
-	while (ts->map[i])
-	{
-		j = 0;
-		while (ts->map[i][j])
-		{
-			if (ts->map[i][j] == '2')
-			{
-				ts->sprite[sprite].x = i + 0.5;
-				ts->sprite[sprite].y = j + 0.5;
-				sprite++;
-			}
-			j++;
-		}
-		i++;
-	}
 }

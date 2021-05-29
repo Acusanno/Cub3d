@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:02:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/28 10:28:24 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 13:11:08 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,17 @@ void	parse_nswes(t_vars *vars, char *str, int i)
 		printf("Error\n Wrong number of arguments");
 		ft_exit(-1, str);
 	}
-	if (array[0][0] == 'N' && !vars->ts.no)
+	if (array[0][0] == 'N' && array[0][1] == 'O' && !vars->ts.no)
 		vars->ts.no = ft_strdup(array[1]);
 	else if (array[0][0] == 'S' && array[0][1] == 'O' && !vars->ts.so)
 		vars->ts.so = ft_strdup(array[1]);
-	else if (array[0][0] == 'W' && !vars->ts.we)
+	else if (array[0][0] == 'W' && array[0][1] == 'E' && !vars->ts.we)
 		vars->ts.we = ft_strdup(array[1]);
-	else if (array[0][0] == 'E' && !vars->ts.ea)
+	else if (array[0][0] == 'E' && array[0][1] == 'A' && !vars->ts.ea)
 		vars->ts.ea = ft_strdup(array[1]);
-	else if (array[0][0] == 'S' && !vars->ts.s && ft_strlen(array[0]) == 1)
-		vars->ts.s = ft_strdup(array[1]);
 	else
 	{
-		printf("Error\n Textures defined multiple times\n");
+		printf("Error\n Problem with texture definition\n");
 		ft_exit(-1, str);
 	}
 	free_tab(array);
@@ -49,9 +47,8 @@ int	parse_fc(t_vars *vars, char *str)
 
 	array = ft_split(str, ' ');
 	tab = ft_split(array[1], ',');
-
 	i = ft_strlen_split(tab);
-	if (i != 3 || ft_strlen(array[0]) > 1)
+	if (i != 3 || ft_strlen(array[0]) > 1 || comma_count(array[1]) != 2)
 	{
 		printf("Error\n Wrong number of color arguments\n");
 		ft_exit(-1, str);
@@ -114,7 +111,7 @@ void	parse_settings(t_vars *vars)
 	char	*str;
 
 	str = NULL;
-	vars->ts.fd = open(vars->ts.filename, O_RDONLY);
+	vars->ts.fd = open(vars->ts.filename, O_RDWR);
 	if (vars->ts.fd == -1 || ft_strlen(vars->ts.filename) <= 4
 		|| ft_strncmp(".cub", &vars->ts.filename
 			[ft_strlen(vars->ts.filename) - 4], 4) != 0)

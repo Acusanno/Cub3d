@@ -1,20 +1,16 @@
-R 1920 1080
-
 NO ./textures/north.xpm   
 SO ./textures/south.xpm
 WE ./textures/west.xpm
 EA ./textures/east.xpm
-
-S ./textures/tonneau.xpm
 
 F 120,100,0
 C 1,1,1
 
 1111111111
 1000000001
-1020000201
 1000000001
-100020E001
+1000000001
+100000E001
 1000000001
 1000000001
 1000000001

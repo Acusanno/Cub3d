@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 11:24:46 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/28 08:54:43 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 11:37:16 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,6 @@ void	text_x_wall(t_vars *vars, int j, int ri)
 	else if (vars->tp.face[ri] == 'v')
 		vars->td[j].text_x = fmodf(vars->tp.inter_h[ri].y, 1)
 			* vars->td[j].img_width;
-}
-
-void	text_x_sprite(t_vars *vars, int sprite, int ri)
-{
-	float	distance;
-
-	distance = dist(vars->ts.sprite[sprite], vars->tp.inter_s[sprite][ri]);
-	if ((vars->tp.pa < M_PI && vars->ts.sprite[sprite].x
-			> vars->tp.inter_s[sprite][ri].x)
-	|| (vars->tp.pa > M_PI && vars->ts.sprite[sprite].x
-			< vars->tp.inter_s[sprite][ri].x))
-		distance *= -1;
-	vars->td[4].text_x = (vars->td[4].img_width / 2)
-		+ (vars->td[4].img_width * distance);
 }
 
 void	start_end_init(t_vars *vars, float ratio_height)
@@ -73,27 +59,4 @@ void	draw_column(t_vars *vars, int ri, int j)
 	i--;
 	while (i++ < vars->ts.r[1])
 		my_mlx_pixel_put(vars, ri, i, vars->ts.f);
-}
-
-void	draw_sprite(t_vars *vars, int ri, float ratio_height, int sprite)
-{
-	int		i;
-	int		color;
-
-	start_end_init(vars, ratio_height);
-	i = vars->tp.start - 1;
-	text_x_sprite(vars, sprite, ri);
-	while (++i < vars->tp.end)
-	{
-		vars->td[4].text_y = (i - vars->tp.start) * vars->td[4].img_height
-			/ (ratio_height);
-		if (vars->td[4].text_x < vars->td[4].img_width
-			&& vars->td[4].text_x >= 0)
-			color = vars->td[4].iaddr[vars->td[4].text_y
-				* vars->td[4].img_height + vars->td[4].text_x];
-		else
-			vars->tp.inter_s[sprite][ri].z = -1;
-		if (vars->tp.inter_s[sprite][ri].z != -1 && color)
-			my_mlx_pixel_put(vars, ri, i, color);
-	}
 }

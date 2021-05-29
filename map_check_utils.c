@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/25 08:50:13 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 14:07:11 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 11:33:37 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ void	put_spawn(t_settings *ts, int i, size_t j)
 		ts->nb_spawn++;
 	if (is_spawn(ts->map[i][j]) == 1)
 		ts->spawn = ts->map[i][j];
-	else if (ts->map[i][j] == '2')
-		ts->nb_sp++;
-	else if ((ts->map[i][j] != '3' && ts->map[i][j] != '0'
-		&& is_spawn(ts->map[i][j]) != 1))
+	else if ((ts->map[i][j] != '0' && is_spawn(ts->map[i][j]) != 1))
 	{
 		printf("Error\n Character in map doesn't exist");
 		ft_exit(-1, NULL);

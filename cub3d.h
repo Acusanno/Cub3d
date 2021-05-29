@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:10:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/25 13:55:59 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 11:34:22 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ typedef struct s_vars {
 // Parsing du fichier de config
 void				struct_init(t_settings *ts);
 int					ft_strlen_split(char **str);
+int					comma_count(char *str);
 int					check_fc(char **array);
 void				put_tab(char **tab, t_settings *ts, char c);
 void				map_realloc(t_settings *ts, char *str, int i);
@@ -212,7 +213,6 @@ void				find_inter_v(t_vars *vars);
 void				find_inter_s(t_vars *vars, int sprite);
 int					check_wall(t_vars *vars, float x, float y, char tal);
 int					which_sprite(t_vars *vars, float x, float y);
-void				sprite_check(t_settings *ts);
 void				distance_comp(t_vars *vars, int ri);
 void				draw_all_sprite(t_vars *vars);
 void				find_all_inter(t_vars *vars);
@@ -238,13 +238,6 @@ void				draw_sprite(t_vars *vars, int ri, float ratio_height,
 						int sprite);
 void				draw_screen(t_vars *vars);
 int					render_next_frame(t_vars *vars);
-
-// Creation de la bitmap
-void				header_bmp(t_vars *vars, int fd);
-int					render_bitmap(t_vars *vars);
-void				img_to_bitmap(t_vars *vars, int fd);
-void				bitmap_create(t_vars *vars);
-void				full_bitmap(t_vars *vars);
 
 // Fermer la fenêtre
 void				ft_exit(int code, char *truc);

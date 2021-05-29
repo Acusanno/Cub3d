@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 10:14:42 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/28 09:16:17 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 11:36:12 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	draw_screen(t_vars *vars)
 		rotation(vars);
 		i = texture_index(vars->tp.ra, vars->tp.face[vars->tp.ri]);
 		draw_column(vars, vars->tp.ri, i);
-		draw_all_sprite(vars);
 		vars->tp.ra += ratioangle;
 		vars->tp.ri--;
 	}
@@ -44,8 +43,6 @@ void	draw_screen(t_vars *vars)
 int	render_next_frame(t_vars *vars)
 {
 	update_player_pos(vars);
-	dist_center_sprite(vars);
-	sprite_ordering(vars);
 	find_all_inter(vars);
 	draw_screen(vars);
 	if (vars->tc.tab == 1)
@@ -57,22 +54,6 @@ int	render_next_frame(t_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 	mlx_do_sync(vars->mlx);
 	return (0);
-}
-
-void	find_all_sprite(t_vars *vars)
-{
-	int	i;
-
-	i = -1;
-	while (++i < vars->ts.nb_sp)
-	{
-		rotation(vars);
-		if (vars->tp.vis_sp[i])
-			find_inter_s(vars, i);
-		if (vars->tp.dist[vars->tp.ri] < dist(vars->tp.player,
-				vars->tp.inter_s[i][vars->tp.ri]))
-			vars->tp.inter_s[i][vars->tp.ri].z = -1;
-	}
 }
 
 void	find_all_inter(t_vars *vars)
@@ -96,7 +77,6 @@ void	find_all_inter(t_vars *vars)
 		rotation(vars);
 		distance_comp(vars, vars->tp.ri);
 		vars->tp.dist[vars->tp.ri] *= cos(vars->tp.pa - vars->tp.ra);
-		find_all_sprite(vars);
 		vars->tp.ra += ratioangle;
 		vars->tp.ri--;
 	}

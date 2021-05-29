@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/25 09:09:35 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/28 09:50:19 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/29 09:57:22 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,27 @@ int	ft_strlen_split(char **str)
 	return (i);
 }
 
+int	comma_count(char *str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (str[j])
+	{
+		if (str[j] == ',')
+			i++;
+		j++;
+	}
+	return (i);
+}
+
 void	character_check(t_vars *vars, char *str)
 {
 	if (*str)
 	{
-		if (*str == 'R')
-			parse_r(vars, str);
-		else if (*str == 'N' || *str == 'S' || *str == 'W' || *str == 'E')
+		if (*str == 'N' || *str == 'S' || *str == 'W' || *str == 'E')
 			parse_nswes(vars, str, 0);
 		else if (*str == 'F' || *str == 'C')
 			parse_fc(vars, str);
@@ -60,31 +74,4 @@ void	character_check(t_vars *vars, char *str)
 		}
 	}
 	free(str);
-}
-
-void	parse_r(t_vars *vars, char *str)
-{
-	int		i;
-	char	**array;
-
-	if (vars->ts.r[0] != 0 || vars->ts.r[1] != 0)
-	{
-		printf("Error\n Resolution defined multiple times\n");
-		ft_exit(-1, str);
-	}
-	array = ft_split(str, ' ');
-	i = ft_strlen_split(array);
-	if (i != 3 || ft_strlen(array[0]) > 1)
-	{
-		printf("Error\n Wrong number of resolution arguments\n");
-		ft_exit(-1, str);
-	}
-	vars->ts.r[0] = ft_atoi(array[1]);
-	vars->ts.r[1] = ft_atoi(array[2]);
-	free_tab(array);
-	if (vars->ts.r[0] <= 0 || vars->ts.r[1] <= 0)
-	{
-		printf("Error\n Wrong resolution arguments\n");
-		ft_exit(-1, str);
-	}
 }
