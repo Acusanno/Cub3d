@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 15:56:25 by acusanno          #+#    #+#             */
-/*   Updated: 2021/03/31 08:56:58 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/31 10:02:35 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void				ft_putnbr_fd(int n, int fd);
 char				*ft_strmapi(char const *s, char (*f) (unsigned int, char));
 char				*ft_itoa(int n);
 char				**ft_split(char const *s, char c);
+char				**ft_split_once(char const *s, char c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 t_list				*ft_lstnew(void *content);
 void				ft_lstadd_front(t_list **alst, t_list *new);

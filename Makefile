@@ -6,7 +6,7 @@
 #    By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 10:08:03 by acusanno          #+#    #+#              #
-#    Updated: 2021/05/29 13:00:45 by acusanno         ###   ########lyon.fr    #
+#    Updated: 2021/05/31 10:37:16 by acusanno         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,11 +62,11 @@ libft/libft.a :
 
 clean :
 			rm -f ${OBJS}
-			rm -f libmlx.dylib
 			${MAKE} -C libft/ clean
 
 fclean :	clean
 			rm -f ${NAME}
+			rm -f libmlx.dylib
 			${MAKE} -C libft/ fclean
 
 re :		fclean all

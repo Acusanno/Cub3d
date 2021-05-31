@@ -1,17 +1,18 @@
-NO ./textures/north.xpm   
-SO ./textures/south.xpm
-WE ./textures/west.xpm
-EA ./textures/east.xpm
+NO ./textures/white_grunge.xpm
+SO ./textures/greystone.xpm
+WE ./textures/brick.xpm
+EA ./textures/red.xpm
 
-F 120,100,0
-C 1,1,1
+F 64,38,133
+C 120,100,255
 
 1111111111
 1000000001
+100S001001
+1000000101
+100001N101
+1000001101
 1000000001
-1000000001
-100000E001
-1000000001
-1000000001
-1000000001
-1111111111
+10000000011111111111111
+11101010110001011011001
+11111111111111111111111

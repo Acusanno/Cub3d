@@ -6,7 +6,7 @@
 /*   By: acusanno <acusanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:02:53 by acusanno          #+#    #+#             */
-/*   Updated: 2021/05/29 13:11:08 by acusanno         ###   ########lyon.fr   */
+/*   Updated: 2021/05/31 12:11:25 by acusanno         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	parse_nswes(t_vars *vars, char *str, int i)
 {
 	char	**array;
 
-	array = ft_split(str, ' ');
+	array = ft_split_once(str, ' ');
 	i = ft_strlen_split(array);
 	if (i != 2 || ft_strlen(array[0]) > 2)
 	{
@@ -104,6 +104,8 @@ void	parse_map(t_vars *vars, char *str)
 	}
 	if (str[0])
 		parse_line(vars, str, i);
+	if (!str[0])
+		free(str);
 }
 
 void	parse_settings(t_vars *vars)
