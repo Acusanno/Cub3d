@@ -45,7 +45,7 @@ _ROSE = \033[95m
 _CYAN = \033[96m
 .PHONY :	all clean fclean re libft_
 
-%.o : 		%.c
+%.o : 		%.c ./cub3d.h
 			${GCCF} -c $< -o $@ -Iminilibx 
 
 all :		libft_ ${NAME}
