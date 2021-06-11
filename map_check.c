@@ -52,7 +52,7 @@ void	check_sides(t_settings *ts, int i, size_t j)
 		check_space(ts, i, j + 1);
 	else
 		error_map();
-	if (i != ft_strlen_split(ts->map) - 1)
+	if (i != ts->map_height - 1)
 		check_space(ts, i + 1, j);
 	else
 		error_map();
@@ -66,7 +66,7 @@ void	map_check(t_settings *ts)
 	i = 0;
 	ts->nb_spawn = 0;
 	ts->nb_sp = 0;
-	while (ts->map[i])
+	while (i < ts->map_height)
 	{
 		j = 0;
 		while (ts->map[i][j])
@@ -81,5 +81,8 @@ void	map_check(t_settings *ts)
 		i++;
 	}
 	if (ts->nb_spawn != 1)
-		error_map();
+	{
+		printf("Error\n Spawn invalid in map");
+		ft_exit(-1, NULL);
+	}
 }

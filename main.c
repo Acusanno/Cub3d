@@ -42,9 +42,9 @@ void	parsing(t_vars *vars)
 	vars->mlx = mlx_init();
 	parse_settings(vars);
 	settings_check(vars);
-	map_check(&vars->ts);
 	map_size(&vars->ts);
 	map_transform(vars);
+	map_check(&vars->ts);
 	if (vars->ts.map_width > vars->ts.map_height)
 		vars->minimap_size = vars->ts.r[0] / (vars->ts.map_width * 3);
 	else

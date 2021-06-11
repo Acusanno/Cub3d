@@ -53,6 +53,20 @@ int	comma_count(char *str)
 	return (i);
 }
 
+void	parse_line(t_vars *vars, char *str, int i)
+{
+	if (vars->ts.blank_line == 0)
+	{
+		map_realloc(&vars->ts, str, i);
+		free(str);
+	}
+	else
+	{
+		printf("Error\n Map invalid");
+		ft_exit(-1, str);
+	}
+}
+
 void	character_check(t_vars *vars, char *str)
 {
 	if (*str)
@@ -61,7 +75,7 @@ void	character_check(t_vars *vars, char *str)
 			parse_nswes(vars, str, 0);
 		else if (*str == 'F' || *str == 'C')
 			parse_fc(vars, str);
-		else if (*str == ' ' || *str == '1')
+		else if ((*str == ' ' || *str == '1'))
 		{
 			parse_map(vars, str);
 			free(str);

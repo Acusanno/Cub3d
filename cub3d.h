@@ -153,6 +153,7 @@ void				parse_map(t_vars *vars, char *str);
 void				parse_settings(t_vars *vars);
 void				map_transform(t_vars *vars);
 void				free_tab(char **tab);
+void				parse_line(t_vars *vars, char *str, int i);
 void				parsing(t_vars *vars);
 
 // Verification de validité de la map

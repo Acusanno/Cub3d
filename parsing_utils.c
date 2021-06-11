@@ -89,7 +89,7 @@ void	map_realloc(t_settings *ts, char *str, int i)
 	j = i;
 	tmp = ft_calloc(i + 2, sizeof(char *));
 	tmp[i] = ft_strdup(str);
-	tmp[i + 1] = 0;
+	tmp[i + 1] = NULL;
 	while (j-- > 0)
 		tmp[j] = ts->map[j];
 	free(ts->map);

@@ -86,4 +86,6 @@ char				*ft_strlcpy_gnl(char *dst, const char *src, size_t dstsize);
 char				*ftgsubstr(char const *s, int start, size_t len, int *ret2);
 char				*after_lb(char *str, int *ret);
 char				*before_lb(char *str, int *ret);
+int					countword(char const *s, char c);
+char				**free_split(char **str_tot, int i);
 #endif

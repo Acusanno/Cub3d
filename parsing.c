@@ -16,7 +16,7 @@ void	parse_nswes(t_vars *vars, char *str, int i)
 {
 	char	**array;
 
-	array = ft_split_once(str, ' ');
+	array = ft_split(str, ' ');
 	i = ft_strlen_split(array);
 	if (i != 2 || ft_strlen(array[0]) > 2)
 	{
@@ -39,22 +39,35 @@ void	parse_nswes(t_vars *vars, char *str, int i)
 	free_tab(array);
 }
 
+void	fc_check(char **array, char **tab, char *str)
+{
+	int	i;
+
+	i = ft_strlen_split(tab);
+	if (i != 3 || ft_strlen(array[0]) > 1 || comma_count(array[1]) != 2)
+	{
+		printf("Error\n Wrong number of color arguments\n");
+		free_tab(tab);
+		free_tab(array);
+		ft_exit(-1, str);
+	}
+	else if (check_fc(tab) == -1)
+		ft_exit(-1, str);
+}
+
 int	parse_fc(t_vars *vars, char *str)
 {
-	int		i;
 	char	**array;
 	char	**tab;
 
 	array = ft_split(str, ' ');
 	tab = ft_split(array[1], ',');
-	i = ft_strlen_split(tab);
-	if (i != 3 || ft_strlen(array[0]) > 1 || comma_count(array[1]) != 2)
+	if (!tab || ft_strlen_split(array) != 2)
 	{
-		printf("Error\n Wrong number of color arguments\n");
+		printf("Error\n Floor or Ceiling invalid\n");
 		ft_exit(-1, str);
 	}
-	else if (check_fc(tab) == -1)
-		ft_exit(-1, str);
+	fc_check(array, tab, str);
 	if ((vars->ts.f != -1 && array[0][0] == 'F')
 		|| (vars->ts.c != -1 && array[0][0] == 'C'))
 	{
@@ -65,20 +78,6 @@ int	parse_fc(t_vars *vars, char *str)
 	free_tab(tab);
 	free_tab(array);
 	return (0);
-}
-
-void	parse_line(t_vars *vars, char *str, int i)
-{
-	if (vars->ts.blank_line == 0)
-	{
-		map_realloc(&vars->ts, str, i);
-		free(str);
-	}
-	else
-	{
-		printf("Error\n Map invalid");
-		ft_exit(-1, str);
-	}
 }
 
 void	parse_map(t_vars *vars, char *str)
@@ -98,6 +97,7 @@ void	parse_map(t_vars *vars, char *str)
 		}
 		else
 		{
+			printf("Yo");
 			free(str);
 			vars->ts.blank_line++;
 		}
