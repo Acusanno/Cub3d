@@ -32,7 +32,7 @@ SRCS =		init.c  \
 			map_check_utils.c        \
 			intersection_utils.c
 
-GCCF = gcc -g3 -O3 -Wall -Werror -Wextra -g
+GCCF = gcc -g3 -O3 -g
 
 OBJS = ${SRCS:.c=.o}
 

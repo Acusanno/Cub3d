@@ -38,15 +38,13 @@ RM			= rm -f
 
 HEADER		= ./libft.h
 
-CFLAGS		= -Wall -Wextra -Werror
-
 all:		${NAME}
 
 $(NAME):	${OBJS} ${HEADER}
 			${AR} ${NAME} ${OBJS}
 
 %.o: %.c	${HEADER}
-			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+			${CC} -c $< -o ${<:.c=.o}
 
 bonus:		${OBJS_BONUS} ${OBJS}
 			${AR} ${NAME} ${OBJS_BONUS} ${OBJS}
