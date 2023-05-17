@@ -2,6 +2,8 @@
 ## Description
 Cub3d is a project from 42, where the goal is to create a raycaster in C.
 It should take a simple 2D map, parse it and output a 3D view of the environment with the textures you linked.
+![image](https://github.com/Acusanno/Cub3d/assets/80698496/00b10d9f-7946-4d3e-bf59-b0d2c8ec356b)
+
 
 ## How to use
 To launch the project first you need to configure a map:
